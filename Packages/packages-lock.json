@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.swtools.swutils": {
-      "version": "https://github.com/LAVINSE/SWUtils.git#v1.4.1",
+      "version": "https://github.com/LAVINSE/SWUtils.git#v1.4.2",
       "depth": 0,
       "source": "git",
       "dependencies": {
@@ -14,7 +14,7 @@
         "com.unity.modules.physics": "1.0.0",
         "com.unity.modules.physics2d": "1.0.0"
       },
-      "hash": "2b9d93d469d2e6619d14afc6f59d9c1e7df20092"
+      "hash": "e80284477c66afbe0a669b43bed150e0fb2099ed"
     },
     "com.unity.2d.animation": {
       "version": "13.0.6",

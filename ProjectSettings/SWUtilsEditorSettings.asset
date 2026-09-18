@@ -1,0 +1,1774 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 53
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9be690cf80fd3247809507723c4115a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SWUtils.Editor::SW.EditorTools.Workspace.SWEditorWorkspaceSettings
+  categoriesInitialized: 1
+  searchFoldersInitialized: 1
+  ViewStates:
+  - Identifier: types.setup
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..swutils.samples
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..swutils.SW.BehaviourTree
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..swutils.SW.Quest
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: workspace.settings
+    SearchText: 
+    ScrollPosition: {x: 0, y: 216}
+    Foldouts: []
+  - Identifier: inspector.8df7606310ccef4438795581505c7b9c:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.c43d8079a7e4fea498436452f8fc93eb:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.0e98fcf430646b14d8f8654d982b3d51:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.75fbf600fb3b52147b90feed6e3420fe:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.7625088bd2615044e8beb67dea9819fc:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.b7746d8379bc164489222513043e162e:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.c03f51f7fbbc3b243a1fff012e52bdd2:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.e8e17608dc8323b4bbcb361f00d0276d:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..swutils.SW.StateMachine
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..swutils.SW.SkillTree
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..swutils.utility
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  IsConfigured: 1
+  UseListView: 0
+  ShowOpenTabs: 1
+  CellSize: 100
+  BrowserWidth: 352
+  SortByName: 0
+  SelectedCategory: swutils.utility
+  SearchText: 
+  ActiveAsset: 
+  LockedAsset: 
+  BrowserScroll: {x: 0, y: 0}
+  CategoryScroll: {x: 0, y: 0}
+  InspectorScroll: {x: 0, y: 0}
+  Categories:
+  - Identifier: swutils.utility
+    DisplayName: SWUtility
+    IconIdentifier: 
+  - Identifier: swutils.samples
+    DisplayName: SWSamples
+    IconIdentifier: 
+  - Identifier: swutils.SW.SkillTree
+    DisplayName: SWSkillTree
+    IconIdentifier: 
+  - Identifier: swutils.SW.Stat
+    DisplayName: SWStat
+    IconIdentifier: 
+  - Identifier: swutils.SW.BehaviourTree
+    DisplayName: SWBehaviour Tree
+    IconIdentifier: 
+  - Identifier: swutils.SW.StateMachine
+    DisplayName: SWStateMachine
+    IconIdentifier: 
+  - Identifier: swutils.SW.Quest
+    DisplayName: SWQuest
+    IconIdentifier: 
+  - Identifier: builtin.other
+    DisplayName: Other
+    IconIdentifier: 
+  Types:
+  - TypeName: DG.Tweening.Core.DOTweenSettings, DOTween, Version=1.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Graphs.Node, UnityEditor.Graphs, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Graphs.Graph, UnityEditor.Graphs, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Graphs.GroupNode, UnityEditor.Graphs, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Graphs.AnimationBlendTree.Node, UnityEditor.Graphs, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.TestRunner.UnityTestProtocol.TestRunDataHolder, UnityEditor.TestRunner,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.TestTools.TestRunner.Api.TestRunnerApi, UnityEditor.TestRunner,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.VisualScripting.StateGraphAsset, Unity.VisualScripting.State,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: Unity.VisualScripting.ScriptGraphAsset, Unity.VisualScripting.Flow,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: Unity.VisualScripting.MacroScriptableObject, Unity.VisualScripting.Core,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.VisualScripting.DictionaryAsset, Unity.VisualScripting.Core,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.VisualScripting.VariablesAsset, Unity.VisualScripting.Core, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TimelineProjectSettings, Unity.Timeline.Editor, Version=1.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TimelinePreferences, Unity.Timeline.Editor, Version=1.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.ControlTrack, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.ControlPlayableAsset, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.ActivationTrack, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.TimelineAsset, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.BasicPlayableBehaviour, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.MarkerTrack, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.PlayableTrack, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.AudioPlayableAsset, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.AnimationPlayableAsset, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.GroupTrack, Unity.Timeline, Version=1.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.SignalTrack, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.SignalEmitter, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.SignalAsset, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.AnimationTrack, Unity.Timeline, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Timeline.AudioTrack, Unity.Timeline, Version=1.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TMPro.TMP_StyleSheet, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TMPro.TMP_SpriteAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TMPro.TMP_FontAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TMPro.TMP_ColorGradient, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Canvas.ShaderGraph.CanvasMetaData, Unity.ShaderGraph.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.ShaderGraph.Internal.ShaderGraphVfxAsset, Unity.ShaderGraph.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Build.Pipeline.CompatibilityAssetBundleManifest, Unity.ScriptableBuildPipeline,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.DecalRendererFeature, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.UniversalRenderPipelineEditorResources,
+      Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: OnTilePostProcessFeature, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.UniversalRendererData, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ColorAdjustments, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ForwardRendererData, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.MotionBlur, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ColorLookup, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.DepthOfField, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.LensDistortion, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ScreenSpaceLensFlare, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.Tonemapping, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.SplitToning, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ShadowsMidtonesHighlights, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.Bloom, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ChromaticAberration, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ChannelMixer, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ScreenSpaceAmbientOcclusion, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.FilmGrain, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.PostProcessData, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.RenderObjects, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.XRSystemData, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.LiftGammaGain, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.FullScreenPassRendererFeature, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.Vignette, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.WhiteBalance, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.ColorCurves, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.PaniniProjection, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.Universal.Renderer2DData, Unity.RenderPipelines.Universal.2D.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.LensFlareDataSRP, Unity.RenderPipelines.Core.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.VolumeProfile, Unity.RenderPipelines.Core.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.ProbeVolumeBakingSet, Unity.RenderPipelines.Core.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.VolumeComponent, Unity.RenderPipelines.Core.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.ProbeVolumesOptions, Unity.RenderPipelines.Core.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateRenderingLayer, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateUInt, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateBool, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.IESObject, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateColor, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateObject, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateFlags, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateEnum, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateVector3, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.LookDev.Context, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.LightAnchorEditorTool, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateVector2, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.LookDev.EnvironmentLibrary, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateFloat, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateInt, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.RenderPipelineGlobalSettingsEndNameEditAction,
+      Unity.RenderPipelines.Core.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.DebugStateVector4, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.LookDev.Environment, Unity.RenderPipelines.Core.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.PostProcessResources, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.PostProcessEffectSettings, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.DepthOfField, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.LensDistortion, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.MotionBlur, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.ChromaticAberration, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.AutoExposure, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.ColorGrading, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.Bloom, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.Vignette, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.Grain, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.ScreenSpaceReflections, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.PostProcessProfile, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Rendering.PostProcessing.AmbientOcclusion, Unity.Postprocessing.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.Pipeline.Config.RuntimePipelineConfig, Unity.Pipeline, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.Pipeline.Config.RuntimePipelineBuildInfo, Unity.Pipeline, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Localization.LocalizationProjectSettings, Unity.Localization.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Localization.Plugins.Google.SheetsServiceProvider, Unity.Localization.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEditor.Localization.Addressables.AddressableGroupRules, Unity.Localization.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Localization.StringTableCollection, Unity.Localization.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Localization.AssetTableCollection, Unity.Localization.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Localization.Pseudo.PseudoLocale, Unity.Localization, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEngine.Localization.SmartFormat.GlobalVariables.GlobalVariablesGroup,
+      Unity.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Localization.SmartFormat.PersistentVariables.VariablesGroupAsset,
+      Unity.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEngine.Localization.Locale, Unity.Localization, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Localization.Settings.LocalizationSettings, Unity.Localization,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Localization.Tables.SharedTableData, Unity.Localization,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Localization.Tables.AssetTable, Unity.Localization, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Localization.Tables.StringTable, Unity.Localization, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.InputSystem.InputSettings, Unity.InputSystem, Version=1.19.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.InputSystem.InputActionReference, Unity.InputSystem, Version=1.19.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.InputSystem.InputActionAsset, Unity.InputSystem, Version=1.19.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.InferenceEngine.ModelAsset, Unity.InferenceEngine, Version=2.6.1.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AutoGroupGenerator.DefaultOutputRule, Unity.AutoGroupGenerator.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AutoGroupGenerator.AssetSelectionInputRule, Unity.AutoGroupGenerator.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AutoGroupGenerator.AutoGroupGeneratorSettings, Unity.AutoGroupGenerator.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AutoGroupGenerator.ImprovedNamesOutputRule, Unity.AutoGroupGenerator.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: Unity.AppUI.Navigation.NavGraphViewAsset, Unity.AppUI.Navigation, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: Unity.AppUI.Navigation.NavAction, Unity.AppUI.Navigation, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.AppUI.Navigation.NavGraphViewNode, Unity.AppUI.Navigation, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.AppUI.Navigation.NavGraphViewHierarchicalNode, Unity.AppUI.Navigation,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.AppUI.Navigation.NavGraph, Unity.AppUI.Navigation, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.AppUI.Navigation.NavDestination, Unity.AppUI.Navigation, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.AppUI.Core.AppUISettings, Unity.AppUI, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: Unity.AI.Navigation.Editor.NavMeshAssetManager, Unity.AI.Navigation.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Settings.AddressableAssetSettings, Unity.Addressables.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Settings.ProfileDataSourceSettings, Unity.Addressables.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Settings.AddressableAssetGroup, Unity.Addressables.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Settings.AddressableAssetGroupSchema,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptPackedPlayMode,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEditor.AddressableAssets.Settings.GroupSchemas.ContentUpdateGroupSchema,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Settings.AddressableAssetGroupTemplate,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptFastMode,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEditor.AddressableAssets.Settings.GroupSchemas.PlayerDataGroupSchema,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.AddressableAssetSettingsDefaultObject,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.BinaryCatalogInitializationSettings,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptBase, Unity.Addressables.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Settings.GroupSchemas.AddressableAssetGroupSortSettings,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Build.AnalyzeRules.AnalyzeResultData,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Settings.GroupSchemas.BundledAssetGroupSchema,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AddressableAssets.Build.DataBuilders.BuildScriptPackedMode,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEditor.AddressableAssets.Settings.CacheInitializationSettings,
+      Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AddressableAssets.DocExampleCode.CustomLocationBuildScript, Unity.Addressables.DocExampleCode.Editor.Tests,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEditor.Tilemaps.LineBrush, Unity.2D.Tilemap.Extras.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.RandomBrush, Unity.2D.Tilemap.Extras.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Tilemaps.AutoTileTemplate, Unity.2D.Tilemap.Extras.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GameObjectBrush, Unity.2D.Tilemap.Extras.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GroupBrush, Unity.2D.Tilemap.Extras.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.RuleTileTemplate, Unity.2D.Tilemap.Extras.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Tilemaps.RuleOverrideTile, Unity.2D.Tilemap.Extras, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.HexagonalRuleTile, Unity.2D.Tilemap.Extras, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.IsometricRuleTile, Unity.2D.Tilemap.Extras, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Tilemaps.AutoTile, Unity.2D.Tilemap.Extras, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.RuleTile, Unity.2D.Tilemap.Extras, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Tilemaps.AnimatedTile, Unity.2D.Tilemap.Extras, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Tilemaps.AdvancedRuleOverrideTile, Unity.2D.Tilemap.Extras,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridSelectionTransformTool, Unity.2D.Tilemap.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridSelection, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.RotateClockwiseTool, Unity.2D.Tilemap.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.PositionTileTemplate, Unity.2D.Tilemap.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridSelectionRotateTool, Unity.2D.Tilemap.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.PickingTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridSelectionScaleTool, Unity.2D.Tilemap.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.SelectTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.BoxTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.EraseTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.FlipXTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.RotateCounterClockwiseTool, Unity.2D.Tilemap.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.FillTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.PaintTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.FlipYTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridBrush, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridPaintingState, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridBrushPickStore, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.MoveTool, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.TileSet, Unity.2D.Tilemap.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tilemaps.GridSelectionMoveTool, Unity.2D.Tilemap.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.U2D.SpriteShape, Unity.2D.SpriteShape.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.U2D.Animation.SpriteLibraryAsset, Unity.2D.Animation.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.U2D.Animation.SkeletonAsset, Unity.2D.Animation.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: SWQuestScoreRewardExample, SWUtils.Samples, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.samples
+    Classification: 0
+  - TypeName: SW.Quest.SWQuest, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Quest.SWAchievementDatabase, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestObjectTarget, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.SkillTree.SWSkillTreeStatEffect, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.SkillTree
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestAddProgressAction, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.SkillTree.SWSkillDefinition, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.SkillTree
+    Classification: 0
+  - TypeName: SW.Base.SWCategory, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.utility
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestContinuousProgressAction, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Popup.SWPopupCatalog, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: swutils.utility
+    Classification: 2
+  - TypeName: SW.Popup.SWPopupScaleShowEffect, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.utility
+    Classification: 0
+  - TypeName: SW.BehaviourTree.SWBehaviourTreeAsset, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.BehaviourTree
+    Classification: 0
+  - TypeName: SW.Quest.SWAchievement, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.SkillTree.SWSkillTreeFeatureEffect, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.SkillTree
+    Classification: 0
+  - TypeName: SW.Util.SWAmountFormatProfile, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.utility
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestDatabase, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestNegativeProgressAction, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Popup.SWPopupScaleHideEffect, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.utility
+    Classification: 0
+  - TypeName: SW.SkillTree.SWSkillTreeDefinition, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.SkillTree
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestCompletedCondition, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Debugging.SWDebugConsoleSettings, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: SW.Util.SWAudioLibrary, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: swutils.utility
+    Classification: 2
+  - TypeName: SW.Base.SWIODatabase, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.utility
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestSetProgressAction, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestPositiveProgressAction, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Stat.SWStat, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Stat
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestStringTarget, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Base.SWIdentifiedObject, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.utility
+    Classification: 0
+  - TypeName: SW.Quest.SWQuestTask, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.Quest
+    Classification: 0
+  - TypeName: SW.Data.SWPlayerPrefsSettings, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: SW.StateMachine.SWStateMachineGraphAsset, SWUtils.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: swutils.SW.StateMachine
+    Classification: 0
+  - TypeName: SW.Pooling.SWPoolCatalog, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: SW.Base.SWScriptableObject, SWUtils.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: swutils.utility
+    Classification: 2
+  - TypeName: SW.EditorTools.Workspace.SWEditorWorkspaceSettings, SWUtils.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn1SpringsToolkit.SpringsToolkitSettingsAsset, SpringsAssembly,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: ProjectT.Data.UnitAppearance, ProjectT.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: ProjectT.Data.StageDefinition, ProjectT.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: ProjectT.Data.ColorData, ProjectT.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: ProjectT.Data.EnemyRouteDefinition, ProjectT.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: ProjectT.Data.EnemyDefinition, ProjectT.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: ProjectT.Data.AllyClassDefinition, ProjectT.Runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: UnityEditor.Rendering.Universal.ChromaticAberrationConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Universal.BloomConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Universal.ColorGradingConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Universal.LensDistortionConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Universal.DepthOfFieldConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Universal.MotionBlurConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Universal.VignetteConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Rendering.Universal.GrainConverter, PPv2URPConverters,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: DamageNumbersPro.Internal.DNPPreset, DamageNumbersPro, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: TMPro.TMP_DigitValidator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TMPro.TMP_PhoneNumberValidator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn1VfxToolkit.DemoAssets.TexturesDemo.Scripts.All1VfxDemoTextureCollection,
+      AllIn1VfxTexDemoAssembly, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AllIn1VfxToolkit.Demo.Scripts.All1VfxDemoEffectCollection, AllIn1VfxDemoScriptAssemblies,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AllIn1VfxToolkit.Demo.Scripts.All1VfxDemoEffect, AllIn1VfxDemoScriptAssemblies,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AllIn1VfxToolkit.AllIn1ParticleHelperSO, AllIn1VfxAssmebly, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AllIn1SpringsToolkit.Demo.Scripts.DemoElementSo, AllIn1SpringsToolkitDemo,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AllIn13DShader.DemoSceneConfiguration, AllIn13DShaderDemoScriptsAssembly,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.DemoExpositorData, AllIn13DShaderDemoScriptsAssembly,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.DemoElementData, AllIn13DShaderDemoScriptsAssembly,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.DemoEnvironment, AllIn13DShaderDemoScriptsAssembly,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.ShaderPassConfig, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.MaterialPresetCollection, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.RGBAPackerValues, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AllIn13DShader.BlendingMode, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.PropertiesConfigCollection, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.EffectsProfileCollection, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.GradientTexture, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.ShaderPassCollection, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: AllIn13DShader.URPSettings, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.EffectsExtraData, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.ConversionProperty, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.AtlasPackerValues, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.URPSettingsUserPref, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.GlobalConfiguration, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.EffectGroupGlobalConfigCollection, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.ConversionConfig, AllIn13DShaderAssemebly.Editor, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.EffectGroupGlobalConfig, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.MaterialOverrideData, AllIn13DShaderAssemebly.Editor,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: AllIn13DShader.AllIn1DepthColoringProperties, AllIn13DShaderAssemebly,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
+  - TypeName: Unity.UI.Builder.BuilderObjectField+NonUnityObjectValue, UnityEditor.UIBuilderModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: TreeEditor.TreeData, UnityEditor.TreeModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.GridPalette, UnityEditor.TilemapModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.SceneTemplate.SceneTemplateAsset, UnityEditor.SceneTemplateModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Presets.DefaultPresetSelectorReceiver, UnityEditor.PresetsUIModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Overlays.OverlayMenu+OverlayMenuData, UnityEditor.EditorToolbarModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Toolbars.AIDropdownConfig, UnityEditor.EditorToolbarModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.SceneVisibilityManager, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.SceneManagement.MainStage, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Networking.PlayerConnection.EditorConnection, UnityEditor.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AnimationModeDriver, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Tools, UnityEditor.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.EditorTools.GameObjectToolContext, UnityEditor.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.SceneManagement.PrefabStage, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Build.Reporting.StrippingInfo, UnityEditor.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Build.Profile.BuildProfile, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.Build.Profile.BuildAutomationSettings, UnityEditor.BuildProfileModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AdaptivePerformance.Editor.AdaptivePerformanceGeneralSettingsPerBuildTarget,
+      UnityEditor.AdaptivePerformanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AdaptivePerformance.Simulator.Editor.SimulatorProviderLoader,
+      UnityEditor.AdaptivePerformanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AdaptivePerformance.Editor.Metadata.BuildProfileProviderContainer,
+      UnityEditor.AdaptivePerformanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEditor.AdaptivePerformance.Simulator.Editor.SimulatorProviderSettings,
+      UnityEditor.AdaptivePerformanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.UIElements.ThemeStyleSheet, UnityEngine.UIElementsModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.UIElements.VectorImage, UnityEngine.UIElementsModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.UIElements.PanelTextSettings, UnityEngine.UIElementsModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.UIElements.VisualTreeAsset, UnityEngine.UIElementsModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.UIElements.FilterFunctionDefinition, UnityEngine.UIElementsModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.UIElements.StyleSheet, UnityEngine.UIElementsModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.UIElements.PanelSettings, UnityEngine.UIElementsModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Tilemaps.Tile, UnityEngine.TilemapModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.TextCore.Text.FontAsset, UnityEngine.TextCoreTextEngineModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.TextCore.Text.TextColorGradient, UnityEngine.TextCoreTextEngineModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.TextCore.Text.TextStyleSheet, UnityEngine.TextCoreTextEngineModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.TextCore.Text.SpriteAsset, UnityEngine.TextCoreTextEngineModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.TextCore.Text.TextSettings, UnityEngine.TextCoreTextEngineModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.LowLevelPhysics2D.PhysicsLowLevelSettings2D, UnityEngine.Physics2DModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.GUISkin, UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.Networking.PlayerConnection.PlayerConnection, UnityEngine.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveSorting, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveShadowQuality, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveResolution, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptivePerformanceGeneralSettings,
+      UnityEngine.AdaptivePerformanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveFramerate, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.IAdaptivePerformanceSettings, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveDecals, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveTransparency, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveLayerCulling, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveShadowDistance, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveViewDistance, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveShadowCascade, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveLut, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveMSAA, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.Basic.BasicProviderSettings, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptivePerformanceManagerSettings,
+      UnityEngine.AdaptivePerformanceModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveBatching, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveShadowmapResolution, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptiveLOD, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  - TypeName: UnityEngine.AdaptivePerformance.AdaptivePhysics, UnityEngine.AdaptivePerformanceModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    Enabled: 0
+    CategoryIdentifier: builtin.other
+    Classification: 2
+  Assignments: []
+  Favourites: []
+  OpenAssets:
+  - 0e98fcf430646b14d8f8654d982b3d51:11400000
+  RecentTypes: []
+  ExcludedFolders: []
+  SearchFolders:
+  - Packages/com.swtools.swutils/Samples/Data
+  - Assets/02_Res
+  FilteredTypes: []
