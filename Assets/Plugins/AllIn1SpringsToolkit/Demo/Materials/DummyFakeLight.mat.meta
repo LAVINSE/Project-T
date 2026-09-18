@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3e508146df5b9274e917c78a5a7c856f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Materials/DummyFakeLight.mat
+  uploadId: 853798

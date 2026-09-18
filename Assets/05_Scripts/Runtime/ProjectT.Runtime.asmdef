@@ -1,0 +1,6 @@
+{
+    "name": "ProjectT.Runtime",
+    "rootNamespace": "ProjectT",
+    "references": ["SWUtils.Runtime", "Unity.TextMeshPro", "Unity.ugui", "Unity.InputSystem"],
+    "autoReferenced": true
+}

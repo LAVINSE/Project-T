@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4a684caf31aee10458ba1363576cf8c4
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Prefabs/MemoryGameTile.prefab
+  uploadId: 853798

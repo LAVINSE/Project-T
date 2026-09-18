@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 7963a0f994e99594f856c615057a2d73
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Shaders/UIGradient.shader
+  uploadId: 853798

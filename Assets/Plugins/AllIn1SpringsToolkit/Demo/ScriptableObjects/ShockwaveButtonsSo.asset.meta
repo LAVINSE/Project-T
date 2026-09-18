@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 23e5a3c054becdc4cbb82bfa81c8391e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/ScriptableObjects/ShockwaveButtonsSo.asset
+  uploadId: 853798

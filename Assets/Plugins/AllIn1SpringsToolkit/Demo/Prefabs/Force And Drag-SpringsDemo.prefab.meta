@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5eb7acc0ed4c54841981bab7e1327f3b
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Prefabs/Force And Drag-SpringsDemo.prefab
+  uploadId: 853798

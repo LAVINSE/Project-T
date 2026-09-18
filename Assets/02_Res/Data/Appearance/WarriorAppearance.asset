@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53f1b7faf0cc6c4793ea87807655ecc, type: 3}
+  m_Name: WarriorAppearance
+  m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Units.UnitAppearance
+  idleFrames:
+  - {fileID: -66217544, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 1953925410, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: -634186776, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 1383355427, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 2122317200, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: -446461561, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: -380091155, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 1941563350, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: -462809209, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: -1024245317, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 1266092227, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 179590722, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 1278344113, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 2145617211, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: -2028531631, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  - {fileID: 894214926, guid: fe0dc9402aa7e484db54324243c0cb64, type: 3}
+  moveFrames:
+  - {fileID: 1983479565, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  - {fileID: -1807419712, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  - {fileID: -1433451575, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  - {fileID: -73157841, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  - {fileID: -827341772, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  - {fileID: 1963337085, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  - {fileID: -1698730856, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  - {fileID: -718709430, guid: d76f65d6710816c419cf1cb3addebf4a, type: 3}
+  attackFrames:
+  - {fileID: -2139251976, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: -1711415822, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: -747698678, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: -1806968179, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: 1585935575, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: -32815667, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: 1286259228, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: -30435786, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: 1424404827, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: 1870070214, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  - {fileID: -289746071, guid: 3c6ba48b0c71fb04997fb4809b85a6c5, type: 3}
+  deathFrames:
+  - {fileID: -1689579217, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 1538274316, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: -225302714, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: -2098375474, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 2049049934, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: -1277950309, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 1909336741, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: -1641965494, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 677759661, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 1656913867, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 960675434, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 1419128648, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: -823968452, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 1572281619, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 479382891, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 1336139176, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: -1435481482, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: -1422803474, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  - {fileID: 1495408548, guid: 58b49803a717c404f9cf63c00a37de22, type: 3}
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  framesPerSecond: 10
+  feetOffset: 0.0025000423
+  healthBarHeight: 1.66875
+  attackImpactFrame: 2
+  spritesFaceRight: 1
+  attackOriginOffset: {x: 0.5, y: 0.8}

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c9e5994301ca15f4b957ce3f885cb88d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/ScriptableObjects/ArrowShootingSo.asset
+  uploadId: 853798

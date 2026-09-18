@@ -1,0 +1,364 @@
+fileFormatVersion: 2
+guid: 5fd0bd8c1279b5f4bb0f6141b1283942
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2991371549198603049
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_0
+  - first:
+      213: -2210720713096755905
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_1
+  - first:
+      213: 8332203665437177796
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_2
+  - first:
+      213: 3755771701678323043
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_3
+  - first:
+      213: -7772623071472732785
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_4
+  - first:
+      213: -2774596943935807220
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_5
+  - first:
+      213: -2856254158695048796
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_6
+  - first:
+      213: 2221724449017034183
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_7
+  - first:
+      213: -3797968178402345796
+    second: pixellab-Use-the-provided-magic-worksho-1789695310236_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 573
+        width: 146
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dcaecacc638c76d0800000000000000
+      internalID: -2991371549198603049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 574
+        width: 146
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f35054e6931f151e0800000000000000
+      internalID: -2210720713096755905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 574
+        width: 146
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c7379a761fe1a370800000000000000
+      internalID: 8332203665437177796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 317
+        width: 146
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3653008b67e2f1430800000000000000
+      internalID: 3755771701678323043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 316
+        width: 146
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f85bcd36f78122490800000000000000
+      internalID: -7772623071472732785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 316
+        width: 147
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0162d9a7c6ae79d0800000000000000
+      internalID: -2774596943935807220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 61
+        width: 150
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a9dfbac9fb8c58d0800000000000000
+      internalID: -2856254158695048796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 62
+        width: 146
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c5f57c7d9625de10800000000000000
+      internalID: 2221724449017034183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArcaneWorkshop_Alert_Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 62
+        width: 146
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbc37127018ea4bc0800000000000000
+      internalID: -3797968178402345796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 159366fd9cb97c44dac021d12361a293
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ArcaneWorkshop_Alert_Sheet_0: -2991371549198603049
+      ArcaneWorkshop_Alert_Sheet_1: -2210720713096755905
+      ArcaneWorkshop_Alert_Sheet_2: 8332203665437177796
+      ArcaneWorkshop_Alert_Sheet_3: 3755771701678323043
+      ArcaneWorkshop_Alert_Sheet_4: -7772623071472732785
+      ArcaneWorkshop_Alert_Sheet_5: -2774596943935807220
+      ArcaneWorkshop_Alert_Sheet_6: -2856254158695048796
+      ArcaneWorkshop_Alert_Sheet_7: 2221724449017034183
+      ArcaneWorkshop_Alert_Sheet_8: -3797968178402345796
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 63848dc6547b2f6468452e956886a1c0
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Prefabs/Rigidbody Springs-Buttons.prefab
+  uploadId: 853798

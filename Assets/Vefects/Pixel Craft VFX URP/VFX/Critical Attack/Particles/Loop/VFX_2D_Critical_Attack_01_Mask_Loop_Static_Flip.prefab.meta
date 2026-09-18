@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 978fc578ccb367d4eb5614d2fd7c2f3f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 308259
+  packageName: Pixel Craft VFX - URP
+  packageVersion: 1.0.02
+  assetPath: Assets/Vefects/Pixel Craft VFX URP/VFX/Critical Attack/Particles/Loop/VFX_Critical_Attack_01_Mask_Loop_Static_Flip.prefab
+  uploadId: 771196

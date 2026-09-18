@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0c0e28ad7c0e1a644b3f6c5a94e593f8
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Scripts/AllIn1SpringsToolkitDemoAssembly.asmdef
+  uploadId: 853798

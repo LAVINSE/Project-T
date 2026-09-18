@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 64a4f56c21cc4274eadd53301e1471da
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Prefabs/SnakeBone.prefab
+  uploadId: 853798

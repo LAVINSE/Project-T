@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d8dd15dc124f41547a5097a37e74dd93
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Prefabs/SpringsToolkitSimpleButton.prefab
+  uploadId: 853798

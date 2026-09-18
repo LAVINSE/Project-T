@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: cefe40cc685ec4c40ab77202dd2f26fc
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Prefabs/HpBar-SpringsDemo.prefab
+  uploadId: 853798

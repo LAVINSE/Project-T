@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d82d955b4857f114d9c85aa9af25c0d8
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/Prefabs/ArrowPrefab.prefab
+  uploadId: 853798

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7458a727ff7cf6c449197d9a2ebfab5e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271579
+  packageName: All In 1 Springs Toolkit
+  packageVersion: 1.7
+  assetPath: Assets/Plugins/AllIn1SpringsToolkit/Demo/ScriptableObjects/MiniPinballSo.asset
+  uploadId: 853798

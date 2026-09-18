@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53f1b7faf0cc6c4793ea87807655ecc, type: 3}
+  m_Name: SkeletonAppearance
+  m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Units.UnitAppearance
+  idleFrames:
+  - {fileID: 1022205791, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+  - {fileID: 2111793144, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+  - {fileID: 370155686, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+  - {fileID: -401466046, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+  - {fileID: 1992683137, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+  - {fileID: 965997395, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+  - {fileID: -2113997926, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+  moveFrames:
+  - {fileID: 2092882140, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  - {fileID: -38814705, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  - {fileID: -2081015609, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  - {fileID: 419559602, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  - {fileID: 422048884, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  - {fileID: -846576334, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  - {fileID: -716761461, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  - {fileID: -1586698804, guid: fc41623138a60cf449f00390a96fcd73, type: 3}
+  attackFrames:
+  - {fileID: -1351856051, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: 1279743021, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -281899044, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: 1476690969, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -1911437552, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -1120030637, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -139901408, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: 713250381, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: 497985747, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -855486966, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -1702520463, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: 1984077322, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: 1713937641, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: 387980939, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -190177084, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -1319120733, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  - {fileID: -1620609426, guid: 4de14e669c375a946aa7b70787d01259, type: 3}
+  deathFrames:
+  - {fileID: 1971991010, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: -727267428, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: -1888166432, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: 1426844207, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: 344535809, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: 767452754, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: 906238261, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: -1093803207, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: 66424357, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: -777931136, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: -898642076, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: -691595641, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  - {fileID: 1932941624, guid: 62040daf5fe7f004599779444aab3fe0, type: 3}
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  framesPerSecond: 10
+  feetOffset: 0.026249979
+  healthBarHeight: 1.45
+  attackImpactFrame: 11
+  spritesFaceRight: 1
+  attackOriginOffset: {x: 0.5, y: 0.8}
