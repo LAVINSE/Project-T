@@ -109,7 +109,9 @@ namespace ProjectT.Editor
                 manager => StageOneGameplayBuilder.Set(
                 manager,
                 "colorData",
-                AssetDatabase.LoadAssetAtPath<ColorData>("Assets/02_Res/Data/Common/ColorData.asset")));
+                AssetDatabase.LoadAssetAtPath<ColorData>("Assets/02_Res/Data/Common/ColorData.asset"),
+                "spriteData",
+                AssetDatabase.LoadAssetAtPath<SpriteData>("Assets/02_Res/Data/Common/SpriteData.asset")));
             CreateConfiguredPrefab<SceneServices>(
                 "Initialization/SceneServices.prefab",
                 services => StageOneGameplayBuilder.Set(

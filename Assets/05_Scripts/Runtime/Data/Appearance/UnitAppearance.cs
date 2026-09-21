@@ -15,6 +15,7 @@ namespace ProjectT.Data
     public sealed class UnitAppearance : SWScriptableObject
     {
         #region 필드
+        [SerializeField, Tooltip("구매·선택 화면의 초상화입니다. 비어 있으면 첫 대기 프레임을 사용합니다.")] private Sprite portrait;
         [SerializeField] private Sprite[] idleFrames = Array.Empty<Sprite>();
         [SerializeField] private Sprite[] moveFrames = Array.Empty<Sprite>();
         [SerializeField] private Sprite[] attackFrames = Array.Empty<Sprite>();
@@ -30,6 +31,11 @@ namespace ProjectT.Data
         #endregion // 필드
 
         #region 함수
+        /// <summary>
+        /// 화면용 초상화입니다. 미지정이면 첫 대기 프레임을 사용하며 프레임도 없으면 null입니다.
+        /// </summary>
+        public Sprite Portrait => portrait != null ? portrait : idleFrames.Length > 0 ? idleFrames[0] : null;
+
         /// <summary>
         /// 상태별 애니메이션 프레임을 반환합니다.
         /// </summary>

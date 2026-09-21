@@ -26,9 +26,37 @@ namespace ProjectT.Timing
         /// </summary>
         public bool IsPaused => leases.Count > 0;
 
+        /// <summary>
+        /// 현재 또는 마지막 정지가 해제될 때 적용할 시간 배율입니다.
+        /// </summary>
+        public float RequestedTimeScale => IsPaused ? previousTimeScale : Time.timeScale;
+
         #endregion // 프로퍼티
 
         #region 함수
+        /// <summary>
+        /// 배율을 변경합니다. 정지 중에는 재개 배율만 바꾸며 잘못된 값은 기존 상태를 보존합니다.
+        /// </summary>
+        public bool TrySetTimeScale(float value)
+        {
+            if (!isActiveAndEnabled || value <= 0f || float.IsNaN(value) || float.IsInfinity(value))
+            {
+                SWLog.LogWarning("[BattlePauseController] 배속 변경 실패: 활성 관리자와 양수 배율이 필요합니다.");
+                return false;
+            }
+
+            if (IsPaused)
+            {
+                previousTimeScale = value;
+            }
+            else
+            {
+                Time.timeScale = value;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// 독립된 정지 소유권을 얻습니다. 반환값을 폐기하면 이 요청의 정지만 해제합니다.
         /// </summary>

@@ -19,5 +19,10 @@ MonoBehaviour:
   attackInterval: 1.4
   workshopAttackDamage: 10
   workshopAttackInterval: 1.4
-  killReward: 10
+  killReward: 0
+  rewards:
+  - definition: {fileID: 11400000, guid: 9bbc013fbfb43094495c5b13adbbfb53, type: 2}
+    useAmountOverride: 1
+    overrideAmount: 10
+    acquisitionProbability: 100
   appearance: {fileID: 11400000, guid: c03f51f7fbbc3b243a1fff012e52bdd2, type: 2}

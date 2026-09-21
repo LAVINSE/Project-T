@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.swtools.swutils": "https://github.com/LAVINSE/SWUtils.git#v1.4.2",
+    "com.swtools.swutils": "https://github.com/LAVINSE/SWUtils.git#v1.4.3",
     "com.unity.2d.animation": "13.0.4",
     "com.unity.2d.aseprite": "3.0.1",
     "com.unity.2d.common": "12.0.2",

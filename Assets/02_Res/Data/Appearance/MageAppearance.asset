@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c53f1b7faf0cc6c4793ea87807655ecc, type: 3}
   m_Name: MageAppearance
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Units.UnitAppearance
+  portrait: {fileID: 21300000, guid: 1a16dc36f852d594cad2d6adf092bd2a, type: 2}
   idleFrames:
   - {fileID: 380225813, guid: 59631ea3f7b28ea489d3c886b2df16e1, type: 3}
   - {fileID: 44163085, guid: 59631ea3f7b28ea489d3c886b2df16e1, type: 3}

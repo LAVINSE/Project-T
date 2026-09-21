@@ -19,6 +19,7 @@ namespace ProjectT.Data
         #region 필드
         [SerializeField] private string displayName;
         [SerializeField] private double startingCurrency;
+        [SerializeField] private CurrencyDefinition deploymentCurrency;
         [SerializeField, Min(1f)] private float workshopMaximumHealth = 300f;
         [SerializeField] private float spawnInterval;
         [SerializeField] private int[] enemiesPerRound = Array.Empty<int>();
@@ -38,6 +39,11 @@ namespace ProjectT.Data
         /// 새 전투마다 지급하는 배치 재화입니다.
         /// </summary>
         public double StartingCurrency => startingCurrency;
+
+        /// <summary>
+        /// 시작 금액·배치 비용·처치 보상이 사용하는 전투 재화의 자산 정의입니다.
+        /// </summary>
+        public CurrencyDefinition DeploymentCurrency => deploymentCurrency;
 
         /// <summary>
         /// 새 출전에서 공방에 부여하는 최대 체력입니다. 라운드 휴식으로 회복하지 않습니다.

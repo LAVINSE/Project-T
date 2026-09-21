@@ -14,6 +14,7 @@ namespace ProjectT.Data
         #region 필드
         [SWGroup("공통 설정")]
         [SerializeField] private ColorData colorData;
+        [SerializeField] private SpriteData spriteData;
 
         #endregion // 필드
 
@@ -22,6 +23,11 @@ namespace ProjectT.Data
         /// 모든 체력바가 공유하는 원본 색상 데이터입니다. 실행 중 원본 값을 변경하지 않습니다.
         /// </summary>
         public ColorData ColorData => colorData;
+
+        /// <summary>
+        /// 모든 장면에서 공유하는 원본 아이콘 데이터입니다. 실행 중 원본 참조를 변경하지 않습니다.
+        /// </summary>
+        public SpriteData SpriteData => spriteData;
 
         #endregion // 프로퍼티
 
@@ -38,6 +44,11 @@ namespace ProjectT.Data
             if (colorData == null)
             {
                 SWLog.LogWarning("[DataManager] 초기화 실패: ColorData 참조가 필요합니다.");
+            }
+
+            if (spriteData == null || !spriteData.HasSpeedIcons)
+            {
+                SWLog.LogWarning("[DataManager] 초기화 실패: SpriteData와 배속 아이콘 참조가 필요합니다.");
             }
         }
 

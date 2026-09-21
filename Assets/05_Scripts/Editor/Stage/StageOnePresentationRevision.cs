@@ -89,7 +89,7 @@ namespace ProjectT.Editor
                 return terrainResult;
             }
 
-            StageOneCompactScreen.Apply();
+            BattleUserInterfaceSetup.CreateForStage();
             ArcaneWorkshopBuilder.Apply();
             string interactionResult = StageOneInteractionBuilder.Apply();
             if (interactionResult.StartsWith("실패:"))

@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.DataManager
   colorData: {fileID: 11400000, guid: 3f66f9fffb222bf418df29135e89986a, type: 2}
+  spriteData: {fileID: 11400000, guid: 1299b79db07986a4d83bc311813ee8d9, type: 2}

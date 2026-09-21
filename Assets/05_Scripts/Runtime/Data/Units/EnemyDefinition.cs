@@ -21,7 +21,8 @@ namespace ProjectT.Data
         [SerializeField] private float attackInterval;
         [SerializeField, Min(0.01f)] private float workshopAttackDamage = 10f;
         [SerializeField, Min(0.01f)] private float workshopAttackInterval = 1.4f;
-        [SerializeField] private double killReward;
+        [SerializeField, HideInInspector] private double killReward;
+        [SerializeField] private RewardEntry[] rewards = System.Array.Empty<RewardEntry>();
         [SerializeField] private UnitAppearance appearance;
 
         #endregion // 필드
@@ -63,9 +64,9 @@ namespace ProjectT.Data
         public float WorkshopAttackInterval => workshopAttackInterval;
 
         /// <summary>
-        /// 사망이 확정된 적 한 명의 배치 재화 보상입니다.
+        /// 사망이 확정될 때 각각 독립 확률로 계산할 보상 목록입니다.
         /// </summary>
-        public double KillReward => killReward;
+        public System.Collections.Generic.IReadOnlyList<RewardEntry> Rewards => rewards;
 
         /// <summary>
         /// 상태별 애니메이션 외형입니다.

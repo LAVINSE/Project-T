@@ -151,7 +151,7 @@ namespace ProjectT.Tests
             session.TryMove(moving, new Vector2(6, -1));
             dead.Health.TakeDamage(10000);
             var popups = Object.FindObjectsByType<SWPopupBase>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            SWPopupBase menu = System.Array.Find(popups, value => value.name == "PauseMenuPopup");
+            SWPopupBase menu = System.Array.Find(popups, value => value is InventoryUI);
             menu.Show();
             Vector3 before = moving.transform.position;
             float remaining = dead.RevivalRemaining;
@@ -172,7 +172,7 @@ namespace ProjectT.Tests
         public IEnumerator ClickPlacementWaitsForPositionThenAllowsSelectionAndRightMovement()
         {
             CreateTestMouse();
-            var button = GameObject.Find("PurchaseWarriorButton").GetComponent<RectTransform>();
+            var button = (RectTransform)Object.FindFirstObjectByType<CharacterSelectedUI>().ActiveSlots[0].transform;
             Canvas.ForceUpdateCanvases();
             Vector2 buttonPosition = RectTransformUtility.WorldToScreenPoint(null, button.TransformPoint(button.rect.center));
             yield return Click(buttonPosition);
@@ -210,7 +210,7 @@ namespace ProjectT.Tests
         public IEnumerator DragFromPurchaseButtonPreviewsThenDeploysExactlyOnce()
         {
             CreateTestMouse();
-            Vector2 button = ButtonPosition("PurchaseMageButton");
+            Vector2 button = ButtonPosition(1);
             Vector2 destination = new Vector2(-8, 2);
             yield return DragStart(button, Camera.main.WorldToScreenPoint(destination));
             var placement = Object.FindFirstObjectByType<BattlePlacementCommand>();
@@ -244,12 +244,12 @@ namespace ProjectT.Tests
         public IEnumerator InvalidDragDestinationsCancelWithoutSpending()
         {
             CreateTestMouse();
-            Vector2 button = ButtonPosition("PurchaseWarriorButton");
+            Vector2 button = ButtonPosition(0);
             Vector2 lake = Camera.main.WorldToScreenPoint(new Vector2(-21, -2));
             foreach (Vector2 destination in new[]
             {
                 lake,
-                ButtonPosition("PurchaseMageButton"),
+                ButtonPosition(1),
                 new Vector2(-40, -40)
             })
             {
@@ -276,7 +276,7 @@ namespace ProjectT.Tests
         public IEnumerator ClickPlacementCancellationPauseAndBalanceChangeDoNotCreateUnits()
         {
             CreateTestMouse();
-            Vector2 button = ButtonPosition("PurchaseWarriorButton");
+            Vector2 button = ButtonPosition(0);
             var placement = Object.FindFirstObjectByType<BattlePlacementCommand>();
             yield return Click(button);
             yield return Click(Camera.main.WorldToScreenPoint(new Vector2(-21, -2)));
@@ -287,7 +287,7 @@ namespace ProjectT.Tests
             Assert.That(placement.IsPlacing, Is.False);
             yield return Click(button);
             var popups = Object.FindObjectsByType<SWPopupBase>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            SWPopupBase menu = System.Array.Find(popups, value => value.name == "PauseMenuPopup");
+            SWPopupBase menu = System.Array.Find(popups, value => value is InventoryUI);
             menu.Show();
             yield return null;
             yield return null;
@@ -526,11 +526,170 @@ namespace ProjectT.Tests
         /// <summary>
         /// 버튼의 화면 좌표를 계산합니다.
         /// </summary>
-        private static Vector2 ButtonPosition(string name)
+        private static Vector2 ButtonPosition(int classIndex)
         {
             Canvas.ForceUpdateCanvases();
-            var button = GameObject.Find(name).GetComponent<RectTransform>();
+            var button = (RectTransform)Object.FindFirstObjectByType<CharacterSelectedUI>().ActiveSlots[classIndex].transform;
             return RectTransformUtility.WorldToScreenPoint(null, button.TransformPoint(button.rect.center));
+        }
+
+        /// <summary>
+        /// 새 화면만 존재하고 구매 클래스와 미구현 재화가 실제 데이터에 맞게 표시됩니다.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator AuthoredScreensReplaceLegacyAndDisplayStageData()
+        {
+            var screen = Object.FindFirstObjectByType<BattleScreen>();
+            Assert.That(screen.IsInitialized, Is.True);
+            foreach (string name in new[]
+            {
+                "BattleHeader",
+                "CommandPanel",
+                "AllyRoster",
+                "PauseMenuPopup",
+                "BattleResultPopup"
+            })
+            {
+                Assert.That(screen.transform.Find(name), Is.Null);
+            }
+
+            Assert.That(Object.FindObjectsByType<BattleScreen>(FindObjectsSortMode.None).Length, Is.EqualTo(1));
+            var purchase = Object.FindFirstObjectByType<CharacterSelectedUI>();
+            Assert.That(purchase.ActiveSlots.Count, Is.EqualTo(session.Definition.Classes.Count));
+            Assert.That(purchase.ActiveSlots[0].Definition, Is.SameAs(session.Definition.Classes[0]));
+            Assert.That(purchase.ActiveSlots[0].GetComponentInChildren<ClassDeploymentButton>(), Is.Not.Null);
+            var economy = Object.FindFirstObjectByType<EconomyHUDUI>();
+            Assert.That(economy.transform.Find("Coin/Coin_Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("100"));
+            Assert.That(economy.transform.Find("Parts/Parts_Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("-"));
+            Assert.That(economy.transform.Find("Round/Round_Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("0/3"));
+            Assert.That(economy.transform.Find("Kill/Kill_Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("0/27"));
+            Assert.That(Object.FindFirstObjectByType<InventoryUI>(FindObjectsInactive.Include).IsVisible, Is.False);
+            session.Wallet.TrySpend(100);
+            yield return null;
+            yield return null;
+            Assert.That(economy.transform.Find("Coin/Coin_Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("-"));
+            Assert.That(purchase.ActiveSlots[0].Button.interactable, Is.False);
+            screen.TestAdvanceRound();
+            yield return null;
+            yield return null;
+            Assert.That(economy.transform.Find("Round/Round_Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("1/3"));
+        }
+
+        /// <summary>
+        /// 선택한 아군의 체력·부활과 미구현 성장을 표시하며 선택 해제 시 상세 화면을 숨깁니다.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator CharacterDetailsFollowSelectionDamageAndRevival()
+        {
+            var details = Object.FindFirstObjectByType<CharacterHUDUI>();
+            var visibility = details.GetComponent<CanvasGroup>();
+            var health = details.transform.Find("GaugeGroup/Hp/HpBar_Img/HpValue_Text").GetComponent<TMPro.TMP_Text>();
+            Assert.That(visibility.alpha, Is.Zero);
+            Assert.That(session.TryDeploy(session.Definition.Classes[0], new Vector2(0, 1), out AllyUnit ally, out _), Is.True);
+            var commands = Object.FindFirstObjectByType<BattleMouseCommand>();
+            commands.SelectUnit(ally);
+            ally.Health.TakeDamage(35);
+            yield return null;
+            yield return null;
+            Assert.That(visibility.alpha, Is.EqualTo(1));
+            Assert.That(health.text, Is.EqualTo("115/150"));
+            Assert.That(details.transform.Find("Level Badge_Img/Level_Text").GetComponent<TMPro.TMP_Text>().text, Is.EqualTo("-"));
+            Assert.That(
+                details.transform.Find("GaugeGroup/Exp/ExpBar_Img/ExpFill_Img").GetComponent<UnityEngine.UI.Image>().fillAmount,
+                Is.Zero);
+            ally.Health.TakeDamage(10000);
+            yield return null;
+            yield return null;
+            Assert.That(health.text, Does.StartWith("부활 "));
+            ally.AdvanceRevival(ally.Definition.RevivalSeconds);
+            yield return null;
+            yield return null;
+            Assert.That(health.text, Is.EqualTo("150/150"));
+            commands.SelectUnit(null);
+            yield return null;
+            yield return null;
+            Assert.That(visibility.alpha, Is.Zero);
+            Assert.That(visibility.blocksRaycasts, Is.False);
+        }
+
+        /// <summary>
+        /// 실제 하단 버튼 클릭이 배속 순환과 중첩 정지를 처리하며 인벤토리 닫기는 수동 정지를 해제하지 않습니다.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator BottomButtonsCycleSpeedAndPreserveNestedPause()
+        {
+            CreateTestMouse();
+            var screen = Object.FindFirstObjectByType<BattleScreen>();
+            var controls = Object.FindFirstObjectByType<BottomHUDUI>();
+            var inventory = Object.FindFirstObjectByType<InventoryUI>(FindObjectsInactive.Include);
+            Canvas.ForceUpdateCanvases();
+            Vector2 speed = ControlPosition(controls.transform.Find("Speed_Button"));
+            Vector2 pause = ControlPosition(controls.transform.Find("Pause_Button"));
+            Vector2 bag = ControlPosition(controls.transform.Find("Inventory_Button"));
+            Assert.That(Vector2.Distance(speed, pause), Is.GreaterThan(20));
+            Assert.That(Vector2.Distance(speed, bag), Is.GreaterThan(20));
+            yield return Click(speed);
+            Assert.That(Time.timeScale, Is.EqualTo(2));
+            yield return Click(speed);
+            Assert.That(Time.timeScale, Is.EqualTo(3));
+            yield return Click(speed);
+            Assert.That(Time.timeScale, Is.EqualTo(1));
+            yield return Click(pause);
+            Assert.That(screen.IsManuallyPaused, Is.True);
+            Assert.That(Time.timeScale, Is.Zero);
+            yield return Click(speed);
+            Assert.That(screen.SpeedMultiplier, Is.EqualTo(2));
+            Assert.That(Time.timeScale, Is.Zero);
+            yield return Click(bag);
+            Assert.That(inventory.IsVisible, Is.True);
+            yield return Click(ControlPosition(inventory.transform.Find("Background_Img/TopPanel/Close_Button")));
+            Assert.That(inventory.IsVisible, Is.False);
+            Assert.That(Time.timeScale, Is.Zero);
+            yield return Click(pause);
+            Assert.That(Time.timeScale, Is.EqualTo(2));
+            yield return Click(bag);
+            Assert.That(Time.timeScale, Is.Zero);
+            yield return Click(bag);
+            Assert.That(Time.timeScale, Is.EqualTo(2));
+        }
+
+        /// <summary>
+        /// 확정 결과의 정지는 하단 버튼으로 풀리지 않고 인스펙터 재시작은 새 화면과 기본 배속을 준비합니다.
+        /// </summary>
+        [UnityTest]
+        public IEnumerator ResultPauseSurvivesControlsAndInspectorRestartResetsSpeed()
+        {
+            var screen = Object.FindFirstObjectByType<BattleScreen>();
+            screen.CycleSpeed();
+            screen.CycleSpeed();
+            session.Workshop.Health.TakeDamage(10000);
+            Assert.That(session.CurrentPhase, Is.EqualTo(BattleSession.Phase.Defeat));
+            screen.TogglePause();
+            screen.CycleSpeed();
+            screen.ToggleInventory();
+            screen.ToggleInventory();
+            Assert.That(Time.timeScale, Is.Zero);
+            screen.TestRestartBattle();
+            yield return null;
+            yield return null;
+            session = Object.FindFirstObjectByType<BattleSession>();
+            Assert.That(session.CurrentPhase, Is.EqualTo(BattleSession.Phase.Preparation));
+            Assert.That(session.Wallet.Balance, Is.EqualTo(100));
+            Assert.That(Time.timeScale, Is.EqualTo(1));
+            Assert.That(Object.FindFirstObjectByType<BattleScreen>().IsInitialized, Is.True);
+            Assert.That(Object.FindObjectsByType<BattleScreen>(FindObjectsSortMode.None).Length, Is.EqualTo(1));
+            Assert.That(
+                Object.FindObjectsByType<UnityEngine.EventSystems.EventSystem>(FindObjectsSortMode.None).Length,
+                Is.EqualTo(1));
+        }
+
+        /// <summary>
+        /// 하단 조작과 팝업 버튼의 클릭 좌표를 계산합니다.
+        /// </summary>
+        private static Vector2 ControlPosition(Transform target)
+        {
+            var rectangle = (RectTransform)target;
+            return RectTransformUtility.WorldToScreenPoint(null, rectangle.TransformPoint(rectangle.rect.center));
         }
 
         /// <summary>
@@ -755,11 +914,9 @@ namespace ProjectT.Tests
             Assert.That(living.Health.Current, Is.EqualTo(living.Health.Maximum - 35));
             Assert.That(session.Workshop.Health.Current, Is.EqualTo(session.Workshop.Health.Maximum - 40));
             Assert.That(dead.Health.IsAlive, Is.True);
-            var button = GameObject.Find("StartBattleButton").GetComponent<UnityEngine.UI.Button>();
-            Assert.That(button.interactable, Is.True);
-            Assert.That(button.GetComponentInChildren<TMPro.TMP_Text>().text, Is.EqualTo("다음 라운드 시작"));
-            button.onClick.Invoke();
-            button.onClick.Invoke();
+            var screen = Object.FindFirstObjectByType<BattleScreen>();
+            screen.TestAdvanceRound();
+            screen.TestAdvanceRound();
             Assert.That(session.RoundNumber, Is.EqualTo(2));
             Assert.That(session.CurrentPhase, Is.EqualTo(BattleSession.Phase.Fighting));
         }
@@ -779,7 +936,7 @@ namespace ProjectT.Tests
             dead.Health.TakeDamage(10000);
             Assert.That(session.TryMove(living, new Vector2(5, -3)), Is.True);
             var popups = Object.FindObjectsByType<SWPopupBase>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            SWPopupBase menu = System.Array.Find(popups, value => value.name == "PauseMenuPopup");
+            SWPopupBase menu = System.Array.Find(popups, value => value is InventoryUI);
             menu.Show();
             float remaining = dead.RevivalRemaining;
             session.CompleteBattle();
@@ -792,10 +949,9 @@ namespace ProjectT.Tests
             Assert.That(living.transform.position, Is.Not.EqualTo(before));
             Assert.That(dead.RevivalRemaining, Is.LessThan(remaining));
             Assert.That(session.IsPaused, Is.False);
-            var button = GameObject.Find("StartBattleButton").GetComponent<UnityEngine.UI.Button>();
-            Assert.That(button.GetComponentInChildren<TMPro.TMP_Text>().text, Is.EqualTo("결과 보기"));
-            button.onClick.Invoke();
-            button.onClick.Invoke();
+            var screen = Object.FindFirstObjectByType<BattleScreen>();
+            screen.TestInspectResult();
+            screen.TestInspectResult();
             Assert.That(session.CurrentPhase, Is.EqualTo(BattleSession.Phase.Victory));
             Assert.That(session.IsPaused, Is.True);
         }

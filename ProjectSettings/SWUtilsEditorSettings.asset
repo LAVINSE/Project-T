@@ -41,7 +41,7 @@ MonoBehaviour:
     Foldouts: []
   - Identifier: workspace.settings
     SearchText: 
-    ScrollPosition: {x: 0, y: 216}
+    ScrollPosition: {x: 0, y: 0}
     Foldouts: []
   - Identifier: inspector.8df7606310ccef4438795581505c7b9c:11400000.builtin.other
     SearchText: 
@@ -87,15 +87,67 @@ MonoBehaviour:
     SearchText: 
     ScrollPosition: {x: 0, y: 0}
     Foldouts: []
+  - Identifier: inspector.0e98fcf430646b14d8f8654d982b3d51:11400000.swutils.utility
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.8df7606310ccef4438795581505c7b9c:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.3f66f9fffb222bf418df29135e89986a:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.7625088bd2615044e8beb67dea9819fc:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.75fbf600fb3b52147b90feed6e3420fe:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.27850dce4cdab6b45b57b1b1981f7004:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.715e45c133aea0d40b95bca9c31e44b9:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.0fa8486ab014afb478d87c5fe8edf7f7:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.a64378552fb50a34bb9434abd4a20b83:11400000.builtin.all
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.a64378552fb50a34bb9434abd4a20b83:11400000.swutils.samples
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.1299b79db07986a4d83bc311813ee8d9:11400000.builtin.other
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector..swutils.SW.Stat
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
+  - Identifier: inspector.1a73c9701c89759458335c445d830c0e:11400000.swutils.samples
+    SearchText: 
+    ScrollPosition: {x: 0, y: 0}
+    Foldouts: []
   IsConfigured: 1
-  UseListView: 0
+  UseListView: 1
   ShowOpenTabs: 1
   CellSize: 100
-  BrowserWidth: 352
+  BrowserWidth: 220
   SortByName: 0
-  SelectedCategory: swutils.utility
+  SelectedCategory: swutils.samples
   SearchText: 
-  ActiveAsset: 
+  ActiveAsset: 1a73c9701c89759458335c445d830c0e:11400000
   LockedAsset: 
   BrowserScroll: {x: 0, y: 0}
   CategoryScroll: {x: 0, y: 0}
@@ -1762,10 +1814,15 @@ MonoBehaviour:
     Enabled: 0
     CategoryIdentifier: builtin.other
     Classification: 2
+  - TypeName: ProjectT.Data.SpriteData, ProjectT.Runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    Enabled: 1
+    CategoryIdentifier: builtin.other
+    Classification: 0
   Assignments: []
   Favourites: []
   OpenAssets:
-  - 0e98fcf430646b14d8f8654d982b3d51:11400000
+  - 1a73c9701c89759458335c445d830c0e:11400000
   RecentTypes: []
   ExcludedFolders: []
   SearchFolders:

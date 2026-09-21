@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6045c5555bff0c549a18f070a167ee35, type: 3}
+  m_Name: SpriteData
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.SpriteData
+  speedIcon1: {fileID: 4361022871735152462, guid: 7936b7523bdac8340a7d0076f27a5d06, type: 3}
+  speedIcon2: {fileID: 1406945339828753239, guid: 87f950698337d02449efae6cdc3ac3aa, type: 3}
+  speedIcon3: {fileID: 3678864367100343301, guid: 36023ed39117e6c4ca73d3c6f9b0e3a0, type: 3}

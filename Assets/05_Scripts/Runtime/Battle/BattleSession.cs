@@ -9,6 +9,7 @@ using SW.Util;
 using ProjectT.Data;
 using ProjectT.Deployment;
 using ProjectT.Economy;
+using ProjectT.Rewards;
 using ProjectT.Navigation;
 using ProjectT.Timing;
 using ProjectT.Units;
@@ -91,6 +92,11 @@ namespace ProjectT.Battle
         public int KilledCount { get; private set; }
 
         /// <summary>
+        /// 마지막 처치의 확률 계산 결과입니다. 현재는 배치 재화만 지급되며 아이템의 소유·영구 저장 결과가 아닙니다.
+        /// </summary>
+        public IReadOnlyList<RewardAmount> LastCalculatedRewards { get; private set; } = Array.Empty<RewardAmount>();
+
+        /// <summary>
         /// 구매한 아군 목록입니다. 부활 대기 중인 아군도 포함합니다.
         /// </summary>
         public IReadOnlyList<AllyUnit> Allies => allies;
@@ -132,6 +138,7 @@ namespace ProjectT.Battle
             if (definition == null
                 || definition.EnemyRoute == null
                 || definition.Enemy == null
+                || definition.DeploymentCurrency == null
                 || battlefield == null
                 || pauseController == null
                 || allyPrefab == null
@@ -340,7 +347,21 @@ namespace ProjectT.Battle
         {
             if (CurrentPhase != Phase.Defeat && CurrentPhase != Phase.Victory)
             {
-                Wallet.TryCredit(enemy.Definition.KillReward);
+                if (BattleRewardService.TryProcess(
+                    enemy.Definition.Rewards,
+                    definition.DeploymentCurrency,
+                    Wallet,
+                    () => UnityEngine.Random.value,
+                    out var calculated,
+                    out string reason))
+                {
+                    LastCalculatedRewards = calculated;
+                }
+                else
+                {
+                    LastCalculatedRewards = Array.Empty<RewardAmount>();
+                    SWLog.LogWarning("[BattleSession] 처치 보상 계산 실패: " + reason);
+                }
                 KilledCount++;
             }
 

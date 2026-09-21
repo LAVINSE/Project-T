@@ -51,16 +51,6 @@ namespace ProjectT.Editor
             StageOneGameplayBuilder.Set(preview, "character", character, "attackRange", previewRange, "placementRing", previewRing);
             StageOneGameplayBuilder.Set(placement, "session", session, "pointer", pointer, "preview", preview);
             StageOneGameplayBuilder.Set(commands, "pointer", pointer, "placement", placement);
-            StageOneGameplayBuilder.Set(screen, "placement", placement);
-            foreach (string name in new[]
-            {
-                "PurchaseWarriorButton",
-                "PurchaseMageButton"
-            })
-            {
-                GetOrAdd<ClassDeploymentButton>(GameObject.Find(name));
-            }
-
             var selectionRoot = Child(commands.transform, "SelectionIndicators");
             var selection = GetOrAdd<BattleSelectionPresentation>(selectionRoot);
             var range = Line(selectionRoot.transform, "SelectedAttackRange", 64, 0.07f, 999, true);
@@ -85,7 +75,6 @@ namespace ProjectT.Editor
                 marker.SetActive(false);
             }
 
-            GameObject.Find("CommandHint").GetComponent<TMPro.TMP_Text>().text = "클래스를 드래그하거나 클릭한 뒤 지면을 클릭해 배치하세요.";
             ArcaneWorkshopBuilder.Apply();
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
