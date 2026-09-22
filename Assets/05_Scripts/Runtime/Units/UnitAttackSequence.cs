@@ -12,6 +12,7 @@ namespace ProjectT.Units
     {
         #region 필드
         private bool active;
+        private bool impactSignaled;
         private CombatHealth targetHealth;
         private int targetLife;
         private float readyAt = float.NegativeInfinity;
@@ -30,7 +31,7 @@ namespace ProjectT.Units
         public float Duration { get; private set; }
 
         /// <summary>
-        /// 타격 프레임이 시작되는 게임 시각입니다.
+        /// 클립 이벤트 비율로 계산한 예상 타격 시각입니다. 실제 타격은 이벤트 수신 후 처리합니다.
         /// </summary>
         public float ImpactAt { get; private set; }
 
@@ -45,7 +46,7 @@ namespace ProjectT.Units
         public Vector2 TargetPosition { get; private set; }
 
         /// <summary>
-        /// 아직 타격 시점에 도달하지 않은 유효한 공격인지 반환합니다.
+        /// 아직 타격을 처리하지 않은 유효한 공격인지 반환합니다.
         /// </summary>
         public bool HasPendingImpact => active && !HasImpacted;
 
@@ -101,6 +102,7 @@ namespace ProjectT.Units
             targetHealth = health;
             targetLife = health.LifeVersion;
             HasImpacted = false;
+            impactSignaled = false;
             active = true;
             return true;
         }
@@ -125,11 +127,11 @@ namespace ProjectT.Units
         }
 
         /// <summary>
-        /// 타격 시점부터 한 번만 참을 반환합니다. 정지한 시각의 반복 호출로 피해가 중복되지 않습니다.
+        /// 현재 공격의 이벤트를 받은 뒤 한 번만 참을 반환하며 중복 피해를 막습니다.
         /// </summary>
         public bool TryImpact(float time)
         {
-            if (!HasPendingImpact || time < ImpactAt)
+            if (!HasPendingImpact || !impactSignaled)
             {
                 return false;
             }
@@ -144,6 +146,7 @@ namespace ProjectT.Units
         public void Cancel()
         {
             active = false;
+            impactSignaled = false;
         }
 
         /// <summary>
@@ -152,6 +155,7 @@ namespace ProjectT.Units
         public void Reset()
         {
             active = false;
+            impactSignaled = false;
             targetHealth = null;
             StartedAt = readyAt = float.NegativeInfinity;
             Duration = 0f;
@@ -164,6 +168,20 @@ namespace ProjectT.Units
         private static bool Finite(float value)
         {
             return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
+
+        /// <summary>
+        /// 현재 공격의 애니메이션 이벤트를 기록합니다. 취소되었거나 다른 공격이면 거절합니다.
+        /// </summary>
+        public bool SignalImpact(float startedAt)
+        {
+            if (!HasPendingImpact || StartedAt != startedAt)
+            {
+                return false;
+            }
+
+            impactSignaled = true;
+            return true;
         }
 
         #endregion // 함수

@@ -33,7 +33,7 @@ namespace ProjectT.Editor
         /// <summary>
         /// 적 이동 경로 데이터 경로입니다.
         /// </summary>
-        public const string EnemyRoute = "Assets/02_Res/Data/Navigation/Stage01EnemyRoute.asset";
+        public const string EnemyRoute = "Assets/02_Res/Data/Navigation/Stage01EnemyRouteData.asset";
 
         #endregion // 필드
 
@@ -43,14 +43,19 @@ namespace ProjectT.Editor
         /// </summary>
         public static string Data(Type type, string name)
         {
-            string category = type == typeof(StageDefinition)
+            string category = type == typeof(StageData)
                 ? "Stage"
-                : type == typeof(UnitAppearance)
-                    ? "Appearance"
-                    : type == typeof(EnemyRouteDefinition)
-                        ? "Navigation"
-                        : "Units";
-            return "Assets/02_Res/Data/" + category + "/" + name + ".asset";
+                : type == typeof(EnemyRouteData)
+                    ? "Navigation"
+                    : type == typeof(UnitClassData)
+                        ? "Character"
+                        : type == typeof(UnitEnemyData)
+                            ? "Enemy"
+                            : type == typeof(CurrencyData)
+                                ? "Currency"
+                                : "Items";
+            string fileName = name.EndsWith("Data", StringComparison.Ordinal) ? name : name + "Data";
+            return "Assets/02_Res/Data/" + category + "/" + fileName + ".asset";
         }
 
         #endregion // 함수

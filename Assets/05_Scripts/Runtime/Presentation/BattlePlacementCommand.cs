@@ -20,7 +20,7 @@ namespace ProjectT.Presentation
         [SerializeField] private BattleSession session;
         [SerializeField] private BattlefieldPointer pointer;
         [SerializeField] private DeploymentPreview preview;
-        private AllyClassDefinition pendingClass;
+        private UnitClassData pendingClass;
         private int consumedFrame = -1;
 
         #endregion // 필드
@@ -44,7 +44,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 배치 완료 개체를 선택 표시 담당에 알립니다.
         /// </summary>
-        public event Action<AllyUnit> Deployed;
+        public event Action<CharacterUnit> Deployed;
 
         /// <summary>
         /// 입력 안내를 전투 화면에 전달합니다.
@@ -57,7 +57,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 비용을 차감하지 않고 배치할 클래스를 선택합니다.
         /// </summary>
-        public void BeginPlacement(AllyClassDefinition definition, bool dragging = false)
+        public void BeginPlacement(UnitClassData definition, bool dragging = false)
         {
             if (!session.CanCommand
                 || session.Wallet == null
@@ -153,7 +153,7 @@ namespace ProjectT.Presentation
         /// </summary>
         private void ConfirmPlacement(Vector2 screenPosition)
         {
-            AllyClassDefinition definition = pendingClass;
+            UnitClassData definition = pendingClass;
             Clear();
             if (!pointer.TryGetPosition(screenPosition, out Vector2 position))
             {
@@ -161,7 +161,7 @@ namespace ProjectT.Presentation
                 return;
             }
 
-            if (!session.TryDeploy(definition, position, out AllyUnit unit, out string reason))
+            if (!session.TryDeploy(definition, position, out CharacterUnit unit, out string reason))
             {
                 MessageChanged?.Invoke(reason + " 비용은 차감되지 않았습니다.");
                 return;

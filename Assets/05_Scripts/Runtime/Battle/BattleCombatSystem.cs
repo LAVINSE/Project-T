@@ -13,10 +13,10 @@ namespace ProjectT.Battle
     public sealed class BattleCombatSystem
     {
         #region 필드
-        private readonly List<AllyUnit> allies;
+        private readonly List<CharacterUnit> allies;
         private readonly List<EnemyUnit> enemies;
         private readonly WorkshopObjective workshop;
-        private readonly Dictionary<AllyUnit, int> blockedCounts = new Dictionary<AllyUnit, int>();
+        private readonly Dictionary<CharacterUnit, int> blockedCounts = new Dictionary<CharacterUnit, int>();
 
         #endregion // 필드
 
@@ -32,7 +32,10 @@ namespace ProjectT.Battle
         /// <summary>
         /// 현재 전투의 개체 목록을 연결합니다.
         /// </summary>
-        public BattleCombatSystem(List<AllyUnit> allyUnits, List<EnemyUnit> enemyUnits, WorkshopObjective objective)
+        public BattleCombatSystem(
+            List<CharacterUnit> allyUnits,
+            List<EnemyUnit> enemyUnits,
+            WorkshopObjective objective)
         {
             allies = allyUnits;
             enemies = enemyUnits;
@@ -44,7 +47,7 @@ namespace ProjectT.Battle
         /// </summary>
         public void CancelAttacks()
         {
-            foreach (AllyUnit ally in allies)
+            foreach (CharacterUnit ally in allies)
             {
                 ally.Attack.Cancel();
                 ally.AttackTarget = null;
@@ -60,7 +63,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 이동을 시작하거나 사망한 아군의 저지를 같은 명령 안에서 해제합니다.
         /// </summary>
-        public void ReleaseUnavailableBlocker(AllyUnit ally)
+        public void ReleaseUnavailableBlocker(CharacterUnit ally)
         {
             if (ally.CanFight)
             {
@@ -89,14 +92,14 @@ namespace ProjectT.Battle
             }
 
             blockedCounts.Clear();
-            foreach (AllyUnit ally in allies)
+            foreach (CharacterUnit ally in allies)
             {
                 blockedCounts[ally] = 0;
             }
 
             foreach (EnemyUnit enemy in enemies)
             {
-                AllyUnit blocker = enemy.Blocker;
+                CharacterUnit blocker = enemy.Blocker;
                 if (blocker == null)
                 {
                     continue;
@@ -122,7 +125,7 @@ namespace ProjectT.Battle
                     continue;
                 }
 
-                AllyUnit blocker = enemy.Blocker;
+                CharacterUnit blocker = enemy.Blocker;
                 if (blocker != null)
                 {
                     continue;
@@ -131,7 +134,7 @@ namespace ProjectT.Battle
                 if (blocker == null)
                 {
                     float closest = float.PositiveInfinity;
-                    foreach (AllyUnit ally in allies)
+                    foreach (CharacterUnit ally in allies)
                     {
                         if (!ally.CanFight || ally.Definition.BlockCapacity <= blockedCounts[ally])
                         {
@@ -156,7 +159,7 @@ namespace ProjectT.Battle
                 }
             }
 
-            foreach (AllyUnit ally in allies)
+            foreach (CharacterUnit ally in allies)
             {
                 if (!ally.CanFight)
                 {
@@ -200,7 +203,7 @@ namespace ProjectT.Battle
                 ally.AttackTarget = target;
                 Begin(
                     ally.Attack,
-                    ally.Definition.Appearance,
+                    ally.Definition,
                     ally.Definition.AttackInterval,
                     time,
                     target.transform.position,
@@ -227,11 +230,11 @@ namespace ProjectT.Battle
                     continue;
                 }
 
-                AllyUnit target = enemy.Blocker;
+                CharacterUnit target = enemy.Blocker;
                 float closest = enemy.Definition.AttackRange;
                 if (target == null && !enemy.HasReachedWorkshop)
                 {
-                    foreach (AllyUnit ally in allies)
+                    foreach (CharacterUnit ally in allies)
                     {
                         if (!ally.Health.IsAlive)
                         {
@@ -259,7 +262,7 @@ namespace ProjectT.Battle
                 {
                     Begin(
                         enemy.Attack,
-                        enemy.Definition.Appearance,
+                        enemy.Definition,
                         enemy.Definition.AttackInterval,
                         time,
                         target.transform.position,
@@ -269,7 +272,7 @@ namespace ProjectT.Battle
                 {
                     Begin(
                         enemy.Attack,
-                        enemy.Definition.Appearance,
+                        enemy.Definition,
                         enemy.Definition.WorkshopAttackInterval,
                         time,
                         workshop.Position,
@@ -289,7 +292,7 @@ namespace ProjectT.Battle
         /// </summary>
         private static void Begin(
             UnitAttackSequence attack,
-            UnitAppearance appearance,
+            UnitData appearance,
             float interval,
             float time,
             Vector2 position,
@@ -301,7 +304,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 아군의 공격 대상과 사거리를 확인한 뒤 타격 시점에 피해를 적용합니다.
         /// </summary>
-        private void ResolveAllyAttack(AllyUnit ally, float time)
+        private void ResolveAllyAttack(CharacterUnit ally, float time)
         {
             UnitAttackSequence attack = ally.Attack;
             if (!attack.HasPendingImpact && !attack.IsPlaying(time))
@@ -335,8 +338,8 @@ namespace ProjectT.Battle
             EmitImpact(
                 ally.transform.position,
                 target.transform.position,
-                ally.Definition.Appearance,
-                target.Definition.Appearance,
+                ally.Definition,
+                target.Definition,
                 ally.Definition.BlockCapacity == 0);
             target.Health.TakeDamage(ally.Definition.AttackDamage);
         }
@@ -352,7 +355,7 @@ namespace ProjectT.Battle
                 return;
             }
 
-            AllyUnit target = enemy.AttackTarget;
+            CharacterUnit target = enemy.AttackTarget;
             if (target == null && enemy.HasReachedWorkshop && enemy.Blocker == null)
             {
                 ResolveWorkshopAttack(enemy, time);
@@ -381,12 +384,7 @@ namespace ProjectT.Battle
                 return;
             }
 
-            EmitImpact(
-                enemy.transform.position,
-                target.transform.position,
-                enemy.Definition.Appearance,
-                target.Definition.Appearance,
-                false);
+            EmitImpact(enemy.transform.position, target.transform.position, enemy.Definition, target.Definition, false);
             target.Health.TakeDamage(enemy.Definition.AttackDamage);
         }
 
@@ -412,7 +410,7 @@ namespace ProjectT.Battle
                 return;
             }
 
-            Vector2 offset = enemy.Definition.Appearance.AttackOriginOffset;
+            Vector2 offset = enemy.Definition.AttackOriginOffset;
             offset.x *= workshop.Position.x < enemy.transform.position.x ? -1f : 1f;
             Attacked?.Invoke((Vector2)enemy.transform.position + offset, workshop.Position, false);
             workshop.Health.TakeDamage(enemy.Definition.WorkshopAttackDamage);
@@ -424,8 +422,8 @@ namespace ProjectT.Battle
         private void EmitImpact(
             Vector2 source,
             Vector2 target,
-            UnitAppearance sourceAppearance,
-            UnitAppearance targetAppearance,
+            UnitData sourceAppearance,
+            UnitData targetAppearance,
             bool ranged)
         {
             Vector2 offset = sourceAppearance.AttackOriginOffset;
@@ -436,7 +434,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 아군과 적 사이의 평면 거리를 계산합니다.
         /// </summary>
-        private static float Distance(AllyUnit ally, EnemyUnit enemy)
+        private static float Distance(CharacterUnit ally, EnemyUnit enemy)
         {
             return UnityEngine.Vector2.Distance(ally.transform.position, enemy.transform.position);
         }

@@ -19,7 +19,6 @@ namespace ProjectT.Editor.Data
         /// </summary>
         private void BuildFields()
         {
-
             if (session.HasExternalChanges)
             {
                 detail.Add(new HelpBox("다른 창 또는 실행 취소에서 원본이 변경되었습니다. 되돌리기를 누르면 최신 원본을 다시 읽습니다.", HelpBoxMessageType.Warning));
@@ -92,15 +91,15 @@ namespace ProjectT.Editor.Data
                     "참조 열기",
                     action => OpenReference(path),
                     action => session?.Serialized.FindProperty(path)?.objectReferenceValue != null
-                        ? DropdownMenuAction.Status.Normal
-                        : DropdownMenuAction.Status.Disabled);
+                    ? DropdownMenuAction.Status.Normal
+                    : DropdownMenuAction.Status.Disabled);
                 menu.menu.AppendAction(
                     "참조 별도 복제",
                     action => BeginReferenceCopy(path),
                     action => !EditorApplication.isPlayingOrWillChangePlaymode
-                        && ProjectDataCatalog.GetKind(session?.Serialized.FindProperty(path)?.objectReferenceValue as ScriptableObject) >= 0
-                            ? DropdownMenuAction.Status.Normal
-                            : DropdownMenuAction.Status.Disabled);
+                    && ProjectDataCatalog.GetKind(session?.Serialized.FindProperty(path)?.objectReferenceValue as ScriptableObject) >= 0
+                    ? DropdownMenuAction.Status.Normal
+                    : DropdownMenuAction.Status.Disabled);
                 container.Add(menu);
             }
 
@@ -164,12 +163,8 @@ namespace ProjectT.Editor.Data
             section.Add(footer);
             if (path == "rewards")
             {
-                section.Add(Text(
-                    "각 항목은 독립 판정합니다. 100%는 확정 지급입니다.",
-                    "project-data-description"));
-                section.Add(Text(
-                    "현재 배치 재화만 지급되며, 아이템·다른 재화는 계산만 지원합니다.",
-                    "project-data-description"));
+                section.Add(Text("각 항목은 독립 판정합니다. 100%는 확정 지급입니다.", "project-data-description"));
+                section.Add(Text("현재 배치 재화만 지급되며, 아이템·다른 재화는 계산만 지원합니다.", "project-data-description"));
             }
 
             return section;
@@ -323,9 +318,7 @@ namespace ProjectT.Editor.Data
         /// </summary>
         private void FocusIssue(ProjectDataIssue issue)
         {
-            if (issue.Asset != session.Draft
-                && issue.Asset != session.Source
-                && issue.Asset != null)
+            if (issue.Asset != session.Draft && issue.Asset != session.Source && issue.Asset != null)
             {
                 var window = NavigateToAsset(issue.Asset);
                 if (window != null)

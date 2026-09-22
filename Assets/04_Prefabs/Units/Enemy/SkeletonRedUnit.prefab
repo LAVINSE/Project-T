@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &309809117672984658
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 788575783469256608, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -306131988, guid: 59e8078300ee57942b7b34e324ffe86e, type: 3}
+    - target: {fileID: 788575783469256608, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3721897667003035443, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_Name
+      value: SkeletonRedUnit
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730715270449507533, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730715270449507533, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730715270449507533, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730715270449507533, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.026249979
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4526435361934506916, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: idleClip
+      value: 
+      objectReference: {fileID: 7400000, guid: 21b48ff5878216e42bd65bc07da53250, type: 2}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: moveClip
+      value: 
+      objectReference: {fileID: 7400000, guid: 37886958aed832246ab54f64408b16cb, type: 2}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: deathClip
+      value: 
+      objectReference: {fileID: 7400000, guid: 37e913b3eb827aa4da09c0284834e3b3, type: 2}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: idleState
+      value: Base Layer.SkeletonRed_Idle
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: attackClip
+      value: 
+      objectReference: {fileID: 7400000, guid: b212c7f2f1f0fd246a77807b9208957b, type: 2}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: deathState
+      value: Base Layer.SkeletonRed_Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: idleSprite
+      value: 
+      objectReference: {fileID: -306131988, guid: 59e8078300ee57942b7b34e324ffe86e, type: 3}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: attackState
+      value: Base Layer.SkeletonRed_MeleeAttack
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}

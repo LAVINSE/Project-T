@@ -19,8 +19,8 @@ namespace ProjectT.Presentation
         [SerializeField] private BattleSession session;
         [SerializeField] private BattlefieldPointer pointer;
         [SerializeField] private BattlePlacementCommand placement;
-        private AllyUnit selectedUnit;
-        private AllyUnit latestPurchase;
+        private CharacterUnit selectedUnit;
+        private CharacterUnit latestPurchase;
 
         #endregion // 필드
 
@@ -28,7 +28,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 현재 선택한 아군입니다. 부활 대기 중인 아군도 선택할 수 있습니다.
         /// </summary>
-        public AllyUnit SelectedUnit => selectedUnit;
+        public CharacterUnit SelectedUnit => selectedUnit;
 
         /// <summary>
         /// 플레이어에게 표시할 구매·선택·이동 안내입니다.
@@ -41,7 +41,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 구매할 클래스를 골라 위치 선택을 시작합니다. 배치가 완료되어야 비용이 차감됩니다.
         /// </summary>
-        public void PurchaseClass(AllyClassDefinition definition)
+        public void PurchaseClass(UnitClassData definition)
         {
             placement.BeginPlacement(definition);
         }
@@ -85,7 +85,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 새 아군을 강조하고 구매 결과를 표시합니다.
         /// </summary>
-        private void OnDeployed(AllyUnit created)
+        private void OnDeployed(CharacterUnit created)
         {
             SelectUnit(null);
             latestPurchase = created;
@@ -95,7 +95,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 아군 한 명을 선택합니다. 목록을 이용하면 겹친 다른 아군도 선택할 수 있습니다.
         /// </summary>
-        public void SelectUnit(AllyUnit unit)
+        public void SelectUnit(CharacterUnit unit)
         {
             if (!session.CanCommand)
             {
@@ -186,9 +186,9 @@ namespace ProjectT.Presentation
                 return;
             }
 
-            AllyUnit nearest = null;
+            CharacterUnit nearest = null;
             float closest = float.PositiveInfinity;
-            foreach (AllyUnit ally in session.Allies)
+            foreach (CharacterUnit ally in session.Allies)
             {
                 if (!ContainsClick(ally, position))
                 {
@@ -211,12 +211,12 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 마우스 월드 좌표가 유닛 선택 영역에 포함되는지 확인합니다.
         /// </summary>
-        private static bool ContainsClick(AllyUnit ally, Vector2 position)
+        private static bool ContainsClick(CharacterUnit ally, Vector2 position)
         {
             Vector2 feet = ally.transform.position;
             return Mathf.Abs(position.x - feet.x) <= 0.65f
                 && position.y >= feet.y - 0.3f
-                && position.y <= feet.y + ally.Definition.Appearance.HealthBarHeight;
+                && position.y <= feet.y + ally.Definition.HealthBarHeight;
         }
 
         #endregion // 함수

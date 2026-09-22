@@ -42,7 +42,7 @@ namespace ProjectT.Editor
                 return "실패: " + "스테이지 1을 편집 모드로 열어 주세요.";
             }
 
-            var definition = AssetDatabase.LoadAssetAtPath<EnemyRouteDefinition>("Assets/02_Res/Data/Navigation/Stage01EnemyRoute.asset");
+            var definition = AssetDatabase.LoadAssetAtPath<EnemyRouteData>("Assets/02_Res/Data/Navigation/Stage01EnemyRouteData.asset");
             if (definition == null)
             {
                 SWLog.LogWarning("[StageOneTerrainBuilder] 작업 중단: 경로 데이터가 없습니다.");

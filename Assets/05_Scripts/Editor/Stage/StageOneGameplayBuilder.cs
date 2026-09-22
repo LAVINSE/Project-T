@@ -40,12 +40,13 @@ namespace ProjectT.Editor
         /// </summary>
         public static string Create()
         {
-            var deploymentCurrency = AssetDatabase.LoadAssetAtPath<CurrencyDefinition>("Assets/02_Res/Data/Currency/BattleCoin.asset");
+            var deploymentCurrency = AssetDatabase.LoadAssetAtPath<CurrencyData>("Assets/02_Res/Data/Currency/BattleCoinData.asset");
             if (deploymentCurrency == null)
             {
                 SWLog.LogWarning("[StageOneGameplayBuilder] 생성 실패: 배치 재화 데이터가 없습니다.");
                 return string.Empty;
             }
+
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             if (EditorApplication.isPlaying || scene.path != StageOneSceneBuilder.ScenePath)
             {
@@ -58,115 +59,24 @@ namespace ProjectT.Editor
                 return "이미 연결된 전투를 보존했습니다.";
             }
 
+            var warrior = AssetDatabase.LoadAssetAtPath<UnitClassData>("Assets/02_Res/Data/Character/OrcWarriorRedData.asset");
+            var mage = AssetDatabase.LoadAssetAtPath<UnitClassData>("Assets/02_Res/Data/Character/OrcMageRedData.asset");
+            var enemy = AssetDatabase.LoadAssetAtPath<UnitEnemyData>("Assets/02_Res/Data/Enemy/SkeletonBasicData.asset");
+            if (warrior == null || !warrior.IsValid || mage == null || !mage.IsValid || enemy == null || !enemy.IsValid)
+            {
+                SWLog.LogWarning("[StageOneGameplayBuilder] 생성 실패: 종류별 유닛 데이터와 프리팹을 먼저 설정하세요.");
+                return "실패: 유닛 데이터와 프리팹을 확인하세요.";
+            }
+
             StageOneSceneBuilder.EnsureFolder(Prefabs.TrimEnd('/'));
-            lineMaterial = new Material(Shader.Find("Sprites/Default"));
-            AssetDatabase.CreateAsset(lineMaterial, ProjectAssetPaths.BattleLine);
-            string warriorFolder = "Assets/RafaelMatos/ERW-Grass Land/Characters/warrior/";
-            UnitAppearance warriorAppearance = Appearance(
-                "WarriorAppearance",
-                warriorFolder + "warrior-idle.png",
-                warriorFolder + "warrior-run.png",
-                warriorFolder + "warrior-single swing 1.png",
-                warriorFolder + "warrior-death.png");
-            string magePrefix = "Assets/RafaelMatos/ERW-Grassland 2.0/Characters/orc mage/orc1/orc mage - with hand fx-";
-            UnitAppearance mageAppearance = Appearance(
-                "MageAppearance",
-                magePrefix + "idle.png",
-                magePrefix + "walk.png",
-                magePrefix + "atk1.png",
-                magePrefix + "death.png");
-            string enemyPrefix = "Assets/RafaelMatos/ERW-Crypt/Characters/Skeleton/skeleton-variation1-";
-            UnitAppearance enemyAppearance = Appearance(
-                "SkeletonAppearance",
-                enemyPrefix + "idle.png",
-                enemyPrefix + "walk.png",
-                enemyPrefix + "attack.png",
-                enemyPrefix + "death.png");
-            if (warriorAppearance == null || mageAppearance == null || enemyAppearance == null)
+            lineMaterial = AssetDatabase.LoadAssetAtPath<Material>(ProjectAssetPaths.BattleLine);
+            if (lineMaterial == null)
             {
-                return "실패: 유닛 외형의 필수 스프라이트를 확인해 주세요.";
+                lineMaterial = new Material(Shader.Find("Sprites/Default"));
+                AssetDatabase.CreateAsset(lineMaterial, ProjectAssetPaths.BattleLine);
             }
 
-            var warrior = Asset<AllyClassDefinition>("Warrior");
-            Set(
-                warrior,
-                "displayName",
-                "전사",
-                "deploymentCost",
-                30d,
-                "maximumHealth",
-                150f,
-                "moveSpeed",
-                2.8f,
-                "attackDamage",
-                18f,
-                "attackRange",
-                1.05f,
-                "attackInterval",
-                0.8f,
-                "blockCapacity",
-                1,
-                "revivalSeconds",
-                12f,
-                "appearance",
-                warriorAppearance);
-            var mage = Asset<AllyClassDefinition>("Mage");
-            Set(
-                mage,
-                "displayName",
-                "마법사",
-                "deploymentCost",
-                40d,
-                "maximumHealth",
-                80f,
-                "moveSpeed",
-                2.5f,
-                "attackDamage",
-                24f,
-                "attackRange",
-                4.5f,
-                "attackInterval",
-                1.35f,
-                "blockCapacity",
-                0,
-                "revivalSeconds",
-                16f,
-                "appearance",
-                mageAppearance);
-            var enemy = Asset<EnemyDefinition>("Skeleton");
-            Set(
-                enemy,
-                "maximumHealth",
-                72f,
-                "moveSpeed",
-                1.2f,
-                "attackDamage",
-                10f,
-                "attackRange",
-                1.05f,
-                "attackInterval",
-                1.4f,
-                "workshopAttackDamage",
-                10f,
-                "workshopAttackInterval",
-                1.4f,
-                "killReward",
-                0d,
-                "appearance",
-                enemyAppearance);
-            using (var serialized = new SerializedObject(enemy))
-            {
-                var rewards = serialized.FindProperty("rewards");
-                rewards.arraySize = 1;
-                var reward = rewards.GetArrayElementAtIndex(0);
-                reward.FindPropertyRelative("definition").objectReferenceValue = deploymentCurrency;
-                reward.FindPropertyRelative("useAmountOverride").boolValue = true;
-                reward.FindPropertyRelative("overrideAmount").doubleValue = 10d;
-                reward.FindPropertyRelative("acquisitionProbability").floatValue = 100f;
-                serialized.ApplyModifiedPropertiesWithoutUndo();
-            }
-
-            var stage = Asset<StageDefinition>("Stage01");
+            var stage = Asset<StageData>("Stage01");
             Set(
                 stage,
                 "displayName",
@@ -182,13 +92,11 @@ namespace ProjectT.Editor
                 "enemiesPerRound",
                 new[] { 6, 9, 12 },
                 "enemyRoute",
-                AssetDatabase.LoadAssetAtPath<EnemyRouteDefinition>(ProjectAssetPaths.EnemyRoute),
+                AssetDatabase.LoadAssetAtPath<EnemyRouteData>(ProjectAssetPaths.EnemyRoute),
                 "enemy",
                 enemy,
                 "classes",
                 new UnityEngine.Object[] { warrior, mage });
-            AllyUnit allyPrefab = UnitPrefab(true).GetComponent<AllyUnit>();
-            EnemyUnit enemyPrefab = UnitPrefab(false).GetComponent<EnemyUnit>();
             var traceObject = new GameObject("AttackTrace", typeof(LineRenderer), typeof(AttackTrace));
             ConfigureLine(traceObject.GetComponent<LineRenderer>(), Color.white, 0.07f, 3000, 2);
             AttackTrace tracePrefab = PrefabUtility.SaveAsPrefabAsset(traceObject, "Assets/04_Prefabs/Effects/AttackTrace.prefab").GetComponent<AttackTrace>();
@@ -198,20 +106,7 @@ namespace ProjectT.Editor
             var units = new GameObject("BattleUnits").transform;
             var session = battleRoot.AddComponent<BattleSession>();
             var terrain = UnityEngine.Object.FindFirstObjectByType<WalkableBattlefield>();
-            Set(
-                session,
-                "definition",
-                stage,
-                "battlefield",
-                terrain,
-                "pauseController",
-                pause,
-                "allyPrefab",
-                allyPrefab,
-                "enemyPrefab",
-                enemyPrefab,
-                "unitParent",
-                units);
+            Set(session, "definition", stage, "battlefield", terrain, "pauseController", pause, "unitParent", units);
             var command = battleRoot.AddComponent<BattleMouseCommand>();
             Set(command, "session", session);
             var attacks = battleRoot.AddComponent<BattleAttackPresentation>();
@@ -223,83 +118,6 @@ namespace ProjectT.Editor
             EditorSceneManager.SaveScene(scene);
             AssetDatabase.SaveAssets();
             return "스테이지 1 연결 완료: 전사·마법사, 3라운드, 무료 부활, 마우스 조작";
-        }
-
-        /// <summary>
-        /// 기존 외형 자산의 프레임 순서와 타격 시점을 새로 연결합니다.
-        /// </summary>
-        public static UnitAppearance Appearance(string name, string idle, string move, string attack, string death)
-        {
-            Sprite[] idleFrames = StageOneSceneBuilder.LoadSprites(idle);
-            Sprite[] moveFrames = StageOneSceneBuilder.LoadSprites(move);
-            Sprite[] attackFrames = StageOneSceneBuilder.LoadSprites(attack);
-            Sprite[] deathFrames = StageOneSceneBuilder.LoadSprites(death);
-            if (idleFrames.Length == 0 || moveFrames.Length == 0 || attackFrames.Length == 0 || deathFrames.Length == 0)
-            {
-                SWLog.LogWarning("[StageOneGameplayBuilder] 외형 설정 실패: 필수 스프라이트가 없습니다. " + name);
-                return null;
-            }
-
-            var appearance = AssetDatabase.LoadAssetAtPath<UnitAppearance>(ProjectAssetPaths.Data(typeof(UnitAppearance), name)) ?? Asset<UnitAppearance>(name);
-            Sprite first = idleFrames[0];
-            Bounds visible = SpriteVisibleBounds.Read(first);
-            float scale = first.pixelsPerUnit / 32f;
-            bool configured = Set(
-                appearance,
-                "idleFrames",
-                idleFrames,
-                "moveFrames",
-                moveFrames,
-                "attackFrames",
-                attackFrames,
-                "deathFrames",
-                deathFrames,
-                "feetOffset",
-                -visible.min.y * scale,
-                "healthBarHeight",
-                visible.size.y * scale + 0.2f,
-                "attackImpactFrame",
-                name == "WarriorAppearance" ? 2 : name == "MageAppearance" ? 9 : 11);
-            return configured ? appearance : null;
-        }
-
-        /// <summary>
-        /// 아군 또는 적의 수명·외형·체력바를 연결한 프리팹을 저장합니다.
-        /// </summary>
-        private static GameObject UnitPrefab(bool ally)
-        {
-            var instance = new GameObject(ally ? "AllyUnit" : "EnemyUnit");
-            if (ally)
-            {
-                instance.AddComponent<AllyUnit>();
-            }
-            else
-            {
-                instance.AddComponent<EnemyUnit>();
-            }
-
-            var presentation = instance.AddComponent<UnitPresentation>();
-            var character = new GameObject("CharacterVisual", typeof(SpriteRenderer));
-            character.transform.SetParent(instance.transform);
-            HealthBarPresentation healthBar = HealthBarPrefabSetup.ConfigureUnit(instance);
-            LineRenderer ring = Line("SelectionRing", instance.transform, new Color(1f, 0.86f, 0.4f), 0.06f, 1000, 32);
-            ring.loop = true;
-            ring.enabled = false;
-            LineRenderer arrow = Line("NewUnitArrow", instance.transform, new Color(1f, 0.86f, 0.4f), 0.1f, 2002, 5);
-            arrow.enabled = false;
-            Set(
-                presentation,
-                "characterRenderer",
-                character.GetComponent<SpriteRenderer>(),
-                "healthBar",
-                healthBar,
-                "selectionRing",
-                ring,
-                "newUnitArrow",
-                arrow);
-            GameObject prefab = PrefabUtility.SaveAsPrefabAsset(instance, Prefabs + (ally ? "AllyUnit" : "EnemyUnit") + ".prefab");
-            UnityEngine.Object.DestroyImmediate(instance);
-            return prefab;
         }
 
         /// <summary>

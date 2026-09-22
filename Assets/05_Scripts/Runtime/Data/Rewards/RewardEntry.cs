@@ -12,17 +12,18 @@ namespace ProjectT.Data
     public sealed class RewardEntry
     {
         #region 필드
-        [SerializeField] private RewardDefinition definition;
+        [SerializeField] private RewardData definition;
         [SerializeField] private bool useAmountOverride;
         [SerializeField, Min(0)] private double overrideAmount = 1d;
         [SerializeField, Range(0, 100)] private float acquisitionProbability = 100f;
+
         #endregion // 필드
 
         #region 프로퍼티
         /// <summary>
         /// 지급 대상 재화 또는 아이템의 원본 자산입니다.
         /// </summary>
-        public RewardDefinition Definition => definition;
+        public RewardData Definition => definition;
 
         /// <summary>
         /// 기본 수량 대신 항목의 개별 수량을 사용할지 여부입니다.
@@ -43,13 +44,14 @@ namespace ProjectT.Data
         /// 실제 지급 수량입니다. 참조가 없고 덮어쓰기도 꺼져 있으면 계산 불가 값입니다.
         /// </summary>
         public double Amount => useAmountOverride ? overrideAmount : definition == null ? double.NaN : definition.DefaultAmount;
+
         #endregion // 프로퍼티
 
         #region 초기화
         /// <summary>
         /// 검증할 개별 보상 설정을 보관합니다. 생성은 Create를 통해 요청합니다.
         /// </summary>
-        private RewardEntry(RewardDefinition definition, float probability, bool useOverride, double amount)
+        private RewardEntry(RewardData definition, float probability, bool useOverride, double amount)
         {
             this.definition = definition;
             acquisitionProbability = probability;
@@ -60,7 +62,11 @@ namespace ProjectT.Data
         /// <summary>
         /// 보상 설정을 검증한 뒤 생성합니다. 잘못된 참조·수량·확률이면 이유를 기록하고 null을 반환합니다.
         /// </summary>
-        public static RewardEntry Create(RewardDefinition definition, float probability = 100f, bool useOverride = false, double amount = 1d)
+        public static RewardEntry Create(
+            RewardData definition,
+            float probability = 100f,
+            bool useOverride = false,
+            double amount = 1d)
         {
             var entry = new RewardEntry(definition, probability, useOverride, amount);
             if (!entry.TryValidate(out string reason))
@@ -71,6 +77,7 @@ namespace ProjectT.Data
 
             return entry;
         }
+
         #endregion // 초기화
 
         #region 검사
@@ -92,8 +99,10 @@ namespace ProjectT.Data
                 return false;
             }
 
-            if (float.IsNaN(acquisitionProbability) || float.IsInfinity(acquisitionProbability)
-                || acquisitionProbability < 0f || acquisitionProbability > 100f)
+            if (float.IsNaN(acquisitionProbability)
+                || float.IsInfinity(acquisitionProbability)
+                || acquisitionProbability < 0f
+                || acquisitionProbability > 100f)
             {
                 reason = "획득 확률은 0부터 100 사이여야 합니다.";
                 return false;
@@ -109,6 +118,7 @@ namespace ProjectT.Data
         {
             return !double.IsNaN(amount) && !double.IsInfinity(amount) && amount >= 0d;
         }
+
         #endregion // 검사
     }
 }

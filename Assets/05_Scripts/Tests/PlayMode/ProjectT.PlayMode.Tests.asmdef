@@ -1,7 +1,0 @@
-{
-    "name": "ProjectT.PlayMode.Tests",
-    "rootNamespace": "ProjectT.Tests",
-    "references": ["ProjectT.Runtime", "SWUtils.Runtime", "Unity.InputSystem", "Unity.ugui", "Unity.TextMeshPro"],
-    "optionalUnityReferences": ["TestAssemblies"],
-    "autoReferenced": false
-}

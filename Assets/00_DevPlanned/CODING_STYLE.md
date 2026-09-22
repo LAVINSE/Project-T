@@ -1,6 +1,13 @@
 # 프로젝트 코드 작성 규칙
 
-`Assets/05_Scripts`의 런타임·편집기·테스트 코드에 공통 적용합니다. SWUtils의 필드 배치, 영역 구분, 로그 API와 한글 XML 주석을 기준으로 합니다.
+`Assets/05_Scripts`의 런타임·편집기 코드에 공통 적용합니다. SWUtils의 필드 배치, 영역 구분, 로그 API와 한글 XML 주석을 기준으로 합니다.
+
+## 테스트·마이그레이션 코드 추가 전 확인
+
+- 자동 테스트, 일회성 검증, 마이그레이션 코드를 새로 만들거나 추가하기 전에는 목적과 범위를 설명하고 사용자 확인을 받습니다. 확인 없이 미리 만들지 않습니다.
+- 사용자가 Unity에서 지속적으로 사용하는 인스펙터 테스트 버튼, 데이터 편집기, 시험 전투 기능은 유지합니다.
+- 현재 자동 테스트 폴더와 과거 일회성 검증·마이그레이션 도구는 사용자 요청에 따라 제거했습니다. 임의로 다시 생성하지 않습니다.
+- 작업 결과는 우선 Unity 컴파일과 기존 수동 확인 기능으로 검증합니다. 검증용 코드 추가가 필요하면 먼저 질문합니다.
 
 ## 코드 정렬
 
@@ -28,6 +35,14 @@ private bool Prepare(GameObject prefab)
 }
 ```
 
+## 데이터와 유닛 명명
+
+- 프로젝트 ScriptableObject 스크립트와 자산 이름은 `Data`로 끝냅니다. 예: `UnitClassData`, `UnitEnemyData`, `OrcMageRedData`, `BattleCoinData`.
+- `UnitData`는 공통 능력치·프리팹·표시 정보의 부모입니다. 캐릭터와 적은 각각 `UnitClassData`, `UnitEnemyData` 한 자산으로 관리합니다.
+- 데이터 자산은 `02_Res/Data/Character`, `02_Res/Data/Enemy`에 구분합니다. 종류별 프리팹은 `04_Prefabs/Units/Character`, `04_Prefabs/Units/Enemy`에 `<종류>Unit` 이름으로 둡니다.
+- 공통 동작은 `CharacterUnitBase`, `EnemyUnitBase`에 두고 종류별 프리팹은 이를 상속하는 변형으로 만듭니다. 타입마다 동작 스크립트를 복제하지 않습니다.
+- 애니메이션 프레임 배열은 데이터에 중복 저장하지 않습니다. 프리팹의 `UnitAnimation`과 Animator가 원본 클립을 재생하고 공격 클립의 `AttackImpact` 이벤트가 피해 시점을 전달합니다.
+
 ## 로그와 실패 처리
 
 - 프로젝트 코드에서 잘못된 입력을 `throw`로 전달하지 않습니다. SWUtils의 실제 API인 `SW.Util.SWLog`로 원인을 기록합니다.
@@ -49,4 +64,4 @@ dotnet Tools/CodeStyle/bin/Debug/net10.0/ProjectCodeStyle.dll Assets/05_Scripts 
 dotnet Tools/CodeStyle/bin/Debug/net10.0/ProjectCodeStyle.dll Assets/05_Scripts --audit
 ```
 
-`--check`는 파일을 수정하지 않고 정렬이 필요한 경우 종료 코드 1을 반환합니다. `--audit`는 XML 주석이 없는 타입·프로퍼티·함수를 표시합니다. 실패 처리 변경은 Unity 컴파일과 편집기·플레이 모드 테스트로 함께 검증합니다.
+`--check`는 파일을 수정하지 않고 정렬이 필요한 경우 종료 코드 1을 반환합니다. `--audit`는 XML 주석이 없는 타입·프로퍼티·함수를 표시합니다. 코드 변경은 Unity 컴파일과 사용자가 유지하는 수동 확인 기능으로 검증하며, 자동 테스트 코드를 추가하려면 사전 확인을 받습니다.

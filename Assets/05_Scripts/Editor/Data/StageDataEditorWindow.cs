@@ -10,6 +10,7 @@ namespace ProjectT.Editor.Data
         /// 이 창에서 목록 조회와 생성에 사용하는 데이터 종류입니다.
         /// </summary>
         protected override int DataKind => 2;
+
         #endregion // 속성
     }
 }

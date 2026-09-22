@@ -24,11 +24,10 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 현재 클래스의 외형과 실제 공격 거리로 미리보기를 갱신합니다.
         /// </summary>
-        public void Show(AllyClassDefinition definition, Vector2 position, bool valid)
+        public void Show(UnitClassData definition, Vector2 position, bool valid)
         {
-            Sprite[] frames = definition.Appearance.GetFrames(true, false, false);
-            character.sprite = frames.Length > 0 ? frames[0] : null;
-            character.transform.position = position + Vector2.up * definition.Appearance.FeetOffset;
+            character.sprite = definition.PreviewSprite;
+            character.transform.position = position + Vector2.up * definition.FeetOffset;
             if (character.sprite != null)
             {
                 character.transform.localScale = Vector3.one * character.sprite.pixelsPerUnit / 32f;

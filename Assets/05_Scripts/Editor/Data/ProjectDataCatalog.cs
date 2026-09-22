@@ -19,13 +19,12 @@ namespace ProjectT.Editor.Data
         public const string DataFolder = "Assets/02_Res/Data";
         private static readonly Type[] supportedTypes =
         {
-            typeof(AllyClassDefinition),
-            typeof(EnemyDefinition),
-            typeof(StageDefinition),
-            typeof(EnemyRouteDefinition),
-            typeof(UnitAppearance),
-            typeof(CurrencyDefinition),
-            typeof(ItemDefinition)
+            typeof(UnitClassData),
+            typeof(UnitEnemyData),
+            typeof(StageData),
+            typeof(EnemyRouteData),
+            typeof(CurrencyData),
+            typeof(ItemData)
         };
         private static readonly string[] kindNames =
         {
@@ -33,15 +32,47 @@ namespace ProjectT.Editor.Data
             "적",
             "스테이지",
             "경로",
-            "외형",
             "재화",
             "아이템"
         };
         private static readonly Dictionary<string, string[]> fieldDescriptions = new Dictionary<string, string[]>
         {
-            { "deploymentCurrency", new[] { "배치 재화", "이 자산에 해당하는 보상만 현재 전투 지갑에 지급합니다. 시작 금액과 배치 비용도 이 재화를 사용합니다.", "전투 경제" } },
-            { "defaultAmount", new[] { "기본 수량", "보상 항목에서 수량 덮어쓰기를 끄면 사용하는 기본값입니다. 소유 잔액이 아닙니다.", "보상 기본값" } },
-            { "icon", new[] { "아이콘", "선택적으로 표시할 재화·아이템 그림입니다.", "기본 정보" } },
+            {
+                "prefab",
+                new[]
+                {
+                    "유닛 프리팹",
+                    "이 종류의 프리팹입니다. 애니메이터와 타격 이벤트는 프리팹 및 클립에서 설정합니다.",
+                    "외형"
+                }
+            },
+            {
+                "deploymentCurrency",
+                new[]
+                {
+                    "배치 재화",
+                    "이 자산에 해당하는 보상만 현재 전투 지갑에 지급합니다. 시작 금액과 배치 비용도 이 재화를 사용합니다.",
+                    "전투 경제"
+                }
+            },
+            {
+                "defaultAmount",
+                new[]
+                {
+                    "기본 수량",
+                    "보상 항목에서 수량 덮어쓰기를 끄면 사용하는 기본값입니다. 소유 잔액이 아닙니다.",
+                    "보상 기본값"
+                }
+            },
+            {
+                "icon",
+                new[]
+                {
+                    "아이콘",
+                    "선택적으로 표시할 재화·아이템 그림입니다.",
+                    "기본 정보"
+                }
+            },
             {
                 "displayName",
                 new[]
@@ -151,15 +182,6 @@ namespace ProjectT.Editor.Data
                 }
             },
             {
-                "appearance",
-                new[]
-                {
-                    "외형",
-                    "연결된 외형은 여러 데이터가 공유할 수 있습니다. 별도 변형은 참조 복제를 사용하세요.",
-                    "참조"
-                }
-            },
-            {
                 "startingCurrency",
                 new[]
                 {
@@ -236,46 +258,8 @@ namespace ProjectT.Editor.Data
                 new[]
                 {
                     "초상화 (선택)",
-                    "비어 있으면 첫 대기 프레임을 사용합니다.",
-                    "외형",
-            "재화",
-            "아이템"
-                }
-            },
-            {
-                "idleFrames",
-                new[]
-                {
-                    "대기 프레임",
-                    "기본 표시 그림입니다. 순서대로 재생하며 한 장 이상 필요합니다.",
-                    "애니메이션"
-                }
-            },
-            {
-                "moveFrames",
-                new[]
-                {
-                    "이동 프레임 (선택)",
-                    "비어 있으면 대기 프레임을 사용합니다.",
-                    "애니메이션"
-                }
-            },
-            {
-                "attackFrames",
-                new[]
-                {
-                    "공격 프레임 (선택)",
-                    "비어 있으면 대기 프레임을 사용합니다. 타격 프레임은 이 목록의 번호입니다.",
-                    "애니메이션"
-                }
-            },
-            {
-                "deathFrames",
-                new[]
-                {
-                    "사망 프레임 (선택)",
-                    "비어 있으면 기존 대기 프레임 표시 규칙을 사용합니다.",
-                    "애니메이션"
+                    "비어 있으면 프리팹의 기본 그림을 사용합니다.",
+                    "외형"
                 }
             },
             {
@@ -285,15 +269,6 @@ namespace ProjectT.Editor.Data
                     "표시 색상",
                     "원본 그림에 곱할 색상입니다.",
                     "표시 조정"
-                }
-            },
-            {
-                "framesPerSecond",
-                new[]
-                {
-                    "초당 프레임",
-                    "게임 시간 1초에 표시할 프레임 수입니다. 1 이상이어야 합니다.",
-                    "애니메이션"
                 }
             },
             {
@@ -312,15 +287,6 @@ namespace ProjectT.Editor.Data
                     "체력바 높이",
                     "발 위치로부터 체력바까지의 월드 높이입니다.",
                     "표시 조정"
-                }
-            },
-            {
-                "attackImpactFrame",
-                new[]
-                {
-                    "타격 프레임 (0부터)",
-                    "공격 피해가 발생하는 프레임입니다. 공격 프레임 목록 안의 번호를 지정하세요.",
-                    "애니메이션"
                 }
             },
             {
@@ -372,32 +338,37 @@ namespace ProjectT.Editor.Data
         /// </summary>
         public static string GetFolder(Type type)
         {
-            if (type == typeof(AllyClassDefinition) || type == typeof(EnemyDefinition))
+            if (type == typeof(UnitClassData))
             {
-                return DataFolder + "/Units";
+                return DataFolder + "/Character";
             }
 
-            if (type == typeof(StageDefinition))
+            if (type == typeof(UnitEnemyData))
+            {
+                return DataFolder + "/Enemy";
+            }
+
+            if (type == typeof(StageData))
             {
                 return DataFolder + "/Stage";
             }
 
-            if (type == typeof(EnemyRouteDefinition))
+            if (type == typeof(EnemyRouteData))
             {
                 return DataFolder + "/Navigation";
             }
 
-            if (type == typeof(CurrencyDefinition))
+            if (type == typeof(CurrencyData))
             {
                 return DataFolder + "/Currency";
             }
 
-            if (type == typeof(ItemDefinition))
+            if (type == typeof(ItemData))
             {
                 return DataFolder + "/Items";
             }
 
-            return type == typeof(UnitAppearance) ? DataFolder + "/Appearance" : null;
+            return null;
         }
 
         /// <summary>

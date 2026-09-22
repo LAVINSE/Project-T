@@ -5,8 +5,7 @@ AssetOrigin:
   productId: 272289
   packageName: Epic RPG World Collection
   packageVersion: 1.8
-  assetPath: Assets/RafaelMatos/ERW-Ancient Ruins/Tilesets/Tileset-Animated Terrains-16
-    framesGUIDE.aseprite
+  assetPath: Assets/RafaelMatos/ERW-Ancient Ruins/Tilesets/Tileset-Animated Terrains-16 framesGUIDE.aseprite
   uploadId: 949568
 ScriptedImporter:
   internalIDToNameTable: []
@@ -51,7 +50,9 @@ ScriptedImporter:
     cubemapConvolution: 0
     seamlessCubemap: 0
     alphaIsTransparency: 1
+    spriteTessellationMethod: 0
     spriteTessellationDetail: -1
+    spriteGeometrySubdivision: 0
     textureType: 8
     textureShape: 1
     singleChannelComponent: 0
@@ -109,9 +110,7 @@ ScriptedImporter:
     addShadowCasters: 0
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
-  importFileNodeState: 1
   platformSettingsDirtyTick: 0
-  textureAssetName: 
   singleSpriteImportData:
   - name: 
     originalName: 
@@ -188,6 +187,5 @@ ScriptedImporter:
   platformSettings: []
   generatePhysicsShape: 0
   secondarySpriteTextures: []
-  spritePackingTag: 
-  canvasSize: {x: 1670, y: 1440}
   previousTextureSize: {x: 2048, y: 2048}
+  canvasSize: {x: 1670, y: 1440}

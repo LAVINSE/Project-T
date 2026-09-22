@@ -25,7 +25,7 @@ namespace ProjectT.Units
         /// <summary>
         /// 적의 수치 정의입니다.
         /// </summary>
-        public EnemyDefinition Definition { get; private set; }
+        public UnitEnemyData Definition { get; private set; }
 
         /// <summary>
         /// 이 개체의 체력입니다.
@@ -40,7 +40,7 @@ namespace ProjectT.Units
         /// <summary>
         /// 현재 이 적을 저지하는 아군입니다.
         /// </summary>
-        public AllyUnit Blocker { get; private set; }
+        public CharacterUnit Blocker { get; private set; }
 
         /// <summary>
         /// 이 적의 공격 동작과 타격 시각입니다.
@@ -50,7 +50,7 @@ namespace ProjectT.Units
         /// <summary>
         /// 현재 준비하거나 진행 중인 공격의 아군 대상입니다.
         /// </summary>
-        internal AllyUnit AttackTarget { get; set; }
+        internal CharacterUnit AttackTarget { get; set; }
 
         /// <summary>
         /// 아직 처치로 정산하지 않은 생존 상태입니다. 공방 도착 이후에도 유지됩니다.
@@ -73,9 +73,9 @@ namespace ProjectT.Units
         /// <summary>
         /// 풀에서 대여한 적을 새로운 생명과 경로 시작점으로 초기화합니다.
         /// </summary>
-        public bool Initialize(EnemyDefinition definition, FixedRoute route)
+        public bool Initialize(UnitEnemyData definition, FixedRoute route)
         {
-            if (definition == null || route == null)
+            if (definition == null || !definition.IsValid || route == null)
             {
                 SWLog.LogWarning("[EnemyUnit] 초기화 실패: 적 정의 또는 경로가 없습니다.");
                 return false;
@@ -113,7 +113,7 @@ namespace ProjectT.Units
         /// <summary>
         /// 근접 저지 연결을 적용하거나 해제합니다.
         /// </summary>
-        public void SetBlocker(AllyUnit ally)
+        public void SetBlocker(CharacterUnit ally)
         {
             if (Blocker != ally)
             {
@@ -147,6 +147,7 @@ namespace ProjectT.Units
             resolved = true;
             Attack.Cancel();
             SetBlocker(null);
+            Movement.SetStopped(true);
             Resolved?.Invoke(this);
         }
 

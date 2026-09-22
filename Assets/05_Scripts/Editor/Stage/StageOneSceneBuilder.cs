@@ -190,7 +190,7 @@ namespace ProjectT.Editor
 
             var navigation = new GameObject("WalkableBattlefield").AddComponent<WalkableBattlefield>();
             navigation.Configure(new Rect(-16, -6.2f, 32, 13.5f), 0.5f, obstacleAreas.ToArray());
-            var routeAsset = ScriptableObject.CreateInstance<EnemyRouteDefinition>();
+            var routeAsset = ScriptableObject.CreateInstance<EnemyRouteData>();
             var serializedRoute = new SerializedObject(routeAsset);
             SerializedProperty routeProperty = serializedRoute.FindProperty("points");
             routeProperty.arraySize = RoutePoints.Length;

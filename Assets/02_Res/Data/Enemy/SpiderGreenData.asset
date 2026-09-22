@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b352fe394fd8c804488c6f5fbbd5528e, type: 3}
+  m_Name: SpiderGreenData
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.UnitEnemyData
+  displayName: SpiderGreen
+  prefab: {fileID: 275937367221474599, guid: 7dcf7b066fc66e446b69be994c5fc108, type: 3}
+  maximumHealth: 0
+  moveSpeed: 0
+  attackDamage: 0
+  attackRange: 0
+  attackInterval: 0
+  portrait: {fileID: -205150647, guid: 455d1ed85468e7d4a92646bf0fd233cf, type: 3}
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  feetOffset: 0.21249996
+  healthBarHeight: 1.0124999
+  spritesFaceRight: 1
+  attackOriginOffset: {x: 0.5, y: 0.8}
+  workshopAttackDamage: 0
+  workshopAttackInterval: 0
+  rewards: []

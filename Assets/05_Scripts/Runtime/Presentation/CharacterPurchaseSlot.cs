@@ -26,7 +26,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 구매할 클래스 정의입니다.
         /// </summary>
-        public AllyClassDefinition Definition { get; private set; }
+        public UnitClassData Definition { get; private set; }
 
         /// <summary>
         /// 외형·가격·클릭·드래그에 필요한 참조입니다.
@@ -44,12 +44,12 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 검증된 클래스와 배치 명령을 연결합니다. 재연결 시 클릭 구독을 중복하지 않습니다.
         /// </summary>
-        public void Configure(AllyClassDefinition definition, BattlePlacementCommand command)
+        public void Configure(UnitClassData definition, BattlePlacementCommand command)
         {
             button.onClick.RemoveListener(BeginPlacement);
             Definition = definition;
             placement = command;
-            portrait.sprite = definition.Appearance.Portrait;
+            portrait.sprite = definition.Portrait;
             portrait.enabled = portrait.sprite != null;
             priceLabel.text = definition.DeploymentCost.ToString("0");
             dragHandler.Configure(command, definition);

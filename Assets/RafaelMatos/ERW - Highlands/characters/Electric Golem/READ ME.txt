@@ -1,1 +1,0 @@
-If you want the upper body to freely spin around using atk2, you gonna need the lower and upper body separated.

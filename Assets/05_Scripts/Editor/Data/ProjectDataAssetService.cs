@@ -61,7 +61,15 @@ namespace ProjectT.Editor.Data
                 return false;
             }
 
-            string path = AssetDatabase.GenerateUniqueAssetPath(folder + "/" + fileName + ".asset");
+            string stem = fileName.EndsWith("Data", StringComparison.Ordinal) ? fileName.Substring(0, fileName.Length - 4) : fileName;
+            string path = folder + "/" + stem + "Data.asset";
+            int suffix = 2;
+            while (!string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(path)))
+            {
+                path = folder + "/" + stem + suffix + "Data.asset";
+                suffix++;
+            }
+
             ScriptableObject copy = null;
             try
             {
@@ -73,7 +81,7 @@ namespace ProjectT.Editor.Data
                 Undo.RegisterCreatedObjectUndo(copy, "Project T 데이터 생성");
                 AssetDatabase.SaveAssetIfDirty(copy);
                 created = copy;
-                reason = "데이터를 생성했습니다. 연결된 외형 등은 원본과 공유합니다.";
+                reason = "데이터를 생성했습니다. 연결된 프리팹과 그림은 원본과 공유합니다.";
                 return true;
             }
             catch (Exception exception)

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761d7928a1fe2b244b864590c5f800c1, type: 3}
+  m_Name: OrcWarriorRedData
+  m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Units.AllyClassDefinition
+  displayName: OrcWarriorRed
+  prefab: {fileID: 6658144341450193196, guid: 0bd86188a806be44a890e6ed593132f1, type: 3}
+  maximumHealth: 150
+  moveSpeed: 2.8
+  attackDamage: 18
+  attackRange: 1.05
+  attackInterval: 0.8
+  portrait: {fileID: 253122543, guid: 32067a1d7944fe9488077a6f23bd6ea7, type: 3}
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  feetOffset: 0.021249987
+  healthBarHeight: 2.4499998
+  spritesFaceRight: 1
+  attackOriginOffset: {x: 0.5, y: 0.8}
+  deploymentCost: 30
+  blockCapacity: 2
+  revivalSeconds: 12

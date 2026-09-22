@@ -72,6 +72,7 @@ namespace ProjectT.Rewards
             rewards = calculated.AsReadOnly();
             return true;
         }
+
         #endregion // 계산
     }
 }

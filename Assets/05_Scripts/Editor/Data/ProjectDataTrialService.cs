@@ -29,32 +29,24 @@ namespace ProjectT.Editor.Data
         /// 선택 데이터를 연결한 시험 복사본을 만듭니다. 외형 시험은 적용할 클래스나 적이 필요하며 실패하면 생성분만 정리합니다.
         /// </summary>
         public static bool TryCreate(
-            StageDefinition baseStage,
+            StageData baseStage,
             ScriptableObject selected,
-            ScriptableObject appearanceTarget,
             string templateScenePath,
             out string scenePath,
             out string reason)
         {
             scenePath = string.Empty;
             reason = string.Empty;
-            StageDefinition stage = selected as StageDefinition ?? baseStage;
+            StageData stage = selected as StageData ?? baseStage;
             if (EditorApplication.isPlayingOrWillChangePlaymode || stage == null || ProjectDataCatalog.GetKind(selected) < 0)
             {
                 reason = "전투를 정지하고 시험할 데이터와 기준 스테이지를 지정하세요.";
                 return false;
             }
 
-            if (selected is RewardDefinition)
+            if (selected is RewardData)
             {
                 reason = "재화·아이템은 적 보상에 연결한 뒤 적 편집기에서 시험하세요.";
-                return false;
-            }
-
-            if (selected is UnitAppearance                && !(appearanceTarget is AllyClassDefinition)
-                && !(appearanceTarget is EnemyDefinition))
-            {
-                reason = "외형을 적용해 시험할 클래스 또는 적을 선택하세요.";
                 return false;
             }
 
@@ -78,20 +70,9 @@ namespace ProjectT.Editor.Data
             Scene previousActive = SceneManager.GetActiveScene();
             try
             {
-                var stageCopy = (StageDefinition)CloneGraph(stage, copies);
+                var stageCopy = (StageData)CloneGraph(stage, copies);
                 var selectedCopy = CloneGraph(selected, copies);
-                ScriptableObject replacement = selectedCopy;
-                if (selected is UnitAppearance)
-                {
-                    replacement = CloneGraph(appearanceTarget, copies);
-                    using (var target = new SerializedObject(replacement))
-                    {
-                        target.FindProperty("appearance").objectReferenceValue = selectedCopy;
-                        target.ApplyModifiedPropertiesWithoutUndo();
-                    }
-                }
-
-                Connect(stageCopy, replacement);
+                Connect(stageCopy, selectedCopy);
                 var issues = ProjectDataValidation.Validate(stageCopy);
                 if (issues.Count > 0)
                 {
@@ -237,19 +218,19 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 선택한 복사본을 시험 스테이지에 연결합니다. 새 클래스는 기존 구매 목록에 추가합니다.
         /// </summary>
-        private static void Connect(StageDefinition stage, ScriptableObject selected)
+        private static void Connect(StageData stage, ScriptableObject selected)
         {
             using (var serialized = new SerializedObject(stage))
             {
-                if (selected is EnemyDefinition)
+                if (selected is UnitEnemyData)
                 {
                     serialized.FindProperty("enemy").objectReferenceValue = selected;
                 }
-                else if (selected is EnemyRouteDefinition)
+                else if (selected is EnemyRouteData)
                 {
                     serialized.FindProperty("enemyRoute").objectReferenceValue = selected;
                 }
-                else if (selected is AllyClassDefinition)
+                else if (selected is UnitClassData)
                 {
                     var classes = serialized.FindProperty("classes");
                     bool found = false;

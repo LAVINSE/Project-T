@@ -27,7 +27,7 @@ namespace ProjectT.Presentation
         /// </summary>
         private void LateUpdate()
         {
-            AllyUnit selected = commands.SelectedUnit;
+            CharacterUnit selected = commands.SelectedUnit;
             bool visible = selected != null && !placement.IsPlacing;
             attackRange.enabled = visible;
             bool moving = visible

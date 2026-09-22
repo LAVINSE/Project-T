@@ -40,7 +40,7 @@ namespace DamageNumbersPro
             // Only damage numbers of the same parent can interact with each other
             if (spamGroup != "" && transform.parent != null)
             {
-                spamGroup += transform.parent.GetInstanceID();
+                spamGroup += EntityId.ToULong(transform.parent.GetEntityId());
             }
 
             // GUI Alpha Fix

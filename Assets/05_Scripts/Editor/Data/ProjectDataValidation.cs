@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 using ProjectT.Data;
+using ProjectT.Units;
 
 namespace ProjectT.Editor.Data
 {
@@ -44,7 +45,7 @@ namespace ProjectT.Editor.Data
     }
 
     /// <summary>
-    /// 현재 전투에서 사용하는 수치·참조·프레임·경로를 검사합니다. 오류 목록만 반환하며 수치를 보정하지 않습니다.
+    /// 현재 전투에서 사용하는 수치·참조·애니메이션·경로를 검사합니다. 오류 목록만 반환하며 수치를 보정하지 않습니다.
     /// </summary>
     public static class ProjectDataValidation
     {
@@ -80,7 +81,7 @@ namespace ProjectT.Editor.Data
 
             using (var serialized = new SerializedObject(asset))
             {
-                if (asset is AllyClassDefinition || asset is EnemyDefinition)
+                if (asset is UnitClassData || asset is UnitEnemyData)
                 {
                     foreach (string path in new[]
                     {
@@ -94,23 +95,40 @@ namespace ProjectT.Editor.Data
                         Number(serialized, path, false, issues);
                     }
 
-                    Required(serialized, "appearance", issues);
+                    Name(serialized, issues);
+                    Required(serialized, "prefab", issues);
+                    var unit = (UnitData)asset;
+                    if (unit.Animation == null || !unit.Animation.IsConfigured)
+                    {
+                        Add(serialized, "prefab", "유닛 애니메이터·클립·타격 이벤트 연결을 확인하세요.", issues);
+                    }
+
+                    if (unit.Prefab != null
+                        && (unit is UnitClassData
+                        && unit.Prefab.GetComponent<CharacterUnit>() == null
+                        || unit is UnitEnemyData
+                        && unit.Prefab.GetComponent<EnemyUnit>() == null))
+                    {
+                        Add(serialized, "prefab", "데이터 종류에 맞는 캐릭터 또는 적 컴포넌트가 필요합니다.", issues);
+                    }
+
+                    Appearance(serialized, issues);
                 }
 
-                if (asset is AllyClassDefinition)
+                if (asset is UnitClassData)
                 {
                     Name(serialized, issues);
                     Number(serialized, "deploymentCost", true, issues);
                     Number(serialized, "blockCapacity", true, issues);
                     Number(serialized, "revivalSeconds", false, issues);
                 }
-                else if (asset is EnemyDefinition)
+                else if (asset is UnitEnemyData)
                 {
                     Number(serialized, "workshopAttackDamage", false, issues);
                     Number(serialized, "workshopAttackInterval", false, issues);
                     Rewards(serialized, issues);
                 }
-                else if (asset is StageDefinition)
+                else if (asset is StageData)
                 {
                     Name(serialized, issues);
                     Number(serialized, "startingCurrency", true, issues);
@@ -132,18 +150,14 @@ namespace ProjectT.Editor.Data
 
                     ReferenceArray(serialized, "classes", true, issues);
                 }
-                else if (asset is RewardDefinition)
+                else if (asset is RewardData)
                 {
                     Name(serialized, issues);
                     Number(serialized, "defaultAmount", true, issues);
                 }
-                else if (asset is EnemyRouteDefinition)
+                else if (asset is EnemyRouteData)
                 {
                     Route(serialized, issues);
-                }
-                else if (asset is UnitAppearance)
-                {
-                    Appearance(serialized, issues);
                 }
 
                 var iterator = serialized.GetIterator();
@@ -182,6 +196,7 @@ namespace ProjectT.Editor.Data
                 }
             }
         }
+
         /// <summary>
         /// 표시 이름의 빈 문자열을 검사합니다.
         /// </summary>
@@ -280,34 +295,10 @@ namespace ProjectT.Editor.Data
         }
 
         /// <summary>
-        /// 외형의 대체 프레임 규칙을 보존하며 프레임 참조와 재생 수치를 검사합니다.
+        /// 유닛 표시 위치와 색상에 유한한 값이 설정되었는지 검사합니다.
         /// </summary>
         private static void Appearance(SerializedObject serialized, List<ProjectDataIssue> issues)
         {
-            foreach (string path in new[]
-            {
-                "idleFrames",
-                "moveFrames",
-                "attackFrames",
-                "deathFrames"
-            })
-            {
-                ReferenceArray(serialized, path, path == "idleFrames", issues);
-            }
-
-            Number(serialized, "framesPerSecond", false, issues);
-            if (serialized.FindProperty("framesPerSecond").floatValue < 1f)
-            {
-                Add(serialized, "framesPerSecond", "초당 프레임은 1 이상이어야 합니다.", issues);
-            }
-
-            int count = serialized.FindProperty("attackFrames").arraySize;
-            int impact = serialized.FindProperty("attackImpactFrame").intValue;
-            if (impact < 0 || impact >= Mathf.Max(1, count))
-            {
-                Add(serialized, "attackImpactFrame", "타격 프레임을 0부터 공격 프레임 수 미만으로 지정하세요. 공격 프레임이 없으면 0입니다.", issues);
-            }
-
             foreach (string path in new[]
             {
                 "feetOffset",

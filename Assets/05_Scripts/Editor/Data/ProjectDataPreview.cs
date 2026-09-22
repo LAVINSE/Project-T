@@ -23,26 +23,26 @@ namespace ProjectT.Editor.Data
         {
             var root = new VisualElement();
             root.Add(Description("편집 중인 값의 미리보기입니다. 실제 전투는 적용·저장 후 시험 전투에서 확인하세요."));
-            UnitAppearance appearance = asset as UnitAppearance;
-            if (asset is AllyClassDefinition ally)
+            UnitData appearance = asset as UnitData;
+            if (asset is UnitClassData ally)
             {
-                appearance = ally.Appearance;
+                appearance = ally;
                 root.Add(Description("배치 비용 " + ally.DeploymentCost + " · 체력 " + ally.MaximumHealth + " · 이동속도 " + ally.MoveSpeed + " · 피해 " + ally.AttackDamage + " · 공격 간격 " + ally.AttackInterval + "초"));
             }
-            else if (asset is EnemyDefinition enemy)
+            else if (asset is UnitEnemyData enemy)
             {
-                appearance = enemy.Appearance;
+                appearance = enemy;
                 foreach (var reward in enemy.Rewards)
                 {
                     if (reward != null)
                     {
-                        root.Add(Description((reward.Definition == null ? "보상 미연결" : reward.Definition.DisplayName)
-                            + " · 수량 " + reward.Amount + " · 독립 확률 " + reward.AcquisitionProbability + "%"));
+                        root.Add(Description((reward.Definition == null ? "보상 미연결" : reward.Definition.DisplayName) + " · 수량 " + reward.Amount + " · 독립 확률 " + reward.AcquisitionProbability + "%"));
                     }
                 }
+
                 root.Add(Description("체력 " + enemy.MaximumHealth + " · 공방 피해 " + enemy.WorkshopAttackDamage + " · 공방 공격 간격 " + enemy.WorkshopAttackInterval + "초"));
             }
-            else if (asset is StageDefinition stage)
+            else if (asset is StageData stage)
             {
                 root.Add(Description("시작 재화 " + stage.StartingCurrency + " · 공방 체력 " + stage.WorkshopMaximumHealth + " · 라운드 " + stage.RoundCount + "개 · 생성 간격 " + stage.SpawnInterval + "초"));
                 for (int index = 0; index < stage.RoundCount; index++)
@@ -52,18 +52,22 @@ namespace ProjectT.Editor.Data
 
                 AddRoute(root, stage.EnemyRoute);
             }
-            else if (asset is RewardDefinition reward)
+            else if (asset is RewardData reward)
             {
                 root.Add(Description(reward.DisplayName + " · 기본 수량 " + reward.DefaultAmount));
                 root.Add(Description("적별 보상에서 수량을 덮어쓸 수 있습니다. 현재 배치 재화만 지급되며 다른 재화·아이템의 보관은 후속 기능입니다."));
                 if (reward.Icon != null)
                 {
-                    var icon = new Image { sprite = reward.Icon, scaleMode = ScaleMode.ScaleToFit };
+                    var icon = new Image
+                    {
+                        sprite = reward.Icon,
+                        scaleMode = ScaleMode.ScaleToFit
+                    };
                     icon.AddToClassList("project-data-preview-image");
                     root.Add(icon);
                 }
             }
-            else if (asset is EnemyRouteDefinition route)
+            else if (asset is EnemyRouteData route)
             {
                 AddRoute(root, route);
             }
@@ -77,56 +81,69 @@ namespace ProjectT.Editor.Data
         }
 
         /// <summary>
-        /// 외형의 대체 프레임 규칙에 맞춰 선택한 동작을 반복 재생합니다.
+        /// 연결된 클립의 스프라이트 키를 읽어 미리봅니다. 원본 프레임 목록을 별도로 저장하지 않습니다.
         /// </summary>
-        private static void AddAppearance(VisualElement root, UnitAppearance appearance)
+        private static void AddAppearance(VisualElement root, UnitData data)
         {
-            var choices = new List<string>
-            {
-                "대기",
-                "이동",
-                "공격",
-                "사망"
-            };
-            var state = new DropdownField("동작", choices, 0);
-            root.Add(state);
+            var state = new DropdownField("동작", new List<string> { "대기", "이동", "공격", "사망" }, 0);
             var image = new Image
             {
                 scaleMode = ScaleMode.ScaleToFit
             };
             image.AddToClassList("project-data-preview-image");
-            root.Add(image);
             var information = Description(string.Empty);
+            root.Add(state);
+            root.Add(image);
             root.Add(information);
             double start = EditorApplication.timeSinceStartup;
             root.schedule.Execute(() =>
             {
-                if (appearance == null)
-                {
-                    return;
-                }
-
-                Sprite[] frames = appearance.GetFrames(state.value != "사망", state.value == "이동", state.value == "공격");
-                float speed = appearance.FramesPerSecond;
-                if (frames == null || frames.Length == 0 || float.IsNaN(speed) || float.IsInfinity(speed) || speed <= 0f)
+                if (data == null || data.Animation == null)
                 {
                     image.sprite = null;
-                    information.text = "표시 가능한 프레임과 재생 속도가 필요합니다.";
+                    information.text = "애니메이션이 설정된 유닛 프리팹을 연결하세요.";
                     return;
                 }
 
-                int index = (int)(((EditorApplication.timeSinceStartup - start) * speed) % frames.Length);
-                image.sprite = frames[index];
-                image.tintColor = appearance.Tint;
-                information.text = state.value + " · 프레임 " + index + " / " + (frames.Length - 1) + " · 초당 " + speed + "프레임";
+                AnimationClip clip = data.Animation.GetClip(state.value != "사망", state.value == "이동", state.value == "공격");
+                if (clip == null || clip.length <= 0f)
+                {
+                    image.sprite = null;
+                    information.text = "선택한 동작의 클립을 확인하세요.";
+                    return;
+                }
+
+                double time = (EditorApplication.timeSinceStartup - start) % clip.length;
+                foreach (var binding in AnimationUtility.GetObjectReferenceCurveBindings(clip))
+                {
+                    if (binding.type != typeof(SpriteRenderer) || binding.propertyName != "m_Sprite")
+                    {
+                        continue;
+                    }
+
+                    foreach (var key in AnimationUtility.GetObjectReferenceCurve(clip, binding))
+                    {
+                        if (key.time > time)
+                        {
+                            break;
+                        }
+
+                        image.sprite = key.value as Sprite;
+                    }
+
+                    break;
+                }
+
+                image.tintColor = data.Tint;
+                information.text = clip.name + " · 원본 길이 " + clip.length.ToString("0.##") + "초";
             }).Every(50);
-            root.Add(Description("일반 동작은 초당 프레임으로 재생합니다. 실제 공격은 공격 간격에 맞춰 전체 동작 길이가 조정됩니다."));
+            root.Add(Description("클립을 반복 미리봅니다. 실제 공격 속도는 공격 간격에 맞추고 피해 시점은 클립 이벤트를 사용합니다."));
         }
 
         /// <summary>
         /// 경유점 좌표를 읽어 입구·공방 방향과 순서를 그립니다.
         /// </summary>
-        private static void AddRoute(VisualElement root, EnemyRouteDefinition route)
+        private static void AddRoute(VisualElement root, EnemyRouteData route)
         {
             if (route == null)
             {

@@ -42,7 +42,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 개체 상태를 표시하며 미구현 성장·스킬에 임시 진행 수치를 넣지 않습니다.
         /// </summary>
-        public void Present(AllyUnit unit)
+        public void Present(CharacterUnit unit)
         {
             bool visible = unit != null && unit.Health != null;
             visibility.alpha = visible ? 1f : 0f;
@@ -63,7 +63,7 @@ namespace ProjectT.Presentation
                 return;
             }
 
-            portrait.sprite = unit.Definition.Appearance.Portrait;
+            portrait.sprite = unit.Definition.Portrait;
             portrait.enabled = portrait.sprite != null;
             healthFill.fillAmount = unit.Health.Maximum > 0f ? unit.Health.Current / unit.Health.Maximum : 0f;
             healthLabel.text = unit.Health.IsAlive

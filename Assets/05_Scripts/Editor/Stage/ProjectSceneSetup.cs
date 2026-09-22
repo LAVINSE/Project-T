@@ -52,7 +52,7 @@ namespace ProjectT.Editor
                 entry.AddComponent<MainSceneEntry>();
             }
 
-            SetCatalog("MainPoolCatalog");
+            SetCatalog("MainPoolData");
             EditorSceneManager.SaveScene(main);
             Scene stage = EditorSceneManager.OpenScene(StageOneSceneBuilder.ScenePath);
             ConfigureStage();
@@ -85,7 +85,7 @@ namespace ProjectT.Editor
             HealthBarPrefabSetup.ConfigurePrefabs();
             foreach (string name in new[]
             {
-                "AllyUnit",
+                "CharacterUnit",
                 "EnemyUnit"
             })
             {
@@ -122,11 +122,11 @@ namespace ProjectT.Editor
                 LoadComponent<SWPool>("Pooling/SWPool.prefab"),
                 "popupManagerPrefab",
                 LoadComponent<SWPopupManager>("Popup/SWPopupManager.prefab")));
-            CreateCatalog("MainPoolCatalog", Array.Empty<string>(), Array.Empty<int>());
+            CreateCatalog("MainPoolData", Array.Empty<string>(), Array.Empty<int>());
             CreateCatalog(
-                "Stage01PoolCatalog",
-                new[] { "Units/AllyUnit.prefab", "Units/EnemyUnit.prefab", "Effects/AttackTrace.prefab" },
-                new[] { 3, 12, 4 });
+                "Stage01PoolData",
+                new[] { "Units/Character/OrcWarriorRedUnit.prefab", "Units/Character/OrcMageRedUnit.prefab", "Units/Enemy/SkeletonBasicUnit.prefab", "Effects/AttackTrace.prefab" },
+                new[] { 2, 2, 12, 4 });
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ProjectT.Editor
             }
 
             EnsureInstance("Initialization/SceneServices.prefab", "SceneServices");
-            SetCatalog("Stage01PoolCatalog");
+            SetCatalog("Stage01PoolData");
             Transform objects = Root("Objects");
             Transform stationary = Child(objects, "StaticObject");
             Transform dynamic = Child(objects, "DynamicObject");

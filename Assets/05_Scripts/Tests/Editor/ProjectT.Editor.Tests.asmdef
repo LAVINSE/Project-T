@@ -1,8 +1,0 @@
-{
-    "name": "ProjectT.Editor.Tests",
-    "rootNamespace": "ProjectT.Tests",
-    "references": ["ProjectT.Runtime", "ProjectT.Editor", "SWUtils.Runtime"],
-    "includePlatforms": ["Editor"],
-    "optionalUnityReferences": ["TestAssemblies"],
-    "autoReferenced": false
-}

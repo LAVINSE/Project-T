@@ -18,11 +18,9 @@ namespace ProjectT.Presentation
         [SerializeField] private HealthBarPresentation healthBar;
         [SerializeField] private LineRenderer selectionRing;
         [SerializeField] private LineRenderer newUnitArrow;
-        private AllyUnit ally;
+        private CharacterUnit ally;
         private EnemyUnit enemy;
-        private Sprite[] currentFrames;
         private Vector3 previousPosition;
-        private float animationTime;
         private bool selected;
         private bool awaitingSelection;
         private CombatHealth displayedHealth;
@@ -51,7 +49,7 @@ namespace ProjectT.Presentation
         /// </summary>
         private void Awake()
         {
-            ally = GetComponent<AllyUnit>();
+            ally = GetComponent<CharacterUnit>();
             enemy = GetComponent<EnemyUnit>();
         }
 
@@ -60,8 +58,6 @@ namespace ProjectT.Presentation
         /// </summary>
         private void OnEnable()
         {
-            currentFrames = null;
-            animationTime = 0;
             previousPosition = transform.position;
             selected = false;
             awaitingSelection = false;
@@ -78,29 +74,10 @@ namespace ProjectT.Presentation
                 return;
             }
 
-            UnitAppearance appearance = ally != null ? ally.Definition.Appearance : enemy.Definition.Appearance;
-            bool moving = ally != null ? ally.Movement.IsMoving : !enemy.Movement.IsStopped && enemy.IsActive;
+            UnitData appearance = ally != null ? ally.Definition : enemy.Definition;
             UnitAttackSequence attack = ally != null ? ally.Attack : enemy.Attack;
             bool attacking = health.IsAlive && attack.IsPlaying(Time.time);
-            Sprite[] frames = appearance.GetFrames(health.IsAlive, moving, attacking);
-            if (frames != currentFrames)
-            {
-                currentFrames = frames;
-                animationTime = 0f;
-            }
-
-            animationTime += Time.deltaTime;
-            if (frames.Length > 0)
-            {
-                int frame = attacking
-                    ? Mathf.FloorToInt((Time.time - attack.StartedAt) / attack.Duration * frames.Length)
-                    : Mathf.FloorToInt(animationTime * appearance.FramesPerSecond);
-                frame = attacking || !health.IsAlive ? Mathf.Clamp(frame, 0, frames.Length - 1) : frame % frames.Length;
-                characterRenderer.sprite = frames[frame];
-                characterRenderer.transform.localScale = Vector3.one * frames[frame].pixelsPerUnit / 32f;
-                characterRenderer.transform.localPosition = Vector3.up * appearance.FeetOffset;
-            }
-
+            characterRenderer.transform.localPosition = Vector3.up * appearance.FeetOffset;
             float direction = attacking ? attack.TargetPosition.x - transform.position.x : transform.position.x - previousPosition.x;
             if (Mathf.Abs(direction) > 0.001f)
             {

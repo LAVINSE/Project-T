@@ -90,7 +90,7 @@ namespace ProjectT.Editor
         public static void Apply()
         {
             Vector2[] points = CreateRoutePoints();
-            var serialized = new SerializedObject(AssetDatabase.LoadAssetAtPath<EnemyRouteDefinition>("Assets/02_Res/Data/Navigation/Stage01EnemyRoute.asset"));
+            var serialized = new SerializedObject(AssetDatabase.LoadAssetAtPath<EnemyRouteData>("Assets/02_Res/Data/Navigation/Stage01EnemyRouteData.asset"));
             var property = serialized.FindProperty("points");
             property.arraySize = points.Length;
             for (int index = 0; index < points.Length; index++)

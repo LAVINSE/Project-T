@@ -60,6 +60,7 @@ namespace ProjectT.Editor.Data
         /// 다른 종류의 창과 초안이 섞이지 않도록 세션 저장 공간을 구분합니다.
         /// </summary>
         private string StateKey => DataKind < 0 ? "ProjectT.DataEditor." : "ProjectT.DataEditor." + DataKind + ".";
+
         #endregion // 속성
 
         #region 진입
@@ -108,21 +109,12 @@ namespace ProjectT.Editor.Data
         }
 
         /// <summary>
-        /// 유닛 외형과 애니메이션을 제작하는 독립 창을 엽니다.
-        /// </summary>
-        [MenuItem("Project T/데이터/외형 편집기", priority = 4)]
-        private static void OpenAppearances()
-        {
-            OpenKind(4);
-        }
-
-        /// <summary>
         /// 재화의 이름·아이콘·기본 수량을 관리하는 창을 엽니다.
         /// </summary>
         [MenuItem("Project T/데이터/재화 편집기", priority = 5)]
         private static void OpenCurrencies()
         {
-            OpenKind(5);
+            OpenKind(4);
         }
 
         /// <summary>
@@ -131,8 +123,9 @@ namespace ProjectT.Editor.Data
         [MenuItem("Project T/데이터/아이템 편집기", priority = 6)]
         private static void OpenItems()
         {
-            OpenKind(6);
+            OpenKind(5);
         }
+
         /// <summary>
         /// 종류별 독립 창을 열어 반환합니다. 지원하지 않는 종류이면 창을 만들지 않고 null을 반환합니다.
         /// </summary>
@@ -142,10 +135,10 @@ namespace ProjectT.Editor.Data
             switch (kind)
             {
                 case 0:
-                    window = GetWindow<AllyClassDataEditorWindow>();
+                    window = GetWindow<UnitClassDataEditorWindow>();
                     break;
                 case 1:
-                    window = GetWindow<EnemyDataEditorWindow>();
+                    window = GetWindow<UnitEnemyDataEditorWindow>();
                     break;
                 case 2:
                     window = GetWindow<StageDataEditorWindow>();
@@ -154,12 +147,9 @@ namespace ProjectT.Editor.Data
                     window = GetWindow<EnemyRouteDataEditorWindow>();
                     break;
                 case 4:
-                    window = GetWindow<UnitAppearanceDataEditorWindow>();
-                    break;
-                case 5:
                     window = GetWindow<CurrencyDataEditorWindow>();
                     break;
-                case 6:
+                case 5:
                     window = GetWindow<ItemDataEditorWindow>();
                     break;
                 default:
@@ -221,7 +211,6 @@ namespace ProjectT.Editor.Data
             toolbar.Add(Element("project-data-spacer"));
             toolbar.Add(CreateToolsMenu());
             rootVisualElement.Add(toolbar);
-
             var body = Element("project-data-body");
             var sidebar = Element("project-data-sidebar");
             var searchRow = Element("project-data-search");
@@ -262,7 +251,6 @@ namespace ProjectT.Editor.Data
             assetCount = Text(string.Empty, "project-data-count");
             sidebar.Add(assetCount);
             body.Add(sidebar);
-
             var workspace = Element("project-data-detail");
             var header = Element("project-data-detail-header");
             headingIcon = new Image
@@ -288,7 +276,6 @@ namespace ProjectT.Editor.Data
             applyButton.AddToClassList("project-data-primary");
             header.Add(applyButton);
             workspace.Add(header);
-
             detailScroll = new ScrollView(ScrollViewMode.Vertical);
             detailScroll.AddToClassList("project-data-scroll");
             detail = Element("project-data-content");
@@ -324,7 +311,14 @@ namespace ProjectT.Editor.Data
                 name = "dataTools"
             };
             menu.AddToClassList("project-data-menu");
-            foreach (string title in new[] { "편집", "검사", "미리보기", "참조·사용처", "시험 전투" })
+            foreach (string title in new[]
+            {
+                "편집",
+                "검사",
+                "미리보기",
+                "참조·사용처",
+                "시험 전투"
+            })
             {
                 if (title == "시험 전투" && DataKind > 4)
                 {
@@ -336,17 +330,16 @@ namespace ProjectT.Editor.Data
                     title == "편집" ? "인스펙터" : title,
                     action => ShowPage(page),
                     action =>
+                {
+                    if (session?.Source == null
+                        || creatingData
+                        || (page == "시험 전투" && EditorApplication.isPlayingOrWillChangePlaymode))
                     {
-                        if (session?.Source == null || creatingData
-                            || (page == "시험 전투" && EditorApplication.isPlayingOrWillChangePlaymode))
-                        {
-                            return DropdownMenuAction.Status.Disabled;
-                        }
+                        return DropdownMenuAction.Status.Disabled;
+                    }
 
-                        return currentPage == page
-                            ? DropdownMenuAction.Status.Checked
-                            : DropdownMenuAction.Status.Normal;
-                    });
+                    return currentPage == page ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal;
+                });
             }
 
             menu.menu.AppendSeparator();
@@ -356,9 +349,7 @@ namespace ProjectT.Editor.Data
             menu.menu.AppendAction(
                 "Project 창에서 선택",
                 action => SW.EditorTools.Util.SWEditorUtils.PingAndSelect(session.Source),
-                action => session?.Source != null
-                    ? DropdownMenuAction.Status.Normal
-                    : DropdownMenuAction.Status.Disabled);
+                action => session?.Source != null ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
             return menu;
         }
 
@@ -425,6 +416,7 @@ namespace ProjectT.Editor.Data
             row.tooltip = asset.name + " · " + ProjectDataCatalog.GetDisplayName(asset) + "\n" + typeName + "\n" + AssetDatabase.GetAssetPath(asset);
             row.EnableInClassList("project-data-selected", session?.Source == asset);
         }
+
         /// <summary>
         /// 다른 자산으로 이동합니다. 미적용 변경의 적용·취소 선택이 취소되면 기존 편집을 유지합니다.
         /// </summary>
@@ -435,6 +427,7 @@ namespace ProjectT.Editor.Data
                 notice = "이 창에서는 " + KindName + " 데이터만 편집할 수 있습니다. 해당 분류 창을 열어 주세요.";
                 return false;
             }
+
             if (session != null && session.Source == asset)
             {
                 if (creatingData)
@@ -516,7 +509,6 @@ namespace ProjectT.Editor.Data
             detail.Unbind();
             detail.Clear();
             fieldElements.Clear();
-
             if (session?.Source == null)
             {
                 heading.text = KindName + " 편집기";
@@ -529,9 +521,7 @@ namespace ProjectT.Editor.Data
 
             heading.text = session.Source.name;
             heading.tooltip = AssetDatabase.GetAssetPath(session.Source);
-            headingType.text = currentPage == "편집"
-                ? ObjectNames.NicifyVariableName(session.Source.GetType().Name)
-                : currentPage;
+            headingType.text = currentPage == "편집" ? ObjectNames.NicifyVariableName(session.Source.GetType().Name) : currentPage;
             headingIcon.image = AssetPreview.GetMiniThumbnail(session.Source);
             switch (currentPage)
             {

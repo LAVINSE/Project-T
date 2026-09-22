@@ -11,23 +11,25 @@ namespace ProjectT.Rewards
         /// <summary>
         /// 판정을 통과한 보상 자산입니다.
         /// </summary>
-        public RewardDefinition Definition { get; }
+        public RewardData Definition { get; }
 
         /// <summary>
         /// 기본값 또는 항목별 덮어쓰기를 반영한 수량입니다.
         /// </summary>
         public double Amount { get; }
+
         #endregion // 프로퍼티
 
         #region 초기화
         /// <summary>
         /// 계산기가 검증한 보상 결과를 보관합니다.
         /// </summary>
-        internal RewardAmount(RewardDefinition definition, double amount)
+        internal RewardAmount(RewardData definition, double amount)
         {
             Definition = definition;
             Amount = amount;
         }
+
         #endregion // 초기화
     }
 }

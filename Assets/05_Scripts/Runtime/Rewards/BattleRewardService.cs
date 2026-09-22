@@ -18,7 +18,7 @@ namespace ProjectT.Rewards
         /// </summary>
         public static bool TryProcess(
             IReadOnlyList<RewardEntry> entries,
-            CurrencyDefinition deploymentCurrency,
+            CurrencyData deploymentCurrency,
             BattleDeploymentWallet wallet,
             Func<double> nextRandom,
             out IReadOnlyList<RewardAmount> rewards,
@@ -64,6 +64,7 @@ namespace ProjectT.Rewards
             rewards = calculated;
             return true;
         }
+
         #endregion // 지급
     }
 }

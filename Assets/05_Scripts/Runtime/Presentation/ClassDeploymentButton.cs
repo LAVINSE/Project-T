@@ -17,7 +17,7 @@ namespace ProjectT.Presentation
     {
         #region 필드
         private BattlePlacementCommand placement;
-        private AllyClassDefinition definition;
+        private UnitClassData definition;
         private UnityEngine.UI.Button button;
         private bool startedDrag;
 
@@ -27,7 +27,7 @@ namespace ProjectT.Presentation
         /// <summary>
         /// 이 버튼의 클래스와 배치 담당을 연결합니다. 클릭은 기존 버튼 이벤트가 담당합니다.
         /// </summary>
-        public void Configure(BattlePlacementCommand command, AllyClassDefinition selectedClass)
+        public void Configure(BattlePlacementCommand command, UnitClassData selectedClass)
         {
             placement = command;
             definition = selectedClass;

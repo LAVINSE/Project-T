@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761d7928a1fe2b244b864590c5f800c1, type: 3}
+  m_Name: OrcMageRedData
+  m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Units.AllyClassDefinition
+  displayName: OrcMageRed
+  prefab: {fileID: 1194513126063678614, guid: dc0da0b5f36b6c44bb1d7ad71ec269cd, type: 3}
+  maximumHealth: 80
+  moveSpeed: 2.5
+  attackDamage: 24
+  attackRange: 4.5
+  attackInterval: 1.35
+  portrait: {fileID: 380225813, guid: 59631ea3f7b28ea489d3c886b2df16e1, type: 3}
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  feetOffset: 0.029999949
+  healthBarHeight: 1.8249999
+  spritesFaceRight: 1
+  attackOriginOffset: {x: 0.5, y: 0.8}
+  deploymentCost: 40
+  blockCapacity: 0
+  revivalSeconds: 16

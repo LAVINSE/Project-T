@@ -9,8 +9,8 @@ using SW.Util;
 using ProjectT.Data;
 using ProjectT.Deployment;
 using ProjectT.Economy;
-using ProjectT.Rewards;
 using ProjectT.Navigation;
+using ProjectT.Rewards;
 using ProjectT.Timing;
 using ProjectT.Units;
 
@@ -40,19 +40,18 @@ namespace ProjectT.Battle
         #endregion // 데이터
 
         #region 필드
-        [SerializeField] private StageDefinition definition;
+        [SerializeField] private StageData definition;
         [SerializeField] private WalkableBattlefield battlefield;
         [SerializeField] private BattlePauseController pauseController;
         private SWPool pool;
-        [SerializeField] private AllyUnit allyPrefab;
-        [SerializeField] private EnemyUnit enemyPrefab;
         [SerializeField] private Transform unitParent;
         [SerializeField] private Transform workshopTarget;
-        private readonly List<AllyUnit> allies = new List<AllyUnit>();
+        private readonly List<CharacterUnit> allies = new List<CharacterUnit>();
         private readonly List<EnemyUnit> enemies = new List<EnemyUnit>();
         private readonly List<EnemyUnit> resolvedEnemies = new List<EnemyUnit>();
+        private readonly List<EnemyUnit> dyingEnemies = new List<EnemyUnit>();
         private FixedRoute route;
-        private AllyDeploymentService deployment;
+        private CharacterDeploymentService deployment;
         private BattleCombatSystem combat;
         private int spawnedThisRound;
         private float spawnRemaining;
@@ -64,7 +63,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 이 전투가 사용하는 스테이지 정의입니다.
         /// </summary>
-        public StageDefinition Definition => definition;
+        public StageData Definition => definition;
 
         /// <summary>
         /// 전투가 시작될 때 새로 생성한 배치 지갑입니다.
@@ -99,7 +98,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 구매한 아군 목록입니다. 부활 대기 중인 아군도 포함합니다.
         /// </summary>
-        public IReadOnlyList<AllyUnit> Allies => allies;
+        public IReadOnlyList<CharacterUnit> Allies => allies;
 
         /// <summary>
         /// 현재 전장의 적 목록입니다.
@@ -141,8 +140,7 @@ namespace ProjectT.Battle
                 || definition.DeploymentCurrency == null
                 || battlefield == null
                 || pauseController == null
-                || allyPrefab == null
-                || enemyPrefab == null
+                || !definition.Enemy.IsValid
                 || unitParent == null
                 || workshopTarget == null)
             {
@@ -165,7 +163,7 @@ namespace ProjectT.Battle
                 return;
             }
 
-            deployment = AllyDeploymentService.Create(nextWallet, battlefield, pool, allyPrefab, unitParent);
+            deployment = CharacterDeploymentService.Create(nextWallet, battlefield, pool, unitParent);
             if (deployment == null)
             {
                 StopInitialization("배치 기능을 준비하지 못했습니다.");
@@ -193,9 +191,9 @@ namespace ProjectT.Battle
         /// 클래스와 목적지를 받아 구매하고 독립된 아군 목록에 등록합니다.
         /// </summary>
         public bool TryDeploy(
-            AllyClassDefinition selectedClass,
+            UnitClassData selectedClass,
             Vector2 destination,
-            out AllyUnit unit,
+            out CharacterUnit unit,
             out string reason)
         {
             unit = null;
@@ -224,7 +222,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 미리보기에서 현재 상태·잔액·통행 영역을 확인합니다. 실제 배치 시에는 다시 검증합니다.
         /// </summary>
-        public bool CanDeployAt(AllyClassDefinition selectedClass, Vector2 position)
+        public bool CanDeployAt(UnitClassData selectedClass, Vector2 position)
         {
             return CanCommand
                 && Wallet != null
@@ -238,7 +236,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 선택한 아군을 이동시키거나 부활 후 이동할 목적지를 예약합니다.
         /// </summary>
-        public bool TryMove(AllyUnit unit, Vector2 destination)
+        public bool TryMove(CharacterUnit unit, Vector2 destination)
         {
             return CanCommand && unit != null && allies.Contains(unit) && unit.TryMove(destination);
         }
@@ -304,7 +302,7 @@ namespace ProjectT.Battle
             spawnRemaining -= Time.deltaTime;
             if (spawnedThisRound < definition.GetEnemyCount(RoundNumber - 1) && spawnRemaining <= 0f)
             {
-                EnemyUnit enemy = pool.Spawn<EnemyUnit>(enemyPrefab.gameObject, route.GetPoint(0), Quaternion.identity, unitParent);
+                EnemyUnit enemy = pool.Spawn<EnemyUnit>(definition.Enemy.Prefab, route.GetPoint(0), Quaternion.identity, unitParent);
                 if (enemy == null || !enemy.Initialize(definition.Enemy, route))
                 {
                     if (enemy != null)
@@ -362,6 +360,7 @@ namespace ProjectT.Battle
                     LastCalculatedRewards = Array.Empty<RewardAmount>();
                     SWLog.LogWarning("[BattleSession] 처치 보상 계산 실패: " + reason);
                 }
+
                 KilledCount++;
             }
 
@@ -369,15 +368,17 @@ namespace ProjectT.Battle
         }
 
         /// <summary>
-        /// 처리가 끝난 적의 이벤트를 해제하고 풀에 반환합니다.
+        /// 처리가 끝난 적을 전투 목록에서 제외하고 사망 애니메이션이 끝난 뒤 풀에 반환합니다.
         /// </summary>
         private void ReleaseResolvedEnemies()
         {
+            dyingEnemies.RemoveAll(enemy => enemy == null || !enemy.gameObject.activeSelf);
             foreach (EnemyUnit enemy in resolvedEnemies)
             {
                 enemy.Resolved -= OnEnemyResolved;
                 enemies.Remove(enemy);
-                pool.Release(enemy.gameObject);
+                dyingEnemies.Add(enemy);
+                pool.Release(enemy.gameObject, enemy.Definition.Animation.DeathDuration);
             }
 
             resolvedEnemies.Clear();
@@ -430,7 +431,7 @@ namespace ProjectT.Battle
                 combat.Attacked -= OnAttacked;
             }
 
-            foreach (AllyUnit ally in allies)
+            foreach (CharacterUnit ally in allies)
             {
                 if (ally == null)
                 {
@@ -461,6 +462,14 @@ namespace ProjectT.Battle
                     pool.Release(enemy.gameObject);
                 }
             }
+
+            foreach (EnemyUnit enemy in dyingEnemies)
+            {
+                if (enemy != null && enemy.gameObject.activeSelf && pool != null)
+                {
+                    pool.Release(enemy.gameObject);
+                }
+            }
         }
 
         #endregion // 함수
@@ -475,9 +484,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 스테이지에서 제공하는 클래스 목록에 선택한 정의가 포함되는지 확인합니다.
         /// </summary>
-        internal static bool ContainsClass(
-            this IReadOnlyList<AllyClassDefinition> classes,
-            AllyClassDefinition selected)
+        internal static bool ContainsClass(this IReadOnlyList<UnitClassData> classes, UnitClassData selected)
         {
             for (int index = 0; index < classes.Count; index++)
             {

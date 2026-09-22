@@ -28,10 +28,10 @@ namespace ProjectT.Editor.Data
 
             var candidates = ProjectDataCatalog.Find(DataKind);
             var template = candidates.FirstOrDefault(asset => ProjectDataValidation.Validate(asset).Count == 0);
-            if (template == null && (DataKind == 5 || DataKind == 6))
+            if (template == null && (DataKind == 4 || DataKind == 5))
             {
                 template = ScriptableObject.CreateInstance(ProjectDataCatalog.SupportedTypes[DataKind]);
-                template.name = DataKind == 5 ? "Currency" : "Item";
+                template.name = DataKind == 4 ? "CurrencyData" : "ItemData";
                 template.hideFlags = HideFlags.HideInHierarchy | HideFlags.DontSave;
             }
 
@@ -147,9 +147,10 @@ namespace ProjectT.Editor.Data
             {
                 detail.Add(Text("기본 양식으로 첫 데이터를 만듭니다. 생성 후 이름·아이콘·기본 수량을 수정하세요.", "project-data-description"));
             }
+
             detail.Add(fileName);
             detail.Add(Text(
-                "저장 위치: " + ProjectDataCatalog.GetFolder(template.GetType()) + "\n이름이 겹치면 번호를 붙입니다. 외형 등 하위 참조는 공유합니다. 생성 후 편집 화면에서 표시 이름과 수치를 조정하세요.",
+                "저장 위치: " + ProjectDataCatalog.GetFolder(template.GetType()) + "\n이름이 겹치면 번호를 붙입니다. 프리팹과 그림 참조는 공유합니다. 이름 끝에는 Data를 붙입니다. 생성 후 편집 화면에서 표시 이름과 수치를 조정하세요.",
                 "project-data-description"));
             if (referencePath != null)
             {
@@ -212,6 +213,7 @@ namespace ProjectT.Editor.Data
                 temporaryCreationTemplate = null;
             }
         }
+
         #endregion // 생성
 
         #region 시험
@@ -226,9 +228,9 @@ namespace ProjectT.Editor.Data
                 "project-data-description"));
             var baseStage = new ObjectField("기준 스테이지")
             {
-                objectType = typeof(StageDefinition),
+                objectType = typeof(StageData),
                 allowSceneObjects = false,
-                value = session.Source as StageDefinition ?? AssetDatabase.LoadAssetAtPath<StageDefinition>("Assets/02_Res/Data/Stage/Stage01.asset")
+                value = session.Source as StageData ?? AssetDatabase.LoadAssetAtPath<StageData>("Assets/02_Res/Data/Stage/Stage01Data.asset")
             };
             var baseScene = new ObjectField("기준 전투 장면")
             {
@@ -236,19 +238,8 @@ namespace ProjectT.Editor.Data
                 allowSceneObjects = false,
                 value = AssetDatabase.LoadAssetAtPath<SceneAsset>("Assets/01_Scenes/Stage01_Grassland.unity")
             };
-            var appearanceTarget = new ObjectField("외형 적용 대상")
-            {
-                objectType = typeof(ScriptableObject),
-                allowSceneObjects = false
-            };
             detail.Add(baseStage);
             detail.Add(baseScene);
-            if (session.Source is UnitAppearance)
-            {
-                detail.Add(appearanceTarget);
-                detail.Add(Text("이 외형을 사용할 클래스 또는 적을 지정하세요. 복사본의 외형 참조만 교체합니다.", "project-data-description"));
-            }
-
             detail.Add(Text(
                 "기준 장면의 지형·공방 위치·배치 영역은 유지됩니다. 경로의 마지막 점과 공방 위치가 맞는지 시험에서 확인하세요. 복사본은 Assets/Temp/ProjectDataTrials에 보관합니다.",
                 "project-data-description"));
@@ -263,9 +254,8 @@ namespace ProjectT.Editor.Data
                 }
 
                 bool success = ProjectDataTrialService.TryCreate(
-                    baseStage.value as StageDefinition,
+                    baseStage.value as StageData,
                     session.Source,
-                    appearanceTarget.value as ScriptableObject,
                     AssetDatabase.GetAssetPath(baseScene.value),
                     out string path,
                     out notice);

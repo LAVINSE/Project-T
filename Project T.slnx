@@ -14,8 +14,6 @@
   <Project Path="DamageNumbersPro.csproj" />
   <Project Path="AllIn13DShaderAssemebly.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
-  <Project Path="ProjectT.Editor.Tests.csproj" />
   <Project Path="AllIn1SpriteShaderAssembly.csproj" />
   <Project Path="AllIn1VfxTexDemoAssembly.csproj" />
-  <Project Path="ProjectT.PlayMode.Tests.csproj" />
 </Solution>

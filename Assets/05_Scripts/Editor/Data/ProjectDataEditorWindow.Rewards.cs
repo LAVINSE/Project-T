@@ -33,7 +33,10 @@ namespace ProjectT.Editor.Data
                 amount.SetEnabled(current != null && current.boolValue);
             });
             container.Add(amount);
-            container.Add(BuildField(entry.FindPropertyRelative("acquisitionProbability"), "획득 확률 (%)", "다른 항목과 독립적으로 판정합니다. 100은 항상 지급하고 0은 지급하지 않습니다."));
+            container.Add(BuildField(
+                entry.FindPropertyRelative("acquisitionProbability"),
+                "획득 확률 (%)",
+                "다른 항목과 독립적으로 판정합니다. 100은 항상 지급하고 0은 지급하지 않습니다."));
             var summary = Text(string.Empty, "project-data-description");
             container.Add(summary);
             container.schedule.Execute(() => RefreshRewardSummary(path, summary)).Every(300);
@@ -57,7 +60,7 @@ namespace ProjectT.Editor.Data
                 return;
             }
 
-            var definition = entry.FindPropertyRelative("definition").objectReferenceValue as RewardDefinition;
+            var definition = entry.FindPropertyRelative("definition").objectReferenceValue as RewardData;
             if (definition == null)
             {
                 summary.text = "재화 또는 아이템 자산을 연결하세요.";
@@ -66,9 +69,9 @@ namespace ProjectT.Editor.Data
 
             bool overridden = entry.FindPropertyRelative("useAmountOverride").boolValue;
             double amount = overridden ? entry.FindPropertyRelative("overrideAmount").doubleValue : definition.DefaultAmount;
-            summary.text = definition.DisplayName + " · 적용 수량 " + amount + (overridden ? " (개별 설정)" : " (원본 기본값)")
-                + " · 획득 확률 " + entry.FindPropertyRelative("acquisitionProbability").floatValue + "%";
+            summary.text = definition.DisplayName + " · 적용 수량 " + amount + (overridden ? " (개별 설정)" : " (원본 기본값)") + " · 획득 확률 " + entry.FindPropertyRelative("acquisitionProbability").floatValue + "%";
         }
+
         #endregion // 보상 입력
     }
 }
