@@ -42,7 +42,6 @@ namespace ProjectT.Editor.Data
         private string notice = string.Empty;
         private List<DataIssue> issues = new List<DataIssue>();
         private readonly Dictionary<string, VisualElement> fieldElements = new Dictionary<string, VisualElement>();
-        private string trialScenePath = string.Empty;
 
         #endregion // 필드
 
@@ -270,7 +269,7 @@ namespace ProjectT.Editor.Data
         }
 
         /// <summary>
-        /// 검사·미리보기·참조·시험과 실행 취소를 한 메뉴에 모읍니다. 사용할 수 없는 작업은 비활성화합니다.
+        /// 검사·미리보기·참조와 실행 취소를 한 메뉴에 모읍니다. 시험 기능은 TestManager에서 제공합니다.
         /// </summary>
         private ToolbarMenu CreateToolsMenu()
         {
@@ -285,15 +284,9 @@ namespace ProjectT.Editor.Data
                 "편집",
                 "검사",
                 "미리보기",
-                "참조·사용처",
-                "시험 전투"
+                "참조·사용처"
             })
             {
-                if (title == "시험 전투" && (kind == DataKind.Currency || kind == DataKind.Item))
-                {
-                    continue;
-                }
-
                 string page = title;
                 menu.menu.AppendAction(
                     title == "편집" ? "인스펙터" : title,
@@ -301,8 +294,7 @@ namespace ProjectT.Editor.Data
                     action =>
                 {
                     if (session?.Source == null
-                        || creatingData
-                        || (page == "시험 전투" && EditorApplication.isPlayingOrWillChangePlaymode))
+                        || creatingData)
                     {
                         return DropdownMenuAction.Status.Disabled;
                     }
@@ -502,9 +494,6 @@ namespace ProjectT.Editor.Data
                     break;
                 case "참조·사용처":
                     BuildReferences();
-                    break;
-                case "시험 전투":
-                    BuildTrial();
                     break;
                 default:
                     BuildFields();

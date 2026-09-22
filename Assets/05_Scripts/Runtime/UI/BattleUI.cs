@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using SW.Attributes;
 using SW.Base;
@@ -13,7 +12,7 @@ using ProjectT.Units;
 namespace ProjectT.UI
 {
     /// <summary>
-    /// 공통 전투 화면을 같은 장면의 전투에 연결합니다. 전투·선택·안내 알림이 올 때만 화면을 갱신합니다.
+    /// 공통 전투 화면을 같은 장면의 전투에 연결합니다. 전투·선택 알림이 올 때만 화면을 갱신합니다.
     /// </summary>
     public sealed class BattleUI : SWMonoBehaviour
     {
@@ -24,8 +23,7 @@ namespace ProjectT.UI
         [SerializeField] private EconomyHUDUI economyHUD;
         [SerializeField] private InventoryUI inventory;
         [SerializeField] private BottomHUDUI bottomHUD;
-        [SWGroup("실행 상태와 테스트")]
-        [SerializeField, SWReadOnly, TextArea] private string testStatus;
+
         private BattleManager battle;
         private BattleInput input;
         private CharacterUnit displayedUnit;
@@ -43,8 +41,7 @@ namespace ProjectT.UI
             battle = FindBattle();
             if (battle == null || !battle.IsReady)
             {
-                testStatus = "같은 장면에서 준비된 전투를 찾지 못했습니다.";
-                SWLog.LogWarning("[BattleUI] 화면 연결 중단: " + testStatus);
+                SWLog.LogWarning("[BattleUI] 화면 연결 중단: 같은 장면에서 준비된 전투를 찾지 못했습니다.");
                 enabled = false;
                 return;
             }
@@ -55,8 +52,7 @@ namespace ProjectT.UI
             inventory.Initialize(battle.TimeController);
             battle.StateChanged += Refresh;
             input.Selection.Changed += OnSelectionChanged;
-            input.MessageChanged += RefreshTestStatus;
-            battle.Workshop.Health.Changed += RefreshTestStatus;
+
             bottomHUD.InventoryRequested += ToggleInventory;
             bottomHUD.PauseRequested += TogglePause;
             bottomHUD.SpeedRequested += CycleSpeed;
@@ -100,7 +96,7 @@ namespace ProjectT.UI
             inventory.PresentCoin(battle.Wallet.Balance);
             characterSelected.RefreshAvailability();
             bottomHUD.Present(manualPause != null, speedMultiplier, !battle.IsFinished);
-            RefreshTestStatus();
+
         }
 
         /// <summary>
@@ -130,41 +126,6 @@ namespace ProjectT.UI
         private void RefreshCharacter()
         {
             characterHUD.Present(displayedUnit);
-        }
-
-        /// <summary>
-        /// 인스펙터 확인용 단계·처치·공방 체력·입력 안내를 갱신합니다.
-        /// </summary>
-        private void RefreshTestStatus()
-        {
-            testStatus = battle.Stage.DisplayName + " · " + GetPhaseText(battle.Phase)
-                + "\n처치 " + battle.KilledCount + " / " + battle.Stage.TotalEnemyCount
-                + " · 공방 체력 " + Mathf.CeilToInt(battle.Workshop.Health.Current) + " / " + battle.Workshop.Health.Maximum.ToString("0")
-                + "\n" + input.Message;
-        }
-
-        /// <summary>
-        /// 전투 단계를 한글 안내로 변환합니다.
-        /// </summary>
-        private static string GetPhaseText(BattlePhase phase)
-        {
-            switch (phase)
-            {
-                case BattlePhase.Preparation:
-                    return "전투 준비";
-                case BattlePhase.Fighting:
-                    return "전투 진행";
-                case BattlePhase.RoundBreak:
-                    return "라운드 휴식";
-                case BattlePhase.FinalRest:
-                    return "방어 성공 · 최종 휴식";
-                case BattlePhase.Victory:
-                    return "승리";
-                case BattlePhase.Defeat:
-                    return "패배";
-                default:
-                    return string.Empty;
-            }
         }
 
         #endregion // 표시
@@ -228,49 +189,6 @@ namespace ProjectT.UI
 
         #endregion // 사용자 조작
 
-        #region 인스펙터 테스트
-        /// <summary>
-        /// 준비 또는 휴식에서 라운드를 시작합니다. 다른 단계의 요청은 전투가 거절합니다.
-        /// </summary>
-        [SWButton("테스트: 전투 시작 / 다음 라운드")]
-        public void TestAdvanceRound()
-        {
-            if (Application.isPlaying && battle != null)
-            {
-                battle.StartRound();
-            }
-        }
-
-        /// <summary>
-        /// 최종 휴식의 승리를 확정하고 현재 결과를 로그에 표시합니다.
-        /// </summary>
-        [SWButton("테스트: 결과 확인")]
-        public void TestInspectResult()
-        {
-            if (!Application.isPlaying || battle == null)
-            {
-                return;
-            }
-
-            battle.CompleteBattle();
-            RefreshTestStatus();
-            SWLog.Log("[BattleUI] " + testStatus);
-        }
-
-        /// <summary>
-        /// 현재 스테이지를 새 전투로 다시 시작합니다. 편집 모드에서는 처리하지 않습니다.
-        /// </summary>
-        [SWButton("테스트: 스테이지 재시작")]
-        public void TestRestartBattle()
-        {
-            if (Application.isPlaying && battle != null)
-            {
-                SceneManager.LoadScene(gameObject.scene.path);
-            }
-        }
-
-        #endregion // 인스펙터 테스트
-
         #region 정리
         /// <summary>
         /// 이 화면의 정지 소유권과 모든 알림 구독을 정리합니다.
@@ -286,8 +204,7 @@ namespace ProjectT.UI
 
             battle.StateChanged -= Refresh;
             input.Selection.Changed -= OnSelectionChanged;
-            input.MessageChanged -= RefreshTestStatus;
-            battle.Workshop.Health.Changed -= RefreshTestStatus;
+
             bottomHUD.InventoryRequested -= ToggleInventory;
             bottomHUD.PauseRequested -= TogglePause;
             bottomHUD.SpeedRequested -= CycleSpeed;

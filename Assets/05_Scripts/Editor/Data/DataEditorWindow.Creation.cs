@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,7 +13,7 @@ using ProjectT.Data;
 namespace ProjectT.Editor.Data
 {
     /// <summary>
-    /// 독립 데이터 창의 템플릿 생성·참조 복제·시험 전투 연결을 담당합니다.
+    /// 독립 데이터 창의 템플릿 생성·참조 복제를 담당합니다.
     /// </summary>
     public sealed partial class DataEditorWindow
     {
@@ -306,81 +305,5 @@ namespace ProjectT.Editor.Data
         }
 
         #endregion // 생성
-
-        #region 시험
-        /// <summary>
-        /// 원본을 유지한 시험 전투의 기준과 연결 대상을 선택합니다.
-        /// </summary>
-        private void BuildTrial()
-        {
-            detail.Add(Text("시험 전투", "project-data-heading"));
-            detail.Add(Text(
-                "현재 데이터는 적용·저장한 값으로 시험합니다. 기준 장면과 전투 데이터 전체를 독립 복제하고 그림·프리팹은 읽기 전용으로 공유합니다. 새 클래스는 구매 목록에 추가됩니다.",
-                "project-data-description"));
-            var baseStage = new ObjectField("기준 스테이지")
-            {
-                objectType = typeof(StageData),
-                allowSceneObjects = false,
-                value = session.Source as StageData ?? AssetDatabase.LoadAssetAtPath<StageData>("Assets/02_Res/Data/Stage/Stage01Data.asset")
-            };
-            var baseScene = new ObjectField("기준 전투 장면")
-            {
-                objectType = typeof(SceneAsset),
-                allowSceneObjects = false,
-                value = AssetDatabase.LoadAssetAtPath<SceneAsset>("Assets/01_Scenes/Stage01_Grassland.unity")
-            };
-            detail.Add(baseStage);
-            detail.Add(baseScene);
-            detail.Add(Text(
-                "기준 장면의 지형·공방 위치·배치 영역은 유지됩니다. 경로의 마지막 점과 공방 위치가 맞는지 시험에서 확인하세요. 복사본은 Assets/Temp/ProjectDataTrials에 보관합니다.",
-                "project-data-description"));
-            var create = ActionButton(
-                "시험 복사본 만들기",
-                () =>
-            {
-                if (session.HasChanges || session.HasExternalChanges)
-                {
-                    notice = "현재 변경을 적용하고 원본 상태를 확인한 뒤 시험 복사본을 만드세요.";
-                    return;
-                }
-
-                bool success = DataTrialService.TryCreate(
-                    baseStage.value as StageData,
-                    session.Source,
-                    AssetDatabase.GetAssetPath(baseScene.value),
-                    out string path,
-                    out notice);
-                if (success)
-                {
-                    trialScenePath = path;
-                    RebuildDetail();
-                }
-            },
-                "createDataTrial");
-            create.SetEnabled(!session.HasChanges && !session.HasExternalChanges && !EditorApplication.isPlayingOrWillChangePlaymode);
-            detail.Add(create);
-            if (!string.IsNullOrEmpty(trialScenePath))
-            {
-                detail.Add(Text(trialScenePath, "project-data-description"));
-                detail.Add(ActionButton(
-                    "시험 장면 열기",
-                    () =>
-                {
-                    if (EditorApplication.isPlayingOrWillChangePlaymode)
-                    {
-                        notice = "실행 중인 전투를 먼저 정지하세요.";
-                        return;
-                    }
-
-                    if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-                    {
-                        EditorSceneManager.OpenScene(trialScenePath, OpenSceneMode.Single);
-                        notice = "시험 장면을 열었습니다. Unity 재생 버튼으로 전투를 확인하세요.";
-                    }
-                }));
-            }
-        }
-
-        #endregion // 시험
     }
 }

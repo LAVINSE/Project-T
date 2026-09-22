@@ -22,7 +22,7 @@ namespace ProjectT.Editor.Data
         public static VisualElement Create(ProjectData asset)
         {
             var root = new VisualElement();
-            root.Add(Description("편집 중인 값의 미리보기입니다. 실제 전투는 적용·저장 후 시험 전투에서 확인하세요."));
+            root.Add(Description("편집 중인 값의 미리보기입니다. 실제 반영은 적용·저장 후 사용하는 스테이지에서 확인하세요."));
             UnitData appearance = asset as UnitData;
             if (asset is UnitClassData ally)
             {

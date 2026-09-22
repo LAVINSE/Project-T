@@ -58,7 +58,6 @@ MonoBehaviour:
   economyHUD: {fileID: 2640038631552140393}
   inventory: {fileID: 2085594731148166149}
   bottomHUD: {fileID: 1779910666731908533}
-  testStatus: 
 --- !u!1001 &1476499435616728521
 PrefabInstance:
   m_ObjectHideFlags: 0
