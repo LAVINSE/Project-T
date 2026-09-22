@@ -1,11 +1,6 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-
-using SW.Base;
-
-using ProjectT.Data;
-using ProjectT.Navigation;
-using ProjectT.Units;
 
 namespace ProjectT.Data
 {
@@ -13,8 +8,7 @@ namespace ProjectT.Data
     /// 스테이지의 라운드 구성과 전투 시작 경제를 정의합니다. 이후 스테이지는 별도 자산으로 확장합니다.
     /// </summary>
     [CreateAssetMenu(fileName = "StageData", menuName = "Project T/데이터/스테이지")]
-    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "ProjectT.Data", "ProjectT.Runtime", "StageDefinition")]
-    public sealed class StageData : SWScriptableObject
+    public sealed class StageData : ProjectData
     {
         #region 필드
         [SerializeField] private string displayName;
@@ -60,15 +54,21 @@ namespace ProjectT.Data
         /// </summary>
         public int RoundCount => enemiesPerRound.Length;
 
-        #endregion // 프로퍼티
-
-        #region 함수
         /// <summary>
-        /// 지정한 라운드의 적 수입니다.
+        /// 모든 라운드의 적 수 합계입니다.
         /// </summary>
-        public int GetEnemyCount(int round)
+        public int TotalEnemyCount
         {
-            return enemiesPerRound[round];
+            get
+            {
+                int total = 0;
+                foreach (int count in enemiesPerRound)
+                {
+                    total += count;
+                }
+
+                return total;
+            }
         }
 
         /// <summary>
@@ -84,7 +84,53 @@ namespace ProjectT.Data
         /// <summary>
         /// 이 전투에서 구매할 수 있는 클래스 목록입니다.
         /// </summary>
-        public System.Collections.Generic.IReadOnlyList<UnitClassData> Classes => classes;
+        public IReadOnlyList<UnitClassData> Classes => classes;
+
+        #endregion // 프로퍼티
+
+        #region 함수
+        /// <summary>
+        /// 0부터 시작하는 라운드 순서의 적 수입니다.
+        /// </summary>
+        public int GetEnemyCount(int roundIndex)
+        {
+            return enemiesPerRound[roundIndex];
+        }
+
+        /// <summary>
+        /// 이 스테이지의 구매 목록에 클래스가 포함되는지 확인합니다.
+        /// </summary>
+        public bool HasClass(UnitClassData unitClass)
+        {
+            return unitClass != null && Array.IndexOf(classes, unitClass) >= 0;
+        }
+
+        /// <summary>
+        /// 경제·라운드·참조 설정을 검사합니다. 참조된 데이터 내부는 각 데이터가 검사합니다.
+        /// </summary>
+        public override bool Validate(List<DataIssue> issues)
+        {
+            bool valid = CheckName(displayName, nameof(displayName), issues);
+            valid &= CheckNonNegative(startingCurrency, nameof(startingCurrency), issues);
+            valid &= CheckRequired(deploymentCurrency, nameof(deploymentCurrency), issues);
+            valid &= CheckPositive(workshopMaximumHealth, nameof(workshopMaximumHealth), issues);
+            valid &= CheckPositive(spawnInterval, nameof(spawnInterval), issues);
+            valid &= CheckRequired(enemyRoute, nameof(enemyRoute), issues);
+            valid &= CheckRequired(enemy, nameof(enemy), issues);
+            valid &= Check(enemiesPerRound.Length > 0, nameof(enemiesPerRound), "라운드를 한 개 이상 추가하세요.", issues);
+            for (int index = 0; index < enemiesPerRound.Length; index++)
+            {
+                valid &= CheckPositive(enemiesPerRound[index], nameof(enemiesPerRound) + ".Array.data[" + index + "]", issues);
+            }
+
+            valid &= Check(classes.Length > 0, nameof(classes), "항목을 한 개 이상 추가하세요.", issues);
+            for (int index = 0; index < classes.Length; index++)
+            {
+                valid &= CheckRequired(classes[index], nameof(classes) + ".Array.data[" + index + "]", issues);
+            }
+
+            return valid;
+        }
 
         #endregion // 함수
     }

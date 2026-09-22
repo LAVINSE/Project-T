@@ -132,7 +132,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: OrcWarriorRed_Portrait
+      name: orc melee - anims-idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -343,7 +343,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      OrcWarriorRed_Portrait: 253122543
+      orc melee - anims-idle_0: 253122543
       orc melee - anims-idle_1: 1104595012
       orc melee - anims-idle_2: 1356988015
       orc melee - anims-idle_3: -2056490941

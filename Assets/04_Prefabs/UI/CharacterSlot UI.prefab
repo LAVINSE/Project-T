@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 937387721788455610}
   - component: {fileID: 4034078007569668085}
   - component: {fileID: 1356683437947258412}
-  - component: {fileID: 9184932265524512607}
   m_Layer: 0
   m_Name: CharacterSlot UI
   m_TagString: Untagged
@@ -166,6 +165,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!114 &1356683437947258412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,19 +182,6 @@ MonoBehaviour:
   button: {fileID: 937387721788455610}
   portrait: {fileID: 8879120122352389180}
   priceLabel: {fileID: 8891139465928547780}
-  dragHandler: {fileID: 9184932265524512607}
---- !u!114 &9184932265524512607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 883135842105213887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ff4eaba9b2908847848d6d4fa78b960, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Presentation.ClassDeploymentButton
 --- !u!1 &2253703265464682287
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,7 +447,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1

@@ -69,36 +69,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 4aacf0671366a7547b6e75e268a85fce, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: idleClip
+      propertyPath: actions.Array.data[0].clip
       value: 
       objectReference: {fileID: 7400000, guid: 58113fee7d7bce54ca2fdba859cf59cb, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: moveClip
+      propertyPath: actions.Array.data[1].clip
       value: 
       objectReference: {fileID: 7400000, guid: 3fe49d096a140fe4f88f7ab973dc8fda, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: deathClip
-      value: 
-      objectReference: {fileID: 7400000, guid: 9a8ce941f0624c247b5b1966947f3a78, type: 2}
-    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: idleState
-      value: Base Layer.OrcWarriorRed_Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: attackClip
+      propertyPath: actions.Array.data[2].clip
       value: 
       objectReference: {fileID: 7400000, guid: a0db16f887dc0c849b14af08f2e48cb1, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: deathState
-      value: Base Layer.OrcWarriorRed_Death
+      propertyPath: actions.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 9a8ce941f0624c247b5b1966947f3a78, type: 2}
+    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: actions.Array.data[0].stateName
+      value: OrcWarriorRed_Idle
       objectReference: {fileID: 0}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: idleSprite
-      value: 
-      objectReference: {fileID: 253122543, guid: 32067a1d7944fe9488077a6f23bd6ea7, type: 3}
+      propertyPath: actions.Array.data[1].stateName
+      value: OrcWarriorRed_Walk
+      objectReference: {fileID: 0}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: attackState
-      value: Base Layer.OrcWarriorRed_MeleeAttack
+      propertyPath: actions.Array.data[2].stateName
+      value: OrcWarriorRed_MeleeAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: actions.Array.data[3].stateName
+      value: OrcWarriorRed_Death
       objectReference: {fileID: 0}
     - target: {fileID: 6121263608913733924, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
       propertyPath: m_Name

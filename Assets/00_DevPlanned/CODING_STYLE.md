@@ -35,6 +35,19 @@ private bool Prepare(GameObject prefab)
 }
 ```
 
+## 구조와 갱신 규칙
+
+- `Update`·`LateUpdate`는 피합니다. 상태가 바뀔 때 알림(event)을 보내고 표시 쪽이 구독해 그때만 갱신합니다. 매 프레임 진행이 꼭 필요한 전투 진행은 `BattleManager.Update` 한 곳에서 유닛의 `Tick`을 호출합니다.
+- 입력은 Input System의 `InputAction` 신호로 처리하고, 짧은 연출만 코루틴을 사용합니다.
+- `DefaultExecutionOrder`로 실행 순서를 지정하지 않습니다. 자기 초기화는 `Awake`, 다른 객체 참조는 `Start`부터 사용하고, 공통 관리자는 Main 장면에 두며 편집기 Play도 Main에서 시작합니다. `Resources.Load`로 관리자를 만들지 않습니다.
+- 기획자가 종류를 늘려 가는 분류(유닛 동작 등)는 enum 대신 SWUtils `SWCategory` 자산으로 만들고 코드는 코드명으로 비교합니다. 코드가 값마다 다르게 처리하는 값만 enum으로 둡니다.
+- 열거형은 `Runtime/Util/ProjectEnum.cs`, 애니메이터 파라미터 해시·공용 상수·색상은 `ProjectDefine.cs`, 공용 검사·표시 확장 메서드는 `ProjectExtension.cs`(SWUtils처럼 `Ex` 접두사)에 모읍니다. 스크립트마다 같은 상수·검사 함수를 따로 만들지 않고, 상태를 가진 static 필드를 새로 만들지 않습니다.
+- 데이터 검사 규칙은 각 데이터의 `Validate`에 둡니다. 별도 검사 스크립트를 만들지 않습니다.
+- 컴포넌트는 조립 지점 역할만 하고 규칙은 일반 클래스(서비스·컨트롤러)에 나눕니다. 싱글톤·공통 데이터는 조립 지점(`BattleManager`, `BattleUI`)에서만 읽고 하위 객체에는 `Initialize` 인자로 전달합니다.
+- 시간 대기는 SWUtils `SWTimer`(Manual 모드, 전투 관리자의 Tick)로 처리합니다.
+- 유닛 애니메이션은 유닛별 Animator Controller를 쓰고, 코드가 재생할 동작은 `UnitAnimation` 동작 목록에서 상태 이름으로 연결합니다. 코드에 상태 이름 문자열을 쓰지 않습니다.
+- 스크립트 이름을 바꿀 때는 `.cs`와 `.meta`를 함께 옮겨 GUID를 유지합니다. `MovedFrom`·`FormerlySerializedAs` 같은 호환 코드 대신 바뀐 참조를 편집기에서 직접 다시 연결합니다.
+
 ## 데이터와 유닛 명명
 
 - 프로젝트 ScriptableObject 스크립트와 자산 이름은 `Data`로 끝냅니다. 예: `UnitClassData`, `UnitEnemyData`, `OrcMageRedData`, `BattleCoinData`.

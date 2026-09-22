@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,11 +21,6 @@ namespace ProjectT.Navigation
         /// 모든 경유점을 따라 이동하는 실제 경로 길이입니다.
         /// </summary>
         public float Length => accumulatedDistances[accumulatedDistances.Length - 1];
-
-        /// <summary>
-        /// 경로를 구성하는 경유점 수입니다.
-        /// </summary>
-        public int PointCount => points.Length;
 
         #endregion // 프로퍼티
 
@@ -56,7 +50,7 @@ namespace ProjectT.Navigation
             for (int index = 0; index < points.Length; index++)
             {
                 Vector2 point = sourcePoints[index];
-                if (!IsFinite(point.x) || !IsFinite(point.y))
+                if (!point.ExIsFinite())
                 {
                     SWLog.LogWarning("[FixedRoute] 생성 실패: 경유점 좌표는 유한한 수여야 합니다.");
                     return null;
@@ -70,7 +64,7 @@ namespace ProjectT.Navigation
 
                 float segmentLength = Vector2.Distance(points[index - 1], point);
                 float totalLength = accumulatedDistances[index - 1] + segmentLength;
-                if (!IsFinite(totalLength) || segmentLength <= 0f || totalLength <= accumulatedDistances[index - 1])
+                if (!totalLength.ExIsFinite() || segmentLength <= 0f || totalLength <= accumulatedDistances[index - 1])
                 {
                     SWLog.LogWarning("[FixedRoute] 생성 실패: 인접 경유점은 구분되어야 하며 경로 길이를 계산할 수 있어야 합니다.");
                     return null;
@@ -95,7 +89,7 @@ namespace ProjectT.Navigation
         /// </summary>
         public Vector2 GetPosition(float distance)
         {
-            if (!IsFinite(distance))
+            if (!distance.ExIsFinite())
             {
                 SWLog.LogWarning("[FixedRoute] 위치 조회 실패: 이동 거리는 유한한 수여야 합니다.");
                 return points[0];
@@ -129,14 +123,6 @@ namespace ProjectT.Navigation
             float startDistance = accumulatedDistances[lower - 1];
             float fraction = (distance - startDistance) / (accumulatedDistances[lower] - startDistance);
             return Vector2.Lerp(points[lower - 1], points[lower], fraction);
-        }
-
-        /// <summary>
-        /// 경로 좌표와 거리가 유한한 값인지 확인합니다.
-        /// </summary>
-        private static bool IsFinite(float value)
-        {
-            return !float.IsNaN(value) && !float.IsInfinity(value);
         }
 
         #endregion // 함수

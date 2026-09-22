@@ -1,7 +1,5 @@
 using System;
-using UnityEngine;
 
-using SW.Base;
 using SW.Util;
 
 using ProjectT.Data;
@@ -12,9 +10,7 @@ namespace ProjectT.Units
     /// <summary>
     /// 적 한 명의 경로 이동·공방 도착·저지·처치를 관리합니다. 도착만으로 적을 제거하지 않습니다.
     /// </summary>
-    [RequireComponent(typeof(EnemyRouteMovement))]
-    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "ProjectT.Defense.Units", "ProjectT.Defense.Runtime", "EnemyUnit")]
-    public sealed class EnemyUnit : SWMonoBehaviour
+    public sealed class EnemyUnit : UnitBase
     {
         #region 필드
         private bool resolved;
@@ -27,25 +23,18 @@ namespace ProjectT.Units
         /// </summary>
         public UnitEnemyData Definition { get; private set; }
 
-        /// <summary>
-        /// 이 개체의 체력입니다.
-        /// </summary>
-        public CombatHealth Health { get; private set; }
+        /// <inheritdoc/>
+        public override UnitData Data => Definition;
 
         /// <summary>
         /// 고정 경로 이동입니다.
         /// </summary>
-        public EnemyRouteMovement Movement { get; private set; }
+        public EnemyMovement Movement { get; private set; }
 
         /// <summary>
         /// 현재 이 적을 저지하는 아군입니다.
         /// </summary>
         public CharacterUnit Blocker { get; private set; }
-
-        /// <summary>
-        /// 이 적의 공격 동작과 타격 시각입니다.
-        /// </summary>
-        public UnitAttackSequence Attack { get; } = new UnitAttackSequence();
 
         /// <summary>
         /// 현재 준비하거나 진행 중인 공격의 아군 대상입니다.
@@ -62,6 +51,9 @@ namespace ProjectT.Units
         /// </summary>
         public bool HasReachedWorkshop => Movement != null && Movement.HasArrived;
 
+        /// <inheritdoc/>
+        public override bool IsMoving => IsActive && !Movement.IsStopped && !Movement.HasArrived;
+
         /// <summary>
         /// 처치 정산을 한 생명마다 한 번만 요청합니다.
         /// </summary>
@@ -69,7 +61,7 @@ namespace ProjectT.Units
 
         #endregion // 프로퍼티
 
-        #region 함수
+        #region 초기화
         /// <summary>
         /// 풀에서 대여한 적을 새로운 생명과 경로 시작점으로 초기화합니다.
         /// </summary>
@@ -81,16 +73,11 @@ namespace ProjectT.Units
                 return false;
             }
 
-            CombatHealth nextHealth = CombatHealth.Create(definition.MaximumHealth);
-            var nextMovement = GetComponent<EnemyRouteMovement>();
-            if (nextHealth == null || nextMovement == null || !nextMovement.Initialize(route, definition.MoveSpeed))
+            Health nextHealth = Health.Create(definition.MaximumHealth);
+            EnemyMovement nextMovement = EnemyMovement.Create(transform, route, definition.MoveSpeed);
+            if (nextHealth == null || nextMovement == null)
             {
                 return false;
-            }
-
-            if (Health != null)
-            {
-                Health.Died -= OnDied;
             }
 
             if (Movement != null)
@@ -99,15 +86,27 @@ namespace ProjectT.Units
             }
 
             Definition = definition;
-            Health = nextHealth;
-            Movement = nextMovement;
-            Health.Died += OnDied;
-            Movement.Arrived += OnArrived;
             Blocker = null;
-            resolved = false;
-            Attack.Reset();
             AttackTarget = null;
+            resolved = false;
+            Movement = nextMovement;
+            Movement.Arrived += OnArrived;
+            SetHealth(nextHealth);
+            NotifyInitialized();
+            NotifyMovingChanged();
             return true;
+        }
+
+        #endregion // 초기화
+
+        #region 함수
+        /// <inheritdoc/>
+        public override void Tick(float deltaTime)
+        {
+            if (IsActive && Movement.Advance(deltaTime))
+            {
+                NotifyMoved();
+            }
         }
 
         /// <summary>
@@ -115,29 +114,32 @@ namespace ProjectT.Units
         /// </summary>
         public void SetBlocker(CharacterUnit ally)
         {
-            if (Blocker != ally)
+            if (Blocker == ally)
             {
-                Attack.Cancel();
-                AttackTarget = null;
+                return;
             }
 
+            Attack.Cancel();
+            AttackTarget = null;
             Blocker = ally;
             Movement.SetStopped(ally != null);
+            NotifyMovingChanged();
         }
 
         /// <summary>
         /// 경로 끝 도착을 공방 공격 가능 상태로 전환합니다.
         /// </summary>
-        private void OnArrived(EnemyRouteMovement movement)
+        private void OnArrived()
         {
             Attack.Cancel();
             AttackTarget = null;
+            NotifyMovingChanged();
         }
 
         /// <summary>
-        /// 공격을 취소하고 처치 완료를 한 번 알립니다.
+        /// 공격과 이동을 멈추고 처치 완료를 한 번 알립니다.
         /// </summary>
-        private void OnDied()
+        protected override void OnDied()
         {
             if (resolved)
             {
@@ -145,22 +147,17 @@ namespace ProjectT.Units
             }
 
             resolved = true;
-            Attack.Cancel();
             SetBlocker(null);
+            Attack.Cancel();
             Movement.SetStopped(true);
+            NotifyMovingChanged();
             Resolved?.Invoke(this);
         }
 
-        /// <summary>
-        /// 이동 도착과 체력 사망 이벤트의 구독을 해제합니다.
-        /// </summary>
-        private void OnDestroy()
+        /// <inheritdoc/>
+        protected override void OnDestroy()
         {
-            if (Health != null)
-            {
-                Health.Died -= OnDied;
-            }
-
+            base.OnDestroy();
             if (Movement != null)
             {
                 Movement.Arrived -= OnArrived;

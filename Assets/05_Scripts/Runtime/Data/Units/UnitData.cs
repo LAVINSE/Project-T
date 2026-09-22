@@ -1,15 +1,17 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 using SW.Base;
 
-using ProjectT.Presentation;
+using ProjectT.View;
 
 namespace ProjectT.Data
 {
     /// <summary>
     /// 캐릭터와 적의 공통 능력치·프리팹·표시 정보를 보관합니다. 미설정 데이터는 생성할 수 없습니다.
     /// </summary>
-    public abstract class UnitData : SWScriptableObject
+    public abstract class UnitData : ProjectData
     {
         #region 필드
         [SerializeField] private string displayName;
@@ -19,12 +21,15 @@ namespace ProjectT.Data
         [SerializeField] private float attackDamage;
         [SerializeField] private float attackRange;
         [SerializeField] private float attackInterval;
+        [SerializeField] private SWCategory attackAction;
         [SerializeField] private Sprite portrait;
         [SerializeField] private Color tint = Color.white;
         [SerializeField] private float feetOffset;
         [SerializeField] private float healthBarHeight = 2f;
         [SerializeField] private bool spritesFaceRight = true;
         [SerializeField] private Vector2 attackOriginOffset = new Vector2(0.5f, 0.8f);
+        [NonSerialized] private GameObject cachedPrefab;
+        [NonSerialized] private UnitAnimation cachedAnimation;
 
         #endregion // 필드
 
@@ -65,9 +70,26 @@ namespace ProjectT.Data
         public float AttackInterval => attackInterval;
 
         /// <summary>
-        /// 프리팹의 애니메이션 설정입니다. 연결되지 않았으면 null입니다.
+        /// 공격할 때 재생할 동작(SWCategory)입니다. 프리팹의 UnitAnimation 동작 목록에 등록되어 있어야 합니다.
         /// </summary>
-        public UnitAnimation Animation => prefab == null ? null : prefab.GetComponentInChildren<UnitAnimation>(true);
+        public SWCategory AttackAction => attackAction;
+
+        /// <summary>
+        /// 프리팹의 애니메이션 설정입니다. 프리팹 참조가 바뀔 때만 다시 찾으며 없으면 null입니다.
+        /// </summary>
+        public UnitAnimation Animation
+        {
+            get
+            {
+                if (cachedPrefab != prefab || (prefab != null && cachedAnimation == null))
+                {
+                    cachedPrefab = prefab;
+                    cachedAnimation = prefab != null ? prefab.GetComponentInChildren<UnitAnimation>(true) : null;
+                }
+
+                return cachedAnimation;
+            }
+        }
 
         /// <summary>
         /// 화면용 초상화이며 미지정이면 프리팹의 기본 그림, 둘 다 없으면 null입니다.
@@ -77,7 +99,7 @@ namespace ProjectT.Data
         /// <summary>
         /// 배치 미리보기용 기본 그림입니다. 프리팹 설정이 없으면 null입니다.
         /// </summary>
-        public Sprite PreviewSprite => Animation == null ? null : Animation.IdleSprite;
+        public Sprite PreviewSprite => Animation != null ? Animation.IdleSprite : null;
 
         /// <summary>
         /// 원본 그림에 곱하는 색상입니다.
@@ -107,19 +129,7 @@ namespace ProjectT.Data
         /// <summary>
         /// 클립의 실제 타격 이벤트 비율이며 설정이 없으면 0입니다.
         /// </summary>
-        public float AttackImpactRatio => Animation == null ? 0f : Animation.AttackImpactRatio;
-
-        /// <summary>
-        /// 공통 입력과 프리팹 연결이 유효할 때만 참입니다.
-        /// </summary>
-        public virtual bool IsValid => !string.IsNullOrWhiteSpace(displayName)
-            && Positive(maximumHealth)
-            && Positive(moveSpeed)
-            && Positive(attackDamage)
-            && Positive(attackRange)
-            && Positive(attackInterval)
-            && Animation != null
-            && Animation.IsConfigured;
+        public float AttackImpactRatio => Animation != null ? Animation.GetImpactRatio(attackAction) : 0f;
 
         #endregion // 프로퍼티
 
@@ -129,16 +139,52 @@ namespace ProjectT.Data
         /// </summary>
         public float GetAttackDuration(float interval)
         {
-            return Animation == null || !Positive(interval) ? 0f : Mathf.Min(interval, Animation.AttackDuration);
+            if (Animation == null || !interval.ExIsPositive())
+            {
+                return 0f;
+            }
+
+            return Mathf.Min(interval, Animation.GetLength(attackAction));
         }
 
         /// <summary>
-        /// 0보다 큰 유한한 값인지 확인합니다.
+        /// 공통 능력치·표시 수치·프리팹 연결을 검사합니다.
         /// </summary>
-        protected static bool Positive(float value)
+        public override bool Validate(List<DataIssue> issues)
         {
-            return !float.IsNaN(value) && !float.IsInfinity(value) && value > 0f;
+            bool valid = CheckName(displayName, nameof(displayName), issues);
+            valid &= CheckPositive(maximumHealth, nameof(maximumHealth), issues);
+            valid &= CheckPositive(moveSpeed, nameof(moveSpeed), issues);
+            valid &= CheckPositive(attackDamage, nameof(attackDamage), issues);
+            valid &= CheckPositive(attackRange, nameof(attackRange), issues);
+            valid &= CheckPositive(attackInterval, nameof(attackInterval), issues);
+            valid &= Check(feetOffset.ExIsFinite(), nameof(feetOffset), "유한한 수를 입력하세요.", issues);
+            valid &= Check(healthBarHeight.ExIsFinite(), nameof(healthBarHeight), "유한한 수를 입력하세요.", issues);
+            valid &= Check(attackOriginOffset.ExIsFinite(), nameof(attackOriginOffset), "좌표는 유한한 수여야 합니다.", issues);
+            valid &= CheckRequired(attackAction, nameof(attackAction), issues);
+            if (!CheckRequired(prefab, nameof(prefab), issues) || attackAction == null)
+            {
+                return false;
+            }
+
+            string animationReason = "프리팹에 UnitAnimation이 필요합니다.";
+            valid &= Check(
+                Animation != null && Animation.TryValidate(attackAction, out animationReason),
+                nameof(prefab),
+                animationReason,
+                issues);
+            valid &= Check(
+                HasUnitComponent(prefab),
+                nameof(prefab),
+                "데이터 종류에 맞는 캐릭터 또는 적 컴포넌트가 필요합니다.",
+                issues);
+            return valid;
         }
+
+        /// <summary>
+        /// 프리팹에 데이터 종류와 맞는 유닛 컴포넌트가 있는지 확인합니다.
+        /// </summary>
+        protected abstract bool HasUnitComponent(GameObject unitPrefab);
 
         #endregion // 함수
     }

@@ -81,36 +81,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleClip
+      propertyPath: actions.Array.data[0].clip
       value: 
       objectReference: {fileID: 7400000, guid: 59870305363608e4da9452197e2e214c, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: moveClip
+      propertyPath: actions.Array.data[1].clip
       value: 
       objectReference: {fileID: 7400000, guid: ee955cb5691f84a47962d13ef4cd47b0, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: deathClip
-      value: 
-      objectReference: {fileID: 7400000, guid: d850e4af860d8b546a38d4b08f2e3e8e, type: 2}
-    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleState
-      value: Base Layer.SkeletonBasic_Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: attackClip
+      propertyPath: actions.Array.data[2].clip
       value: 
       objectReference: {fileID: 7400000, guid: 5c9c40eb8657c4245b940d72f0486fa6, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: deathState
-      value: Base Layer.SkeletonBasic_Death
+      propertyPath: actions.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 7400000, guid: d850e4af860d8b546a38d4b08f2e3e8e, type: 2}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: actions.Array.data[0].stateName
+      value: SkeletonBasic_Idle
       objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleSprite
-      value: 
-      objectReference: {fileID: 1022205791, guid: 0ea0bc6dd911c5b4087d2f0dd1590ee3, type: 3}
+      propertyPath: actions.Array.data[1].stateName
+      value: SkeletonBasic_Walk
+      objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: attackState
-      value: Base Layer.SkeletonBasic_MeleeAttack
+      propertyPath: actions.Array.data[2].stateName
+      value: SkeletonBasic_MeleeAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: actions.Array.data[3].stateName
+      value: SkeletonBasic_Death
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

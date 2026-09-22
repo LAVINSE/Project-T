@@ -1,13 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
-
-using SW.Base;
 
 namespace ProjectT.Data
 {
     /// <summary>
     /// 재화와 아이템의 공통 정의입니다. 소유 수량을 보관하지 않고 보상 기본값만 제공합니다.
     /// </summary>
-    public abstract class RewardData : SWScriptableObject
+    public abstract class RewardData : ProjectData
     {
         #region 필드
         [SerializeField] private string displayName = "새 보상";
@@ -33,5 +32,18 @@ namespace ProjectT.Data
         public double DefaultAmount => defaultAmount;
 
         #endregion // 프로퍼티
+
+        #region 검사
+        /// <summary>
+        /// 표시 이름과 기본 수량을 검사합니다.
+        /// </summary>
+        public override bool Validate(List<DataIssue> issues)
+        {
+            bool valid = CheckName(displayName, nameof(displayName), issues);
+            valid &= CheckNonNegative(defaultAmount, nameof(defaultAmount), issues);
+            return valid;
+        }
+
+        #endregion // 검사
     }
 }

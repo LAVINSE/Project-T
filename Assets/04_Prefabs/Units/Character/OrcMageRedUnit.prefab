@@ -64,37 +64,57 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.029999949
       objectReference: {fileID: 0}
+    - target: {fileID: 4690104796987998945, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 018b005ef1fb6244c920c45ab989f45b, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: idleClip
+      propertyPath: actions.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: actions.Array.data[0].clip
       value: 
       objectReference: {fileID: 7400000, guid: 1ede19d20dccad845b3f25700292b3a8, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: moveClip
+      propertyPath: actions.Array.data[1].clip
       value: 
       objectReference: {fileID: 7400000, guid: 9a9321be22e4aba4cac998f65d916c6b, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: deathClip
+      propertyPath: actions.Array.data[2].clip
+      value: 
+      objectReference: {fileID: 7400000, guid: d43fafaa456c3d04db25ad485159786d, type: 2}
+    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: actions.Array.data[3].clip
       value: 
       objectReference: {fileID: 7400000, guid: b2ef7273245a8bc48b5367be5c62f1a6, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: idleState
-      value: Base Layer.OrcMageRed_Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: attackClip
+      propertyPath: actions.Array.data[4].clip
       value: 
       objectReference: {fileID: 7400000, guid: 95f7fa168070157489e2cb6ecf441766, type: 2}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: deathState
-      value: Base Layer.OrcMageRed_Death
+      propertyPath: actions.Array.data[4].action
+      value: 
+      objectReference: {fileID: 11400000, guid: 10d27793a92cd2c42a7b6b528a8b3d03, type: 2}
+    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: actions.Array.data[0].stateName
+      value: OrcMageRed_Idle
       objectReference: {fileID: 0}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: idleSprite
-      value: 
-      objectReference: {fileID: 380225813, guid: 59631ea3f7b28ea489d3c886b2df16e1, type: 3}
+      propertyPath: actions.Array.data[1].stateName
+      value: OrcMageRed_Walk
+      objectReference: {fileID: 0}
     - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-      propertyPath: attackState
-      value: Base Layer.OrcMageRed_RangeAttack
+      propertyPath: actions.Array.data[2].stateName
+      value: OrcMageRed_MeleeAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: actions.Array.data[3].stateName
+      value: OrcMageRed_Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 5925493818966016127, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
+      propertyPath: actions.Array.data[4].stateName
+      value: OrcMageRed_RangeAttack
       objectReference: {fileID: 0}
     - target: {fileID: 6121263608913733924, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
       propertyPath: m_Name

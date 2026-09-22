@@ -1278,8 +1278,6 @@ GameObject:
   - component: {fileID: 213428810}
   - component: {fileID: 213428809}
   - component: {fileID: 213428811}
-  - component: {fileID: 213428814}
-  - component: {fileID: 213428813}
   m_Layer: 0
   m_Name: BattleController
   m_TagString: Untagged
@@ -1311,9 +1309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22299240ecbfbe845a958c3ede0e88e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Presentation.BattleMouseCommand
-  session: {fileID: 213428810}
-  pointer: {fileID: 213428814}
-  placement: {fileID: 213428813}
+  worldCamera: {fileID: 1459022182}
+  preview: {fileID: 91459650}
 --- !u!114 &213428810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1326,13 +1323,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59868acd9ca8a564b9d90f13660fa587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Battle.BattleSession
-  definition: {fileID: 11400000, guid: 0e98fcf430646b14d8f8654d982b3d51, type: 2}
+  stage: {fileID: 11400000, guid: 0e98fcf430646b14d8f8654d982b3d51, type: 2}
   battlefield: {fileID: 526650122}
-  pauseController: {fileID: 213428808}
-  allyPrefab: {fileID: 331255623795719203, guid: 7d9bad5e08503884d95e291aee8fb5f2, type: 3}
-  enemyPrefab: {fileID: 665106715649615824, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
   unitParent: {fileID: 580324451}
-  workshopTarget: {fileID: 799422840}
+  workshopPoint: {fileID: 799422840}
+  workshopView: {fileID: 961438700}
 --- !u!114 &213428811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1345,7 +1340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c110938100ed594bb772331767280c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Presentation.BattleAttackPresentation
-  session: {fileID: 213428810}
   tracePrefab: {fileID: 3406769335851276264, guid: 9d737929849850d4ea4917ea5bd0e6a2, type: 3}
 --- !u!4 &213428812
 Transform:
@@ -1364,34 +1358,6 @@ Transform:
   - {fileID: 926378499}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &213428813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 213428807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a11f0c964131f8849ad781dfd89c20a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Presentation.BattlePlacementCommand
-  session: {fileID: 213428810}
-  pointer: {fileID: 213428814}
-  preview: {fileID: 91459650}
---- !u!114 &213428814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 213428807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e20236b64436c444f828ee78d5989edc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Presentation.BattlefieldPointer
-  worldCamera: {fileID: 1459022182}
 --- !u!1 &221233154
 GameObject:
   m_ObjectHideFlags: 0
@@ -8397,8 +8363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30aa6f7946e04fe4595025024142ed5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Presentation.BattleSelectionPresentation
-  commands: {fileID: 213428809}
-  placement: {fileID: 213428813}
+  input: {fileID: 213428809}
   attackRange: {fileID: 1368798215}
   destinationRing: {fileID: 1547803821}
   destinationCross: {fileID: 635760647}
@@ -8530,10 +8495,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1477763042}
     m_Modifications:
-    - target: {fileID: 543394098807626659, guid: b36212b77c158be4eb4ac447a25b89e5, type: 3}
-      propertyPath: session
-      value: 
-      objectReference: {fileID: 213428810}
     - target: {fileID: 4632517662658265410, guid: b36212b77c158be4eb4ac447a25b89e5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18
@@ -8592,6 +8553,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4632517662658265410, guid: b36212b77c158be4eb4ac447a25b89e5, type: 3}
   m_PrefabInstance: {fileID: 961438698}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &961438700 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 543394098807626659, guid: b36212b77c158be4eb4ac447a25b89e5, type: 3}
+  m_PrefabInstance: {fileID: 961438698}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb24db14b158f5d488b7fd50d726694d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Presentation.WorkshopObjectivePresentation
 --- !u!1 &989633615
 GameObject:
   m_ObjectHideFlags: 0
@@ -43461,63 +43433,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: 403992982}
   m_ActionId: 3c7022bf-7922-4f7c-a998-c437916075ad
---- !u!1001 &2065406010
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3389859079647647059, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3713837008885223087, guid: 14d049cffddee9847831f833ba767df1, type: 3}
-      propertyPath: m_Name
-      value: SceneServices
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 14d049cffddee9847831f833ba767df1, type: 3}
 --- !u!1 &2109828028
 GameObject:
   m_ObjectHideFlags: 0
@@ -44554,7 +44469,7 @@ Tilemap:
       - {fileID: -752050436, guid: ecbe7126a90a4ae4e89a7448a8cea7fa, type: 3}
       - {fileID: -256102857, guid: ecbe7126a90a4ae4e89a7448a8cea7fa, type: 3}
       - {fileID: -612616052, guid: ecbe7126a90a4ae4e89a7448a8cea7fa, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -20, y: -2, z: 0}
@@ -44734,7 +44649,7 @@ Tilemap:
       - {fileID: 221992815, guid: ecbe7126a90a4ae4e89a7448a8cea7fa, type: 3}
       - {fileID: 123104392, guid: ecbe7126a90a4ae4e89a7448a8cea7fa, type: 3}
       - {fileID: 601234667, guid: ecbe7126a90a4ae4e89a7448a8cea7fa, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -21, y: 0, z: 0}
@@ -45365,7 +45280,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1459022183}
   - {fileID: 213428812}
-  - {fileID: 2065406010}
   - {fileID: 182546847}
   - {fileID: 333664366}
   - {fileID: 2145994386}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 using ProjectT.Units;
@@ -8,7 +9,6 @@ namespace ProjectT.Data
     /// 캐릭터의 공통 유닛 정보와 구매·저지·부활 설정을 관리합니다.
     /// </summary>
     [CreateAssetMenu(fileName = "UnitClassData", menuName = "Project T/데이터/캐릭터")]
-    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "ProjectT.Data", "ProjectT.Runtime", "AllyClassDefinition")]
     public sealed class UnitClassData : UnitData
     {
         #region 필드
@@ -34,17 +34,29 @@ namespace ProjectT.Data
         /// </summary>
         public float RevivalSeconds => revivalSeconds;
 
-        /// <summary>
-        /// 능력치와 캐릭터 프리팹 구성이 유효할 때만 참입니다.
-        /// </summary>
-        public override bool IsValid => base.IsValid
-            && Prefab.GetComponent<CharacterUnit>() != null
-            && deploymentCost >= 0d
-            && !double.IsNaN(deploymentCost)
-            && !double.IsInfinity(deploymentCost)
-            && blockCapacity >= 0
-            && Positive(revivalSeconds);
-
         #endregion // 프로퍼티
+
+        #region 검사
+        /// <summary>
+        /// 공통 설정과 구매·저지·부활 수치를 검사합니다.
+        /// </summary>
+        public override bool Validate(List<DataIssue> issues)
+        {
+            bool valid = base.Validate(issues);
+            valid &= CheckNonNegative(deploymentCost, nameof(deploymentCost), issues);
+            valid &= CheckNonNegative(blockCapacity, nameof(blockCapacity), issues);
+            valid &= CheckPositive(revivalSeconds, nameof(revivalSeconds), issues);
+            return valid;
+        }
+
+        /// <summary>
+        /// 캐릭터 프리팹에는 CharacterUnit이 필요합니다.
+        /// </summary>
+        protected override bool HasUnitComponent(GameObject unitPrefab)
+        {
+            return unitPrefab.GetComponent<CharacterUnit>() != null;
+        }
+
+        #endregion // 검사
     }
 }

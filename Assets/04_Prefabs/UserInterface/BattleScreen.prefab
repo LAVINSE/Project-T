@@ -53,11 +53,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0c8eaef35e0734fbfacd8069f3bbb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Presentation.BattleScreen
-  character: {fileID: 5439184657888469251}
-  deployment: {fileID: 6039151051877315272}
-  economy: {fileID: 2640038631552140393}
+  characterHUD: {fileID: 5439184657888469251}
+  characterSelected: {fileID: 6039151051877315272}
+  economyHUD: {fileID: 2640038631552140393}
   inventory: {fileID: 2085594731148166149}
-  controls: {fileID: 1779910666731908533}
+  bottomHUD: {fileID: 1779910666731908533}
   testStatus: 
 --- !u!1001 &1476499435616728521
 PrefabInstance:

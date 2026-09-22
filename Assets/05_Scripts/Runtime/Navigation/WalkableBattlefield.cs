@@ -10,7 +10,6 @@ namespace ProjectT.Navigation
     /// <summary>
     /// 맵의 통행 영역에서 아군 경로를 찾습니다. 목적지는 격자에 맞추지 않고 클릭한 좌표를 유지합니다.
     /// </summary>
-    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "ProjectT.Defense.Navigation", "ProjectT.Defense.Runtime", "WalkableBattlefield")]
     public sealed class WalkableBattlefield : SWMonoBehaviour
     {
         #region 필드
@@ -34,13 +33,10 @@ namespace ProjectT.Navigation
         /// </summary>
         public bool Configure(Rect area, float resolution, Rect[] blockedAreas)
         {
-            if (!Finite(area.x)
-                || !Finite(area.y)
-                || !Finite(area.width)
-                || !Finite(area.height)
-                || area.width <= 0f
-                || area.height <= 0f
-                || !Finite(resolution)
+            if (!area.position.ExIsFinite()
+                || !area.width.ExIsPositive()
+                || !area.height.ExIsPositive()
+                || !resolution.ExIsFinite()
                 || resolution < 0.1f
                 || Math.Ceiling(area.width / resolution) * Math.Ceiling(area.height / resolution) > 20000)
             {
@@ -59,7 +55,7 @@ namespace ProjectT.Navigation
         /// </summary>
         public bool IsWalkable(Vector2 point)
         {
-            if (!Finite(point.x) || !Finite(point.y) || !bounds.Contains(point))
+            if (!point.ExIsFinite() || !bounds.Contains(point))
             {
                 return false;
             }
@@ -88,16 +84,7 @@ namespace ProjectT.Navigation
 
             if (ClearSegment(start, destination))
             {
-                points = start == destination
-                    ? new[]
-                {
-                    start
-                }
-                    : new[]
-                {
-                    start,
-                    destination
-                };
+                points = start == destination ? new[] { start } : new[] { start, destination };
                 return true;
             }
 
@@ -289,14 +276,6 @@ namespace ProjectT.Navigation
         private int Index(Vector2 point, int width)
         {
             return Mathf.FloorToInt((point.y - bounds.yMin) / cellSize) * width + Mathf.FloorToInt((point.x - bounds.xMin) / cellSize);
-        }
-
-        /// <summary>
-        /// 전장 좌표와 크기가 유한한 값인지 확인합니다.
-        /// </summary>
-        private static bool Finite(float value)
-        {
-            return !float.IsNaN(value) && !float.IsInfinity(value);
         }
 
         #endregion // 함수

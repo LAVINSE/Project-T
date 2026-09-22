@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 using SW.Util;
@@ -66,7 +65,7 @@ namespace ProjectT.Navigation
         /// </summary>
         public bool Advance(float distance)
         {
-            if (distance < 0f || float.IsNaN(distance) || float.IsInfinity(distance))
+            if (!distance.ExIsNonNegative())
             {
                 SWLog.LogWarning("[RouteProgress] 전진 실패: 거리는 0 이상의 유한한 수여야 합니다.");
                 return false;

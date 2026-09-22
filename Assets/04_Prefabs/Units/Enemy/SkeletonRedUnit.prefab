@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1046630763814224827, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0811204eeb9d1d54ba740f7d48a58d5e, type: 2}
     - target: {fileID: 3721897667003035443, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
       propertyPath: m_Name
       value: SkeletonRedUnit
@@ -77,36 +81,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleClip
+      propertyPath: actions.Array.data[0].clip
       value: 
       objectReference: {fileID: 7400000, guid: 21b48ff5878216e42bd65bc07da53250, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: moveClip
+      propertyPath: actions.Array.data[1].clip
       value: 
       objectReference: {fileID: 7400000, guid: 37886958aed832246ab54f64408b16cb, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: deathClip
-      value: 
-      objectReference: {fileID: 7400000, guid: 37e913b3eb827aa4da09c0284834e3b3, type: 2}
-    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleState
-      value: Base Layer.SkeletonRed_Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: attackClip
+      propertyPath: actions.Array.data[2].clip
       value: 
       objectReference: {fileID: 7400000, guid: b212c7f2f1f0fd246a77807b9208957b, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: deathState
-      value: Base Layer.SkeletonRed_Death
+      propertyPath: actions.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 37e913b3eb827aa4da09c0284834e3b3, type: 2}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: actions.Array.data[0].stateName
+      value: SkeletonRed_Idle
       objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleSprite
-      value: 
-      objectReference: {fileID: -306131988, guid: 59e8078300ee57942b7b34e324ffe86e, type: 3}
+      propertyPath: actions.Array.data[1].stateName
+      value: SkeletonRed_Walk
+      objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: attackState
-      value: Base Layer.SkeletonRed_MeleeAttack
+      propertyPath: actions.Array.data[2].stateName
+      value: SkeletonRed_MeleeAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: actions.Array.data[3].stateName
+      value: SkeletonRed_Death
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

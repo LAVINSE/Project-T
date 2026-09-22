@@ -119,7 +119,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SkeletonRed_Portrait
+      name: skeleton-variation2-idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -286,7 +286,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SkeletonRed_Portrait: -306131988
+      skeleton-variation2-idle_0: -306131988
       skeleton-variation2-idle_1: -706832776
       skeleton-variation2-idle_2: -1512033448
       skeleton-variation2-idle_3: 546132457

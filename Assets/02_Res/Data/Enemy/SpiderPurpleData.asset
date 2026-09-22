@@ -19,7 +19,8 @@ MonoBehaviour:
   attackDamage: 0
   attackRange: 0
   attackInterval: 0
-  portrait: {fileID: 850733916, guid: 810e85807ba84a44992b4d22c2cf42fe, type: 3}
+  attackAction: {fileID: 11400000, guid: 794012e5968d461489917cf65306f676, type: 2}
+  portrait: {fileID: 3874517484573266657, guid: d4b3c2c05549da1449f1ccf7c54a9094, type: 3}
   tint: {r: 1, g: 1, b: 1, a: 1}
   feetOffset: 0.21249996
   healthBarHeight: 1.0124999

@@ -119,7 +119,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpiderGreen_Portrait
+      name: Spider-variation2-idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -308,6 +308,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+      Spider-variation2-idle_0: -205150647
       Spider-variation2-idle_1: -904909495
       Spider-variation2-idle_2: 1156228161
       Spider-variation2-idle_3: 25084251
@@ -315,7 +316,6 @@ TextureImporter:
       Spider-variation2-idle_5: -1049308279
       Spider-variation2-idle_6: -761383456
       Spider-variation2-idle_7: 437982544
-      SpiderGreen_Portrait: -205150647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

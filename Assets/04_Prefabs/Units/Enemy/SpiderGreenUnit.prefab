@@ -89,36 +89,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleClip
+      propertyPath: actions.Array.data[0].clip
       value: 
       objectReference: {fileID: 7400000, guid: 80471d391e01e8a488f1f219faaade21, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: moveClip
+      propertyPath: actions.Array.data[1].clip
       value: 
       objectReference: {fileID: 7400000, guid: 83c2b4c5f66d1bd40896c5d56a6bd31c, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: deathClip
-      value: 
-      objectReference: {fileID: 7400000, guid: e88fe796aa4909146abf57b13f13f916, type: 2}
-    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleState
-      value: Base Layer.SpiderGreen_Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: attackClip
+      propertyPath: actions.Array.data[2].clip
       value: 
       objectReference: {fileID: 7400000, guid: 830b6a7298e5f484f82b24efbdadd884, type: 2}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: deathState
-      value: Base Layer.SpiderGreen_Death
+      propertyPath: actions.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 7400000, guid: e88fe796aa4909146abf57b13f13f916, type: 2}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: actions.Array.data[0].stateName
+      value: SpiderGreen_Idle
       objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: idleSprite
-      value: 
-      objectReference: {fileID: -205150647, guid: 455d1ed85468e7d4a92646bf0fd233cf, type: 3}
+      propertyPath: actions.Array.data[1].stateName
+      value: SpiderGreen_Walk
+      objectReference: {fileID: 0}
     - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
-      propertyPath: attackState
-      value: Base Layer.SpiderGreen_MeleeAttack
+      propertyPath: actions.Array.data[2].stateName
+      value: SpiderGreen_MeleeAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738810748013600949, guid: 81aa2d4fb01e6524ea149f2dcf807276, type: 3}
+      propertyPath: actions.Array.data[3].stateName
+      value: SpiderGreen_Death
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

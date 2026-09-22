@@ -132,7 +132,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: OrcMageRed_Portrait
+      name: orc mage - with hand fx-idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -321,7 +321,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      OrcMageRed_Portrait: 380225813
+      orc mage - with hand fx-idle_0: 380225813
       orc mage - with hand fx-idle_1: 44163085
       orc mage - with hand fx-idle_2: -1946964813
       orc mage - with hand fx-idle_3: 1851677636

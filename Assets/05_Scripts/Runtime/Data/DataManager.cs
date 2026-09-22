@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 using SW.Attributes;
@@ -7,7 +6,7 @@ using SW.Util;
 namespace ProjectT.Data
 {
     /// <summary>
-    /// 색상처럼 모든 장면에서 공유하는 읽기 전용 설정을 제공합니다. 전투별 상태와 스테이지 자산은 보관하지 않습니다.
+    /// 색상·아이콘처럼 모든 장면에서 공유하는 읽기 전용 설정을 제공합니다. 전투별 상태와 스테이지 자산은 보관하지 않습니다.
     /// </summary>
     public sealed class DataManager : SWSingleton<DataManager>
     {
@@ -41,12 +40,12 @@ namespace ProjectT.Data
                 return;
             }
 
-            if (colorData == null)
+            if (colorData == null || !colorData.IsValid)
             {
-                SWLog.LogWarning("[DataManager] 초기화 실패: ColorData 참조가 필요합니다.");
+                SWLog.LogWarning("[DataManager] 초기화 실패: ColorData 참조와 채움 색상이 필요합니다.");
             }
 
-            if (spriteData == null || !spriteData.HasSpeedIcons)
+            if (spriteData == null || !spriteData.IsValid)
             {
                 SWLog.LogWarning("[DataManager] 초기화 실패: SpriteData와 배속 아이콘 참조가 필요합니다.");
             }

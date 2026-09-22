@@ -2,18 +2,18 @@
   <Project Path="AllIn1VfxDemoScriptAssemblies.csproj" />
   <Project Path="AllIn1SpringsToolkitCustomEditorsAssembly.csproj" />
   <Project Path="AllIn1SpringsToolkitDemo.csproj" />
-  <Project Path="ProjectT.Runtime.csproj" />
   <Project Path="AllIn1VfxAssmebly.csproj" />
   <Project Path="AllIn1ShaderNodes.Editor.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="AllIn13DShaderAssemebly.Editor.csproj" />
   <Project Path="AllIn13DShaderDemoScriptsAssembly.csproj" />
-  <Project Path="ProjectT.Editor.csproj" />
   <Project Path="AllIn1ShaderNodesAssembly.csproj" />
+  <Project Path="ProjectT.Runtime.csproj" />
   <Project Path="SpringsAssembly.csproj" />
   <Project Path="DamageNumbersPro.csproj" />
   <Project Path="AllIn13DShaderAssemebly.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="AllIn1SpriteShaderAssembly.csproj" />
+  <Project Path="ProjectT.Editor.csproj" />
   <Project Path="AllIn1VfxTexDemoAssembly.csproj" />
 </Solution>

@@ -10,7 +10,6 @@ namespace ProjectT.Data
     /// 적의 공통 유닛 정보와 공방 공격·처치 보상을 관리합니다.
     /// </summary>
     [CreateAssetMenu(fileName = "UnitEnemyData", menuName = "Project T/데이터/적")]
-    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "ProjectT.Data", "ProjectT.Runtime", "EnemyDefinition")]
     public sealed class UnitEnemyData : UnitData
     {
         #region 필드
@@ -36,14 +35,36 @@ namespace ProjectT.Data
         /// </summary>
         public IReadOnlyList<RewardEntry> Rewards => rewards;
 
-        /// <summary>
-        /// 능력치와 적 프리팹 구성이 유효할 때만 참입니다. 미설정 적은 생성되지 않습니다.
-        /// </summary>
-        public override bool IsValid => base.IsValid
-            && Prefab.GetComponent<EnemyUnit>() != null
-            && Positive(workshopAttackDamage)
-            && Positive(workshopAttackInterval);
-
         #endregion // 프로퍼티
+
+        #region 검사
+        /// <summary>
+        /// 공통 설정과 공방 공격·보상 목록을 검사합니다. 보상이 없는 적은 허용합니다.
+        /// </summary>
+        public override bool Validate(List<DataIssue> issues)
+        {
+            bool valid = base.Validate(issues);
+            valid &= CheckPositive(workshopAttackDamage, nameof(workshopAttackDamage), issues);
+            valid &= CheckPositive(workshopAttackInterval, nameof(workshopAttackInterval), issues);
+            for (int index = 0; index < rewards.Length; index++)
+            {
+                string path = nameof(rewards) + ".Array.data[" + index + "]";
+                valid &= rewards[index] != null
+                    ? rewards[index].Validate(this, path, issues)
+                    : Check(false, path, "빈 보상 항목을 제거하세요.", issues);
+            }
+
+            return valid;
+        }
+
+        /// <summary>
+        /// 적 프리팹에는 EnemyUnit이 필요합니다.
+        /// </summary>
+        protected override bool HasUnitComponent(GameObject unitPrefab)
+        {
+            return unitPrefab.GetComponent<EnemyUnit>() != null;
+        }
+
+        #endregion // 검사
     }
 }

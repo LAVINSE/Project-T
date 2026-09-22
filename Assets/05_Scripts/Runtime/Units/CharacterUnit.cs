@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-using SW.Base;
 using SW.Util;
 
 using ProjectT.Data;
@@ -12,13 +11,12 @@ namespace ProjectT.Units
     /// <summary>
     /// 구매한 아군 한 명의 수명과 명령을 관리합니다. 같은 클래스도 서로 독립된 상태를 가집니다.
     /// </summary>
-    [RequireComponent(typeof(CharacterMovement))]
-    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, "ProjectT.Units", "ProjectT.Runtime", "AllyUnit")]
-    public sealed class CharacterUnit : SWMonoBehaviour
+    public sealed class CharacterUnit : UnitBase
     {
         #region 필드
+        private readonly SWTimer revivalTimer = new SWTimer(0f, false, false, SWTimer.TimeMode.Manual);
         private WalkableBattlefield battlefield;
-        private Vector2 requestedDestination;
+        private int displayedRevivalSeconds;
 
         #endregion // 필드
 
@@ -28,35 +26,31 @@ namespace ProjectT.Units
         /// </summary>
         public UnitClassData Definition { get; private set; }
 
-        /// <summary>
-        /// 현재 생명과 체력입니다.
-        /// </summary>
-        public CombatHealth Health { get; private set; }
+        /// <inheritdoc/>
+        public override UnitData Data => Definition;
 
         /// <summary>
-        /// 이동 명령과 현재 이동 상태입니다.
+        /// 목적지 명령과 현재 이동 상태입니다.
         /// </summary>
         public CharacterMovement Movement { get; private set; }
 
         /// <summary>
         /// 부활까지 남은 게임 시간입니다.
         /// </summary>
-        public float RevivalRemaining { get; private set; }
+        public float RevivalRemaining => revivalTimer.IsRunning ? revivalTimer.Remaining : 0f;
 
         /// <summary>
         /// 생존하고 목적지에 도착한 아군만 교전할 수 있습니다.
         /// </summary>
         public bool CanFight => Health != null && Health.IsAlive && !Movement.IsMoving;
 
-        /// <summary>
-        /// 이 개체의 마지막 이동 목적지입니다.
-        /// </summary>
-        public Vector2 RequestedDestination => requestedDestination;
+        /// <inheritdoc/>
+        public override bool IsMoving => Health != null && Health.IsAlive && Movement.IsMoving;
 
         /// <summary>
-        /// 이 아군의 공격 동작과 타격 시각입니다.
+        /// 이 개체의 마지막 이동 목적지입니다. 부활 대기 중에도 유지합니다.
         /// </summary>
-        public UnitAttackSequence Attack { get; } = new UnitAttackSequence();
+        public Vector2 RequestedDestination { get; private set; }
 
         /// <summary>
         /// 현재 준비하거나 진행 중인 공격의 적 대상입니다.
@@ -64,13 +58,18 @@ namespace ProjectT.Units
         internal EnemyUnit AttackTarget { get; set; }
 
         /// <summary>
-        /// 저지 해제 등 외부 교전 상태를 즉시 갱신하는 알림입니다.
+        /// 이동·사망·부활로 교전 가능 상태가 바뀌었을 때 전투에 알립니다.
         /// </summary>
         public event Action<CharacterUnit> AvailabilityChanged;
 
+        /// <summary>
+        /// 화면에 표시하는 부활 남은 초가 바뀌었을 때 발생합니다.
+        /// </summary>
+        public event Action RevivalChanged;
+
         #endregion // 프로퍼티
 
-        #region 함수
+        #region 초기화
         /// <summary>
         /// 생성 위치에서 독립된 체력과 클래스별 부활 상태로 초기화합니다.
         /// </summary>
@@ -82,16 +81,11 @@ namespace ProjectT.Units
                 return false;
             }
 
-            CombatHealth nextHealth = CombatHealth.Create(definition.MaximumHealth);
-            var nextMovement = GetComponent<CharacterMovement>();
-            if (nextHealth == null || nextMovement == null || !nextMovement.Initialize(terrain, spawn, definition.MoveSpeed))
+            Health nextHealth = Health.Create(definition.MaximumHealth);
+            var nextMovement = CharacterMovement.Create(transform, terrain, spawn, definition.MoveSpeed);
+            if (nextHealth == null || nextMovement == null)
             {
                 return false;
-            }
-
-            if (Health != null)
-            {
-                Health.Died -= OnDied;
             }
 
             if (Movement != null)
@@ -99,19 +93,21 @@ namespace ProjectT.Units
                 Movement.MovementChanged -= OnMovementChanged;
             }
 
-            Movement = nextMovement;
             Definition = definition;
             battlefield = terrain;
-            requestedDestination = spawn;
-            Health = nextHealth;
-            Health.Died += OnDied;
-            Movement.MovementChanged += OnMovementChanged;
-            RevivalRemaining = 0f;
-            Attack.Reset();
+            RequestedDestination = spawn;
+            revivalTimer.Stop();
             AttackTarget = null;
+            Movement = nextMovement;
+            Movement.MovementChanged += OnMovementChanged;
+            SetHealth(nextHealth);
+            NotifyInitialized();
             return true;
         }
 
+        #endregion // 초기화
+
+        #region 함수
         /// <summary>
         /// 생존 중에는 즉시 이동하고 부활 중에는 부활 후 이동할 목적지를 갱신합니다.
         /// </summary>
@@ -134,65 +130,78 @@ namespace ProjectT.Units
                 return false;
             }
 
-            requestedDestination = destination;
+            RequestedDestination = destination;
+            NotifyMovingChanged();
             return true;
         }
 
-        /// <summary>
-        /// 게임 시간으로 부활을 진행합니다. 팝업이 전투를 정지하면 부활도 정지합니다.
-        /// </summary>
-        public void AdvanceRevival(float elapsedSeconds)
+        /// <inheritdoc/>
+        public override void Tick(float deltaTime)
         {
-            if (elapsedSeconds < 0f || float.IsNaN(elapsedSeconds) || float.IsInfinity(elapsedSeconds))
-            {
-                SWLog.LogWarning("[CharacterUnit] 부활 진행 실패: 경과 시간은 0 이상의 유한한 수여야 합니다.");
-                return;
-            }
-
-            if (Health == null || Health.IsAlive || elapsedSeconds == 0f)
+            if (Health == null)
             {
                 return;
             }
 
-            RevivalRemaining = Mathf.Max(0f, RevivalRemaining - elapsedSeconds);
-            if (RevivalRemaining > 0f)
+            if (Health.IsAlive)
             {
+                if (Movement.Advance(deltaTime))
+                {
+                    NotifyMoved();
+                }
+
                 return;
             }
 
-            if (!Movement.Initialize(battlefield, transform.position, Definition.MoveSpeed))
-            {
-                return;
-            }
-
-            Health.Revive();
-            Movement.TryMove(requestedDestination);
-            Attack.Reset();
-            AttackTarget = null;
-            AvailabilityChanged?.Invoke(this);
+            AdvanceRevival(deltaTime);
         }
 
         /// <summary>
-        /// 현재 프레임의 게임 시간만큼 부활 대기를 진행합니다.
+        /// 게임 시간으로 부활을 진행합니다. 전투가 정지하면 부활도 정지하며, 부활 위치를 준비하지 못하면 다음 갱신에 다시 시도합니다.
         /// </summary>
-        private void Update()
+        private void AdvanceRevival(float deltaTime)
         {
-            AdvanceRevival(Time.deltaTime);
+            if (revivalTimer.IsRunning && !revivalTimer.Tick(deltaTime))
+            {
+                int seconds = Mathf.CeilToInt(RevivalRemaining);
+                if (seconds != displayedRevivalSeconds)
+                {
+                    displayedRevivalSeconds = seconds;
+                    RevivalChanged?.Invoke();
+                }
+
+                return;
+            }
+
+            if (!Movement.Reset(transform.position))
+            {
+                return;
+            }
+
+            AttackTarget = null;
+            Health.Revive();
+            Attack.Reset();
+            Movement.TryMove(RequestedDestination);
+            AvailabilityChanged?.Invoke(this);
+            RevivalChanged?.Invoke();
         }
 
         /// <summary>
         /// 공격과 이동을 중단하고 무료 부활 대기를 시작합니다.
         /// </summary>
-        private void OnDied()
+        protected override void OnDied()
         {
             Attack.Cancel();
-            RevivalRemaining = Definition.RevivalSeconds;
+            revivalTimer.SetDuration(Definition.RevivalSeconds);
+            revivalTimer.Start();
+            displayedRevivalSeconds = Mathf.CeilToInt(RevivalRemaining);
             Movement.Stop();
             AvailabilityChanged?.Invoke(this);
+            RevivalChanged?.Invoke();
         }
 
         /// <summary>
-        /// 이동 시작 시 공격을 취소하고 저지 가능 상태의 변화를 알립니다.
+        /// 이동 시작 시 공격을 취소하고 교전·이동 상태의 변화를 알립니다.
         /// </summary>
         private void OnMovementChanged()
         {
@@ -202,18 +211,13 @@ namespace ProjectT.Units
             }
 
             AvailabilityChanged?.Invoke(this);
+            NotifyMovingChanged();
         }
 
-        /// <summary>
-        /// 체력과 이동 컴포넌트의 이벤트 구독을 해제합니다.
-        /// </summary>
-        private void OnDestroy()
+        /// <inheritdoc/>
+        protected override void OnDestroy()
         {
-            if (Health != null)
-            {
-                Health.Died -= OnDied;
-            }
-
+            base.OnDestroy();
             if (Movement != null)
             {
                 Movement.MovementChanged -= OnMovementChanged;
