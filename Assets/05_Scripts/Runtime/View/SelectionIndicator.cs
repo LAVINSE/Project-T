@@ -63,6 +63,7 @@ namespace ProjectT.View
                 target.Moved -= Refresh;
                 target.MovingChanged -= Refresh;
                 target.HealthChanged -= Refresh;
+                target.StatsChanged -= Refresh;
             }
 
             target = unit;
@@ -71,6 +72,7 @@ namespace ProjectT.View
                 target.Moved += Refresh;
                 target.MovingChanged += Refresh;
                 target.HealthChanged += Refresh;
+                target.StatsChanged += Refresh;
             }
 
             Refresh();
@@ -97,7 +99,7 @@ namespace ProjectT.View
             Color rangeColor = target.CanFight ? ProjectDefine.Palette.ActiveRange : ProjectDefine.Palette.InactiveRange;
             attackRange.startColor = rangeColor;
             attackRange.endColor = rangeColor;
-            attackRange.ExDrawCircle(position, target.Definition.AttackRange);
+            attackRange.ExDrawCircle(position, target.AttackRange);
             if (!hasDestination)
             {
                 return;

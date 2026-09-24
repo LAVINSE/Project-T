@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4157113041874971424}
   - component: {fileID: 1684794442659696725}
+  - component: {fileID: 1091212919872590303}
+  - component: {fileID: 1376324653061990208}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -46,3 +48,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.DataManager
   colorData: {fileID: 11400000, guid: 3f66f9fffb222bf418df29135e89986a, type: 2}
   spriteData: {fileID: 11400000, guid: 1299b79db07986a4d83bc311813ee8d9, type: 2}
+  soulCurrency: {fileID: 11400000, guid: f8aea1a59752fd447ad3a3da171f5956, type: 2}
+--- !u!114 &1091212919872590303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8859893763748944142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a8b5b969827cb040990a68ae298d6db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Progression.SoulManager
+--- !u!114 &1376324653061990208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8859893763748944142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0ff477d8ea7d714982f33e266bcc0b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Inventory.InventoryManager
+  catalog: {fileID: 11400000, guid: 0d0512c0fc5562c4ebc07ec7273ca0b6, type: 2}

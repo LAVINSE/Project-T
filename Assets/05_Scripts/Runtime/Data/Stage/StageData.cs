@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+using SW.Stat;
+
 namespace ProjectT.Data
 {
     /// <summary>
@@ -14,7 +16,8 @@ namespace ProjectT.Data
         [SerializeField] private string displayName;
         [SerializeField] private double startingCurrency;
         [SerializeField] private CurrencyData deploymentCurrency;
-        [SerializeField, Min(1f)] private float workshopMaximumHealth = 300f;
+
+        [SerializeField] private SWStatOverride workshopMaximumHealth;
         [SerializeField] private float spawnInterval;
         [SerializeField] private int[] enemiesPerRound = Array.Empty<int>();
         [SerializeField] private EnemyRouteData enemyRoute;
@@ -24,6 +27,11 @@ namespace ProjectT.Data
         #endregion // 필드
 
         #region 프로퍼티
+        /// <summary>
+        /// 공방 최대 체력 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat WorkshopMaximumHealthStat => workshopMaximumHealth?.Stat;
+
         /// <summary>
         /// 스테이지 이름입니다.
         /// </summary>
@@ -42,7 +50,7 @@ namespace ProjectT.Data
         /// <summary>
         /// 새 출전에서 공방에 부여하는 최대 체력입니다. 라운드 휴식으로 회복하지 않습니다.
         /// </summary>
-        public float WorkshopMaximumHealth => workshopMaximumHealth;
+        public float WorkshopMaximumHealth => workshopMaximumHealth.ExGetConfiguredValue();
 
         /// <summary>
         /// 라운드 안에서 적이 등장하는 간격입니다.
@@ -113,7 +121,7 @@ namespace ProjectT.Data
             bool valid = CheckName(displayName, nameof(displayName), issues);
             valid &= CheckNonNegative(startingCurrency, nameof(startingCurrency), issues);
             valid &= CheckRequired(deploymentCurrency, nameof(deploymentCurrency), issues);
-            valid &= CheckPositive(workshopMaximumHealth, nameof(workshopMaximumHealth), issues);
+            valid &= CheckPositive(WorkshopMaximumHealth, nameof(workshopMaximumHealth), issues);
             valid &= CheckPositive(spawnInterval, nameof(spawnInterval), issues);
             valid &= CheckRequired(enemyRoute, nameof(enemyRoute), issues);
             valid &= CheckRequired(enemy, nameof(enemy), issues);
@@ -129,9 +137,21 @@ namespace ProjectT.Data
                 valid &= CheckRequired(classes[index], nameof(classes) + ".Array.data[" + index + "]", issues);
             }
 
+            valid &= CheckStat(workshopMaximumHealth, nameof(workshopMaximumHealth), issues);
             return valid;
         }
 
         #endregion // 함수
+
+        #region 스탯 정의
+        /// <summary>
+        /// 개체별 런타임 스탯으로 복제할 설정을 열거합니다. 참조 유효성은 Validate에서 검사합니다.
+        /// </summary>
+        public  IEnumerable<SWStatOverride> GetStatSettings()
+        {
+            yield return workshopMaximumHealth;
+        }
+
+        #endregion // 스탯 정의
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+using SW.Stat;
 using SW.Base;
 
 using ProjectT.View;
@@ -16,11 +17,12 @@ namespace ProjectT.Data
         #region 필드
         [SerializeField] private string displayName;
         [SerializeField] private GameObject prefab;
-        [SerializeField] private float maximumHealth;
-        [SerializeField] private float moveSpeed;
-        [SerializeField] private float attackDamage;
-        [SerializeField] private float attackRange;
-        [SerializeField] private float attackInterval;
+
+        [SerializeField] private SWStatOverride maximumHealth;
+        [SerializeField] private SWStatOverride moveSpeed;
+        [SerializeField] private SWStatOverride attackDamage;
+        [SerializeField] private SWStatOverride attackRange;
+        [SerializeField] private SWStatOverride attackSpeed;
         [SerializeField] private SWCategory attackAction;
         [SerializeField] private Sprite portrait;
         [SerializeField] private Color tint = Color.white;
@@ -35,6 +37,31 @@ namespace ProjectT.Data
 
         #region 프로퍼티
         /// <summary>
+        /// 최대 체력 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat MaximumHealthStat => maximumHealth?.Stat;
+
+        /// <summary>
+        /// 공격력 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat AttackDamageStat => attackDamage?.Stat;
+
+        /// <summary>
+        /// 공격 속도 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat AttackSpeedStat => attackSpeed?.Stat;
+
+        /// <summary>
+        /// 이동속도 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat MoveSpeedStat => moveSpeed?.Stat;
+
+        /// <summary>
+        /// 사거리 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat AttackRangeStat => attackRange?.Stat;
+
+        /// <summary>
         /// 게임 화면에 표시할 이름입니다.
         /// </summary>
         public string DisplayName => displayName;
@@ -47,27 +74,32 @@ namespace ProjectT.Data
         /// <summary>
         /// 새 생명의 최대 체력입니다.
         /// </summary>
-        public float MaximumHealth => maximumHealth;
+        public float MaximumHealth => maximumHealth.ExGetConfiguredValue();
 
         /// <summary>
         /// 초당 이동 거리입니다.
         /// </summary>
-        public float MoveSpeed => moveSpeed;
+        public float MoveSpeed => moveSpeed.ExGetConfiguredValue();
 
         /// <summary>
         /// 한 번의 타격 피해입니다.
         /// </summary>
-        public float AttackDamage => attackDamage;
+        public float AttackDamage => attackDamage.ExGetConfiguredValue();
 
         /// <summary>
         /// 공격 가능한 월드 거리입니다.
         /// </summary>
-        public float AttackRange => attackRange;
+        public float AttackRange => attackRange.ExGetConfiguredValue();
 
         /// <summary>
-        /// 연속 공격 시작 사이의 게임 시간입니다.
+        /// 게임 시간 1초당 공격 횟수입니다.
         /// </summary>
-        public float AttackInterval => attackInterval;
+        public float AttackSpeed => attackSpeed.ExGetConfiguredValue();
+
+        /// <summary>
+        /// 공격 속도를 내부 실행 주기로 변환합니다. 잘못된 속도는 0을 반환합니다.
+        /// </summary>
+        public float AttackInterval => AttackSpeed.ExIsPositive() ? 1f / AttackSpeed : 0f;
 
         /// <summary>
         /// 공격할 때 재생할 동작(SWCategory)입니다. 프리팹의 UnitAnimation 동작 목록에 등록되어 있어야 합니다.
@@ -153,11 +185,23 @@ namespace ProjectT.Data
         public override bool Validate(List<DataIssue> issues)
         {
             bool valid = CheckName(displayName, nameof(displayName), issues);
-            valid &= CheckPositive(maximumHealth, nameof(maximumHealth), issues);
-            valid &= CheckPositive(moveSpeed, nameof(moveSpeed), issues);
-            valid &= CheckPositive(attackDamage, nameof(attackDamage), issues);
-            valid &= CheckPositive(attackRange, nameof(attackRange), issues);
-            valid &= CheckPositive(attackInterval, nameof(attackInterval), issues);
+            var definitions = new HashSet<SWStat>();
+            var identifiers = new HashSet<int>();
+            foreach (SWStatOverride setting in GetStatSettings())
+            {
+                if (setting?.Stat != null)
+                {
+                    valid &= Check(definitions.Add(setting.Stat) && (setting.Stat.ID == 0 || identifiers.Add(setting.Stat.ID)),
+                        nameof(maximumHealth), "한 유닛의 서로 다른 능력치에 같은 스탯 또는 식별 번호를 중복 연결할 수 없습니다.", issues);
+                }
+            }
+
+            valid &= CheckPositive(MaximumHealth, nameof(maximumHealth), issues);
+            valid &= CheckPositive(MoveSpeed, nameof(moveSpeed), issues);
+            valid &= CheckPositive(AttackDamage, nameof(attackDamage), issues);
+            valid &= CheckPositive(AttackRange, nameof(attackRange), issues);
+            valid &= CheckPositive(AttackSpeed, nameof(attackSpeed), issues);
+            valid &= Check(AttackInterval.ExIsPositive(), nameof(attackSpeed), "공격 주기로 변환할 수 있는 양수를 입력하세요.", issues);
             valid &= Check(feetOffset.ExIsFinite(), nameof(feetOffset), "유한한 수를 입력하세요.", issues);
             valid &= Check(healthBarHeight.ExIsFinite(), nameof(healthBarHeight), "유한한 수를 입력하세요.", issues);
             valid &= Check(attackOriginOffset.ExIsFinite(), nameof(attackOriginOffset), "좌표는 유한한 수여야 합니다.", issues);
@@ -178,6 +222,11 @@ namespace ProjectT.Data
                 nameof(prefab),
                 "데이터 종류에 맞는 캐릭터 또는 적 컴포넌트가 필요합니다.",
                 issues);
+            valid &= CheckStat(maximumHealth, nameof(maximumHealth), issues);
+            valid &= CheckStat(attackDamage, nameof(attackDamage), issues);
+            valid &= CheckStat(attackSpeed, nameof(attackSpeed), issues);
+            valid &= CheckStat(moveSpeed, nameof(moveSpeed), issues);
+            valid &= CheckStat(attackRange, nameof(attackRange), issues);
             return valid;
         }
 
@@ -187,5 +236,20 @@ namespace ProjectT.Data
         protected abstract bool HasUnitComponent(GameObject unitPrefab);
 
         #endregion // 함수
+
+        #region 스탯 정의
+        /// <summary>
+        /// 개체별 런타임 스탯으로 복제할 설정을 열거합니다. 참조 유효성은 Validate에서 검사합니다.
+        /// </summary>
+        public virtual IEnumerable<SWStatOverride> GetStatSettings()
+        {
+            yield return maximumHealth;
+            yield return attackDamage;
+            yield return attackSpeed;
+            yield return moveSpeed;
+            yield return attackRange;
+        }
+
+        #endregion // 스탯 정의
     }
 }

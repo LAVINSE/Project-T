@@ -13,7 +13,7 @@ namespace ProjectT.Units
         /// <summary>
         /// 최대 체력입니다.
         /// </summary>
-        public float Maximum { get; }
+        public float Maximum { get; private set; }
 
         /// <summary>
         /// 현재 체력입니다.
@@ -74,6 +74,28 @@ namespace ProjectT.Units
         #endregion // 초기화
 
         #region 함수
+        /// <summary>
+        /// 최대 체력을 변경하고 현재 체력은 새 상한까지만 유지합니다. 사망자는 부활하지 않으며 잘못된 값이면 false입니다.
+        /// </summary>
+        public bool SetMaximum(float maximum)
+        {
+            if (!maximum.ExIsPositive())
+            {
+                SWLog.LogWarning("[Health] 최대 체력 변경 실패: 양수가 필요합니다.");
+                return false;
+            }
+
+            if (Maximum == maximum)
+            {
+                return true;
+            }
+
+            Maximum = maximum;
+            Current = Math.Min(Current, Maximum);
+            Changed?.Invoke();
+            return true;
+        }
+
         /// <summary>
         /// 유효한 피해만 적용합니다. 이미 사망한 개체의 중복 피해는 무시합니다.
         /// </summary>

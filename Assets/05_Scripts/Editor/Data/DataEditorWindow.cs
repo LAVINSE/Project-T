@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 using SW.EditorTools;
+using SW.EditorTools.Util;
 
 using ProjectT.Data;
 
@@ -21,13 +22,14 @@ namespace ProjectT.Editor.Data
         private const string StylePath = "Assets/05_Scripts/Editor/Data/DataEditorWindow.uss";
         [SerializeField] private DataKind kind;
         private DataEditSession session;
-        private List<ProjectData> assets = new List<ProjectData>();
+        private List<ScriptableObject> assets = new List<ScriptableObject>();
         private ListView assetList;
         private VisualElement detail;
         private ScrollView detailScroll;
         private Label status;
         private Label heading;
         private Button applyButton;
+        private Button validateButton;
         private Button cancelButton;
         private Button inspectorButton;
         private Label assetCount;
@@ -35,6 +37,8 @@ namespace ProjectT.Editor.Data
         private Image headingIcon;
         private Button createButton;
         private Button duplicateButton;
+        private Button pingButton;
+        private IVisualElementScheduledItem statusRefresh;
         private bool creatingData;
         private ScriptableObject temporaryCreationTemplate;
         private string search = string.Empty;
@@ -42,6 +46,7 @@ namespace ProjectT.Editor.Data
         private string notice = string.Empty;
         private List<DataIssue> issues = new List<DataIssue>();
         private readonly Dictionary<string, VisualElement> fieldElements = new Dictionary<string, VisualElement>();
+        private readonly Dictionary<string, Action> statRefreshers = new Dictionary<string, Action>();
 
         #endregion // 필드
 
@@ -107,10 +112,26 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 아이템의 이름·아이콘·기본 수량을 관리하는 창을 엽니다.
         /// </summary>
-        [MenuItem("Project T/데이터/아이템 편집기", priority = 6)]
+        [MenuItem("Project T/데이터/아이템·장비 편집기", priority = 6)]
         private static void OpenItems()
         {
             Open(DataKind.Item);
+        }
+
+        /// <summary>
+        /// 장비의 희귀도와 성능 등급별 효과를 정의하는 창을 엽니다.
+        /// </summary>
+        private static void OpenEquipment()
+        {
+            Open(DataKind.Equipment);
+        }
+
+        /// <summary>
+        /// 장비의 고정 능력치 증가량을 정의하는 창을 엽니다.
+        /// </summary>
+        private static void OpenEquipmentEffects()
+        {
+            Open(DataKind.EquipmentStatEffect);
         }
 
         /// <summary>
@@ -118,13 +139,19 @@ namespace ProjectT.Editor.Data
         /// </summary>
         public static DataEditorWindow Open(DataKind dataKind)
         {
-            DataEditorWindow window = Resources.FindObjectsOfTypeAll<DataEditorWindow>().FirstOrDefault(candidate => candidate.kind == dataKind);
+            DataEditorWindow window = Resources.FindObjectsOfTypeAll<DataEditorWindow>().FirstOrDefault(candidate =>
+                candidate.kind == dataKind || IsEquipmentWorkspace(candidate.kind) && IsEquipmentWorkspace(dataKind));
             if (window == null)
             {
                 window = CreateInstance<DataEditorWindow>();
                 window.kind = dataKind;
                 window.titleContent = new GUIContent("Project T · " + window.KindName);
                 window.minSize = new Vector2(800, 560);
+            }
+
+            if (window.kind != dataKind && !window.SwitchKind(dataKind))
+            {
+                return null;
             }
 
             window.Show();
@@ -146,6 +173,7 @@ namespace ProjectT.Editor.Data
         /// </summary>
         private void OnDisable()
         {
+            statusRefresh?.Pause();
             StoreDraft();
             ClearCreationTemplate();
             detail?.Unbind();
@@ -160,7 +188,42 @@ namespace ProjectT.Editor.Data
         /// </summary>
         public void CreateGUI()
         {
+            statusRefresh?.Pause();
+            rootVisualElement.Unbind();
             rootVisualElement.Clear();
+            ApplyTheme();
+            if (IsEquipmentWorkspace(kind))
+            {
+                titleContent = new GUIContent("Project T · 아이템·장비");
+                rootVisualElement.Add(BuildWorkspaceTabs());
+            }
+
+            rootVisualElement.Add(BuildToolbar());
+            var body = Element("project-data-body");
+            body.Add(BuildSidebar());
+            body.Add(BuildWorkspace());
+            rootVisualElement.Add(body);
+            status = Text(string.Empty, "project-data-status");
+            rootVisualElement.Add(status);
+            RestoreDraft();
+            RefreshCatalog();
+            if (session == null && assets.Count > 0)
+            {
+                SelectAsset(assets[0]);
+            }
+            else
+            {
+                RebuildDetail();
+            }
+
+            statusRefresh = rootVisualElement.schedule.Execute(RefreshStatus).Every(400);
+        }
+
+        /// <summary>
+        /// SWUtils 편집기 테마와 이 창의 스타일 시트를 적용합니다. 스타일 시트가 없으면 테마만 적용합니다.
+        /// </summary>
+        private void ApplyTheme()
+        {
             SWEditorTheme.Apply(rootVisualElement);
             var style = AssetDatabase.LoadAssetAtPath<StyleSheet>(StylePath);
             if (style != null)
@@ -169,6 +232,13 @@ namespace ProjectT.Editor.Data
             }
 
             rootVisualElement.AddToClassList("project-data-root");
+        }
+
+        /// <summary>
+        /// 생성·복제와 도구 메뉴를 담은 상단 줄을 만듭니다.
+        /// </summary>
+        private VisualElement BuildToolbar()
+        {
             var toolbar = Element("project-data-toolbar");
             createButton = ActionButton("+ 새로 만들기", BeginCreation, "createData");
             createButton.tooltip = KindName + " 데이터를 템플릿으로 생성합니다.";
@@ -178,8 +248,14 @@ namespace ProjectT.Editor.Data
             toolbar.Add(duplicateButton);
             toolbar.Add(Element("project-data-spacer"));
             toolbar.Add(CreateToolsMenu());
-            rootVisualElement.Add(toolbar);
-            var body = Element("project-data-body");
+            return toolbar;
+        }
+
+        /// <summary>
+        /// 검색·표시 기준과 자산 목록을 담은 왼쪽 영역을 만듭니다.
+        /// </summary>
+        private VisualElement BuildSidebar()
+        {
             var sidebar = Element("project-data-sidebar");
             var searchRow = Element("project-data-search");
             var searchField = new TextField
@@ -195,9 +271,9 @@ namespace ProjectT.Editor.Data
                 RefreshCatalog();
             });
             searchRow.Add(searchField);
-            var refresh = ActionButton("새로 고침", RefreshCatalog);
-            searchRow.Add(refresh);
+            searchRow.Add(ActionButton("새로 고침", RefreshCatalog));
             sidebar.Add(searchRow);
+            sidebar.Add(BuildListOptions());
             assetList = new ListView
             {
                 name = "dataAssetList",
@@ -209,7 +285,7 @@ namespace ProjectT.Editor.Data
             assetList.AddToClassList("project-data-list");
             assetList.selectionChanged += selected =>
             {
-                var asset = selected.FirstOrDefault() as ProjectData;
+                var asset = selected.FirstOrDefault() as ScriptableObject;
                 if (asset != null)
                 {
                     SelectAsset(asset);
@@ -218,8 +294,30 @@ namespace ProjectT.Editor.Data
             sidebar.Add(assetList);
             assetCount = Text(string.Empty, "project-data-count");
             sidebar.Add(assetCount);
-            body.Add(sidebar);
+            return sidebar;
+        }
+
+        /// <summary>
+        /// 선택한 데이터의 제목줄과 입력 화면을 담은 오른쪽 영역을 만듭니다.
+        /// </summary>
+        private VisualElement BuildWorkspace()
+        {
             var workspace = Element("project-data-detail");
+            workspace.Add(BuildDetailHeader());
+            detailScroll = new ScrollView(ScrollViewMode.Vertical);
+            detailScroll.AddToClassList("project-data-scroll");
+            detail = Element("project-data-content");
+            SWEditorTheme.ApplyEmbeddedInspector(detail);
+            detailScroll.Add(detail);
+            workspace.Add(detailScroll);
+            return workspace;
+        }
+
+        /// <summary>
+        /// 선택한 데이터의 이름과 Ping·되돌리기·검사·저장 버튼을 만듭니다.
+        /// </summary>
+        private VisualElement BuildDetailHeader()
+        {
             var header = Element("project-data-detail-header");
             headingIcon = new Image
             {
@@ -233,39 +331,23 @@ namespace ProjectT.Editor.Data
             identity.Add(heading);
             identity.Add(headingType);
             header.Add(identity);
+            pingButton = ActionButton("Ping", () => SWEditorUtils.PingAndSelect(session?.Source), "pingData");
+            pingButton.tooltip = "선택한 원본 에셋을 Project 창에서 표시합니다.";
+            header.Add(pingButton);
             inspectorButton = ActionButton("인스펙터", () => ShowPage("편집"), "showInspector");
             inspectorButton.tooltip = "데이터 입력 화면으로 돌아갑니다.";
             header.Add(inspectorButton);
             cancelButton = ActionButton("되돌리기", CancelCurrent, "cancelData");
             cancelButton.tooltip = "미적용 변경을 버리고 저장된 원본을 다시 읽습니다.";
             header.Add(cancelButton);
-            applyButton = ActionButton("적용·저장", ApplyCurrent, "applyData");
-            applyButton.tooltip = "편집값을 검사한 뒤 원본에 적용하고 저장합니다.";
+            validateButton = ActionButton("검사하기", ValidateCurrentData, "validateData");
+            validateButton.tooltip = "원할 때 현재 편집값을 검사합니다. 검사 결과는 저장을 제한하지 않습니다.";
+            header.Add(validateButton);
+            applyButton = ActionButton("저장", ApplyCurrent, "applyData");
+            applyButton.tooltip = "유효성 검사 없이 저장합니다. 빈 값과 미완성 데이터도 저장할 수 있습니다.";
             applyButton.AddToClassList("project-data-primary");
             header.Add(applyButton);
-            workspace.Add(header);
-            detailScroll = new ScrollView(ScrollViewMode.Vertical);
-            detailScroll.AddToClassList("project-data-scroll");
-            detail = Element("project-data-content");
-            SWEditorTheme.ApplyEmbeddedInspector(detail);
-            detailScroll.Add(detail);
-            workspace.Add(detailScroll);
-            body.Add(workspace);
-            rootVisualElement.Add(body);
-            status = Text(string.Empty, "project-data-status");
-            rootVisualElement.Add(status);
-            RestoreDraft();
-            RefreshCatalog();
-            if (session == null && assets.Count > 0)
-            {
-                SelectAsset(assets[0]);
-            }
-            else
-            {
-                RebuildDetail();
-            }
-
-            rootVisualElement.schedule.Execute(RefreshStatus).Every(400);
+            return header;
         }
 
         /// <summary>
@@ -327,7 +409,7 @@ namespace ProjectT.Editor.Data
                 return;
             }
 
-            assets = DataCatalog.Find(kind, search);
+            assets = SortAssets(DataCatalog.Find(kind, search));
             assetCount.text = KindName + " · " + assets.Count + "개";
             assetList.itemsSource = assets;
             assetList.Rebuild();
@@ -355,7 +437,7 @@ namespace ProjectT.Editor.Data
             row.Add(assetType);
             row.RegisterCallback<PointerDownEvent>(change =>
             {
-                if (change.button == 0 && change.clickCount == 2 && row.userData is ProjectData asset)
+                if (change.button == 0 && change.clickCount == 2 && row.userData is ScriptableObject asset)
                 {
                     EditorGUIUtility.PingObject(asset);
                 }
@@ -372,7 +454,7 @@ namespace ProjectT.Editor.Data
             string typeName = ObjectNames.NicifyVariableName(asset.GetType().Name);
             row.userData = asset;
             row.Q<Image>("assetIcon").image = AssetPreview.GetMiniThumbnail(asset);
-            row.Q<Label>("assetName").text = asset.name;
+            row.Q<Label>("assetName").text = GetListLabel(asset);
             row.Q<Label>("assetType").text = typeName;
             row.tooltip = asset.name + " · " + DataCatalog.GetDisplayName(asset) + "\n" + typeName + "\n" + AssetDatabase.GetAssetPath(asset);
             row.EnableInClassList("project-data-selected", session?.Source == asset);
@@ -381,7 +463,7 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 다른 자산으로 이동합니다. 미적용 변경의 적용·취소 선택이 취소되면 기존 편집을 유지합니다.
         /// </summary>
-        public bool SelectAsset(ProjectData asset)
+        public bool SelectAsset(ScriptableObject asset)
         {
             if (!DataCatalog.TryGetKind(asset, out DataKind assetKind) || assetKind != kind)
             {
@@ -436,7 +518,7 @@ namespace ProjectT.Editor.Data
                 return true;
             }
 
-            int choice = EditorUtility.DisplayDialogComplex("미적용 변경", "현재 변경을 적용하고 이동할까요?", "검사 후 적용", "이동 취소", "수정 버리기");
+            int choice = EditorUtility.DisplayDialogComplex("미저장 변경", "현재 변경을 저장하고 이동할까요?", "저장 후 이동", "이동 취소", "수정 버리기");
             if (choice == 0)
             {
                 return ApplyCurrentData();
@@ -470,6 +552,7 @@ namespace ProjectT.Editor.Data
             detail.Unbind();
             detail.Clear();
             fieldElements.Clear();
+            statRefreshers.Clear();
             if (session?.Source == null)
             {
                 heading.text = KindName + " 편집기";
@@ -496,6 +579,7 @@ namespace ProjectT.Editor.Data
                     BuildReferences();
                     break;
                 default:
+                    BuildAssetManagement();
                     BuildFields();
                     break;
             }
@@ -515,7 +599,9 @@ namespace ProjectT.Editor.Data
 
             bool active = session?.Source != null;
             bool playing = EditorApplication.isPlayingOrWillChangePlaymode;
+            pingButton.SetEnabled(active);
             applyButton.SetEnabled(active && !creatingData && !playing && session.HasChanges && !session.HasExternalChanges);
+            validateButton.SetEnabled(active && !creatingData);
             createButton.SetEnabled(!playing);
             duplicateButton.SetEnabled(active && !playing);
             cancelButton.SetEnabled(active && !creatingData && (session.HasChanges || session.HasExternalChanges));
@@ -550,6 +636,7 @@ namespace ProjectT.Editor.Data
                 session.Reload();
             }
 
+            session?.Serialized?.Update();
             RebuildDetail();
             RefreshCatalog();
         }
@@ -579,7 +666,7 @@ namespace ProjectT.Editor.Data
                 return;
             }
 
-            var asset = AssetDatabase.LoadAssetAtPath<ProjectData>(SessionState.GetString(StateKey + "source", string.Empty));
+            var asset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(SessionState.GetString(StateKey + "source", string.Empty));
             if (!DataCatalog.TryGetKind(asset, out DataKind assetKind) || assetKind != kind)
             {
                 return;

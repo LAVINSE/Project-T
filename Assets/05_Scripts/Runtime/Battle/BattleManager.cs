@@ -7,7 +7,9 @@ using SW.Pooling;
 using SW.Util;
 
 using ProjectT.Data;
+using ProjectT.Inventory;
 using ProjectT.Navigation;
+using ProjectT.Progression;
 using ProjectT.Rewards;
 using ProjectT.Units;
 using ProjectT.View;
@@ -53,6 +55,21 @@ namespace ProjectT.Battle
         public BattleWallet Wallet { get; private set; }
 
         /// <summary>
+        /// Main에서 불러온 영구 소울 지갑입니다. 이 전투의 승패나 재시작으로 초기화하지 않습니다.
+        /// </summary>
+        public SoulWallet Souls { get; private set; }
+
+        /// <summary>
+        /// Main에서 불러온 영구 아이템 보관소입니다. 초기화에 실패하면 null입니다.
+        /// </summary>
+        public InventoryStore Inventory { get; private set; }
+
+        /// <summary>
+        /// 보류 중인 보상 지급 안내입니다. 정상 지급 상태에서는 빈 문자열입니다.
+        /// </summary>
+        public string RewardIssue { get; private set; } = string.Empty;
+
+        /// <summary>
         /// 실제 피격되는 공방입니다. 초기화 실패 시 null입니다.
         /// </summary>
         public Workshop Workshop { get; private set; }
@@ -78,7 +95,7 @@ namespace ProjectT.Battle
         public int KilledCount { get; private set; }
 
         /// <summary>
-        /// 마지막 처치의 확률 계산 결과입니다. 현재는 배치 재화만 지급되며 아이템의 소유·영구 저장 결과가 아닙니다.
+        /// 마지막 처치의 지급 처리에 성공한 전투 재화·소울·아이템 계산 결과입니다.
         /// </summary>
         public IReadOnlyList<RewardAmount> LastCalculatedRewards { get; private set; } = Array.Empty<RewardAmount>();
 
@@ -86,6 +103,11 @@ namespace ProjectT.Battle
         /// 구매한 아군 목록입니다. 부활 대기 중인 아군도 포함합니다.
         /// </summary>
         public IReadOnlyList<CharacterUnit> Allies => allies;
+
+        /// <summary>
+        /// 현재 전투의 통계입니다. 승패 확정 후에는 종료 시점의 값으로 유지됩니다.
+        /// </summary>
+        public BattleStatistics Statistics { get; } = new BattleStatistics();
 
         /// <summary>
         /// 초기화에 성공해 전투를 진행할 수 있는지 반환합니다.
@@ -130,26 +152,46 @@ namespace ProjectT.Battle
 
             FixedRoute route = stage.EnemyRoute.CreateRoute();
             var wallet = BattleWallet.Create(stage.StartingCurrency);
-            var workshop = Workshop.Create(stage.WorkshopMaximumHealth, workshopPoint.position);
+            var workshop = Workshop.Create(stage, workshopPoint.position);
             if (route == null || wallet == null || workshop == null)
             {
+                workshop?.Dispose();
                 StopInitialization("경로·시작 재화·공방 체력 설정을 확인해 주세요.");
                 return;
             }
 
             ColorData colors = DataManager.Instance.ColorData;
+            Souls = SoulManager.HasInstance ? SoulManager.Instance.Wallet : null;
+            Inventory = InventoryManager.HasInstance ? InventoryManager.Instance.Store : null;
+            rewards = RewardService.Create(
+                stage.DeploymentCurrency,
+                DataManager.Instance.SoulCurrency,
+                wallet,
+                Souls,
+                Inventory,
+                () => UnityEngine.Random.value);
+            if (rewards == null)
+            {
+                workshop.Dispose();
+                string soulIssue = SoulManager.HasInstance ? SoulManager.Instance.InitializationError : "Main의 SoulManager가 없습니다.";
+                string inventoryIssue = InventoryManager.HasInstance ? InventoryManager.Instance.InitializationError : "Main의 InventoryManager가 없습니다.";
+                StopInitialization("보상 정의와 영구 저장을 확인하세요. " + soulIssue + " " + inventoryIssue);
+                return;
+            }
+
             Wallet = wallet;
             Workshop = workshop;
             deployment = new DeploymentService(stage, Wallet, battlefield, unitParent, colors);
             spawner = new EnemySpawner(stage.Enemy, route, unitParent, colors, stage.SpawnInterval);
-            rewards = new RewardService(stage.DeploymentCurrency, Wallet.TryCredit, () => UnityEngine.Random.value);
             combat = new CombatSystem(allies, spawner.Enemies, Workshop);
             workshopView.Initialize(Workshop, colors);
             Wallet.Changed += NotifyStateChanged;
+            Souls.Changed += NotifyStateChanged;
             Workshop.Health.Died += OnWorkshopDestroyed;
             TimeController.PauseChanged += NotifyStateChanged;
             spawner.EnemyResolved += OnEnemyResolved;
             combat.Attacked += OnAttacked;
+            combat.AllyHitResolved += Statistics.RecordHit;
             Phase = BattlePhase.Preparation;
         }
 
@@ -183,6 +225,7 @@ namespace ProjectT.Battle
             }
 
             allies.Add(unit);
+            Statistics.Register(unit);
             unit.AvailabilityChanged += combat.ReleaseUnavailableBlocker;
             return true;
         }
@@ -222,6 +265,7 @@ namespace ProjectT.Battle
             }
 
             RoundNumber++;
+            RetryPendingRewards();
             spawner.StartRound(stage.GetEnemyCount(RoundNumber - 1));
             SetPhase(BattlePhase.Fighting);
         }
@@ -303,18 +347,40 @@ namespace ProjectT.Battle
                 return;
             }
 
-            if (rewards.TryGrant(enemy.Definition.Rewards, out var granted, out string reason))
+            if (rewards.TryGrant(enemy.RewardIdentifier, enemy.Definition.Rewards, out var granted, out string reason))
             {
                 LastCalculatedRewards = granted;
             }
             else
             {
                 LastCalculatedRewards = Array.Empty<RewardAmount>();
+                RewardIssue = reason;
                 SWLog.LogWarning("[BattleManager] 처치 보상 지급 실패: " + reason);
             }
 
             KilledCount++;
             NotifyStateChanged();
+        }
+
+        /// <summary>
+        /// 이미 계산된 보류 보상을 다시 저장·지급합니다. 실패 시 현재 잔액과 안내를 유지합니다.
+        /// </summary>
+        private void RetryPendingRewards()
+        {
+            rewards.TryGrantPending(out string reason);
+            RewardIssue = reason;
+        }
+
+        /// <summary>
+        /// 앱으로 돌아오면 저장 실패로 보류된 지급을 다시 시도합니다. 새 확률 판정을 하지 않습니다.
+        /// </summary>
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus && IsReady && !string.IsNullOrEmpty(RewardIssue))
+            {
+                RetryPendingRewards();
+                NotifyStateChanged();
+            }
         }
 
         /// <summary>
@@ -333,6 +399,16 @@ namespace ProjectT.Battle
         {
             if (IsFinished)
             {
+                return;
+            }
+
+            RetryPendingRewards();
+            Statistics.SynchronizeClock(Time.realtimeSinceStartupAsDouble, false);
+            if (!Statistics.Complete(phase, stage, RoundNumber, KilledCount, Workshop))
+            {
+                Statistics.SynchronizeClock(
+                    Time.realtimeSinceStartupAsDouble,
+                    Phase == BattlePhase.Fighting && !TimeController.IsPaused);
                 return;
             }
 
@@ -362,6 +438,9 @@ namespace ProjectT.Battle
         /// </summary>
         private void NotifyStateChanged()
         {
+            Statistics.SynchronizeClock(
+                Time.realtimeSinceStartupAsDouble,
+                IsReady && enabled && Phase == BattlePhase.Fighting && !TimeController.IsPaused);
             StateChanged?.Invoke();
         }
 
@@ -374,16 +453,19 @@ namespace ProjectT.Battle
         private void OnDestroy()
         {
             resultPause?.Dispose();
+            Workshop?.Dispose();
             if (!IsReady)
             {
                 return;
             }
 
             Wallet.Changed -= NotifyStateChanged;
+            Souls.Changed -= NotifyStateChanged;
             Workshop.Health.Died -= OnWorkshopDestroyed;
             TimeController.PauseChanged -= NotifyStateChanged;
             spawner.EnemyResolved -= OnEnemyResolved;
             combat.Attacked -= OnAttacked;
+            combat.AllyHitResolved -= Statistics.RecordHit;
             SWPool pool = SWPool.HasInstance ? SWPool.Instance : null;
             foreach (CharacterUnit ally in allies)
             {

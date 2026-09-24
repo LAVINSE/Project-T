@@ -22,6 +22,23 @@ namespace ProjectT.Units
 
         #region 프로퍼티
         /// <summary>
+        /// 런타임 동시 저지 수입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public int BlockCapacity
+        {
+            get
+            {
+                float value = Stats?.GetValue(Definition.BlockCapacityStat) ?? 0f;
+                return value >= int.MaxValue ? int.MaxValue : Mathf.Max(0, Mathf.FloorToInt(value));
+            }
+        }
+
+        /// <summary>
+        /// 런타임 부활 대기시간입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float RevivalSeconds => Stats?.GetValue(Definition.RevivalSecondsStat) ?? 0f;
+
+        /// <summary>
         /// 이 개체가 사용하는 클래스입니다.
         /// </summary>
         public UnitClassData Definition { get; private set; }
@@ -81,10 +98,17 @@ namespace ProjectT.Units
                 return false;
             }
 
-            Health nextHealth = Health.Create(definition.MaximumHealth);
+            RuntimeStatCollection nextStats = RuntimeStatCollection.Create(definition.GetStatSettings());
+            if (nextStats == null)
+            {
+                return false;
+            }
+
+            Health nextHealth = Health.Create(nextStats.GetValue(definition.MaximumHealthStat));
             var nextMovement = CharacterMovement.Create(transform, terrain, spawn, definition.MoveSpeed);
             if (nextHealth == null || nextMovement == null)
             {
+                nextStats.Dispose();
                 return false;
             }
 
@@ -101,6 +125,7 @@ namespace ProjectT.Units
             Movement = nextMovement;
             Movement.MovementChanged += OnMovementChanged;
             SetHealth(nextHealth);
+            SetStats(nextStats);
             NotifyInitialized();
             return true;
         }
@@ -108,6 +133,13 @@ namespace ProjectT.Units
         #endregion // 초기화
 
         #region 함수
+        /// <inheritdoc/>
+        protected override void OnStatsChanged()
+        {
+            base.OnStatsChanged();
+            Movement?.SetMoveSpeed(MoveSpeed);
+        }
+
         /// <summary>
         /// 생존 중에는 즉시 이동하고 부활 중에는 부활 후 이동할 목적지를 갱신합니다.
         /// </summary>
@@ -192,7 +224,7 @@ namespace ProjectT.Units
         protected override void OnDied()
         {
             Attack.Cancel();
-            revivalTimer.SetDuration(Definition.RevivalSeconds);
+            revivalTimer.SetDuration(RevivalSeconds);
             revivalTimer.Start();
             displayedRevivalSeconds = Mathf.CeilToInt(RevivalRemaining);
             Movement.Stop();

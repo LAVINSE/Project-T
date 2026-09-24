@@ -13,7 +13,7 @@ namespace ProjectT.Navigation
         #region 필드
         private readonly Transform target;
         private readonly WalkableBattlefield battlefield;
-        private readonly float moveSpeed;
+        private float moveSpeed;
         private RouteProgress progress;
 
         #endregion // 필드
@@ -76,6 +76,21 @@ namespace ProjectT.Navigation
         #endregion // 초기화
 
         #region 함수
+        /// <summary>
+        /// 런타임 이동속도를 반영합니다. 음수나 유한하지 않은 값은 기존 속도를 유지합니다.
+        /// </summary>
+        public bool SetMoveSpeed(float speed)
+        {
+            if (!speed.ExIsNonNegative())
+            {
+                SWLog.LogWarning("[Movement] 이동속도 변경 실패: 0 이상 유한한 값이 필요합니다.");
+                return false;
+            }
+
+            moveSpeed = speed;
+            return true;
+        }
+
         /// <summary>
         /// 현재 위치에서 새 목적지로 이동합니다. 경로가 없으면 기존 이동을 유지합니다.
         /// </summary>

@@ -51,6 +51,20 @@ private bool Prepare(GameObject prefab)
 - 유닛 애니메이션은 유닛별 Animator Controller를 쓰고, 코드가 재생할 동작은 `UnitAnimation` 동작 목록에서 상태 이름으로 연결합니다. 코드에 상태 이름 문자열을 쓰지 않습니다.
 - 스크립트 이름을 바꿀 때는 `.cs`와 `.meta`를 함께 옮겨 GUID를 유지합니다. `MovedFrom`·`FormerlySerializedAs` 같은 호환 코드 대신 바뀐 참조를 편집기에서 직접 다시 연결합니다.
 
+## 화면 오브젝트와 프리팹 명명
+
+프리팹과 장면 안의 오브젝트 이름은 `BattleResultPopup`, `Inventory UI`의 구성을 기준으로 합니다.
+
+- 프리팹 파일은 화면과 조각을 `<역할> UI`로, 팝업을 `<역할>Popup`으로 이름 짓습니다. 예: `Inventory UI`, `BottomHUD UI`, `CharacterSlot UI`, `BattleResultPopup`.
+- 화면 프리팹은 `04_Prefabs/UI` 아래 `Battle`, `Inventory`, `Popup`, `Common`으로 나눕니다. 화면 밖의 프리팹은 기존 폴더(`Units`, `Effects`, `Health` 등)를 그대로 씁니다.
+- 컴포넌트를 직접 가진 오브젝트는 `<역할>_<컴포넌트>`로 이름 짓습니다. `_Img`는 `Image`, `_Text`는 `TMP_Text`, `_Button`은 `Button`, `_ScrollRect`는 `ScrollRect`입니다. 예: `Background_Img`, `StageName_Text`, `Move_Button`, `CharacterDPS_ScrollRect`.
+- 아이콘은 대상을 앞에 적고 `Icon_Img`로 끝냅니다. 예: `Coin Icon_Img`, `Sort Arrow Icon_Img`.
+- 자식을 묶기만 하는 오브젝트에는 컴포넌트 접미사를 붙이지 않고 역할 접미사를 씁니다. 화면 영역은 `~Panel`, 같은 성격의 묶음은 `~Group`, 상단 제목 영역은 `~Header`, 입력을 받는 범위는 `~Area`입니다. 예: `TopPanel`, `FilterGroup`, `TopHeader`, `TitleDragArea`.
+- Unity가 만드는 `Viewport`, `Content`, `Sliding Area`, `Handle`은 기본 이름을 유지합니다.
+- 직렬화 필드는 연결한 컴포넌트 종류가 드러나게 이름 짓고 오브젝트 이름과 짝을 맞춥니다. 오브젝트 `Coin_Text`는 필드 `coinText`, `Close_Button`은 `closeButton`, `Result_Img`는 `resultImage`로 연결합니다.
+- UI 스크립트 이름은 붙는 프리팹 이름에서 공백을 뺀 형태로 맞춥니다. `Inventory UI`는 `InventoryUI`, 팝업은 `<역할>PopupUI`로 `BattleResultPopup`은 `BattleResultPopupUI`입니다.
+- UI 스크립트는 `Runtime/UI` 아래 프리팹과 같은 분류(`Battle`, `Inventory`, `Popup`, `Common`)로 나눕니다.
+
 ## 데이터와 유닛 명명
 
 - 프로젝트 ScriptableObject 스크립트와 자산 이름은 `Data`로 끝냅니다. 예: `UnitClassData`, `UnitEnemyData`, `OrcMageRedData`, `BattleCoinData`.
@@ -65,7 +79,7 @@ private bool Prepare(GameObject prefab)
 - 복구 가능한 입력·참조 문제는 `SWLog.LogWarning`과 `null` 또는 `false`로 반환합니다. 생성 실패가 가능한 일반 객체는 검증하는 `Create` 함수와 비공개 생성자를 사용합니다.
 - 호출자는 성공 여부를 확인한 뒤 상태를 반영합니다. 초기화 실패는 기존 상태를 보존하고, 실패한 배치에서는 비용을 차감하지 않으며 생성된 임시 객체를 풀로 반환합니다.
 - 재화 부족·배치 불가 등 정상적인 사용자 입력 거절은 `Try` 반환값과 안내 문구로 처리해 반복 로그를 피합니다.
-- 편집기 작업은 필수 입력을 먼저 검증합니다. 직렬화 속성 묶음은 모든 항목을 확인한 뒤 한 번에 적용합니다.
+- 데이터 편집기의 저장·생성·복제는 데이터 유효성 검사와 분리합니다. 빈 값·미완성 데이터도 저장하며, 검사는 사용자가 별도 버튼으로 실행합니다. 파일 이름·경로·잠금·외부 원본 충돌 등 저장에 필요한 조건과 실제 게임에서 데이터를 사용하기 전의 검사는 유지합니다. 직렬화 속성 묶음은 대상 속성을 모두 확인한 뒤 한 번에 적용합니다.
 - 외부 이벤트 구독자에서 발생한 예외를 격리해야 할 때는 필요한 범위에서만 잡고 `SWLog.LogError`로 기록합니다.
 - `SWLog`는 `SW_DEBUG_MODE`가 있을 때 출력됩니다. 현재 개발 타겟인 Standalone에 활성화했으며 다른 타겟은 각 타겟의 설정을 확인합니다.
 

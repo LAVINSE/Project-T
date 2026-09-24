@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a7f3d05714bae48915ba2a3150d95f, type: 3}
+  m_Name: NewEquipment2Data
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.EquipmentData
+  displayName: "\uC0C8 \uC7A5\uBE44"
+  icon: {fileID: 0}
+  rarity: {fileID: 11400000, guid: 0e331c8dad8502745a152787ed30afec, type: 2}
+  performanceGrades:
+  - performanceGrade: {fileID: 0}
+    effect: {fileID: 11400000, guid: e652fbeca94349d41a049f6d8c2f8b95, type: 2}
+    selectionWeight: 1
+    statOverrides: []
+    additionalEffects: []

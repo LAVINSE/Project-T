@@ -15,7 +15,10 @@ MonoBehaviour:
   displayName: "\uCD08\uC6D0 \uACBD\uACC4"
   startingCurrency: 100
   deploymentCurrency: {fileID: 11400000, guid: 9bbc013fbfb43094495c5b13adbbfb53, type: 2}
-  workshopMaximumHealth: 300
+  workshopMaximumHealth:
+    stat: {fileID: 11400000, guid: 90cea33973c67a24282ba9ad6791c2dd, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 300
   spawnInterval: 2.8
   enemiesPerRound: 06000000090000000c000000i
   enemyRoute: {fileID: 11400000, guid: 75fbf600fb3b52147b90feed6e3420fe, type: 2}

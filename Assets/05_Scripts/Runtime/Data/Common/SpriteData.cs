@@ -18,6 +18,17 @@ namespace ProjectT.Data
         [SerializeField] private Sprite speedIcon2;
         [SerializeField] private Sprite speedIcon3;
 
+        [SWGroup("정지/시작")]
+        [SerializeField] private Sprite pauseIcon;
+        [SerializeField] private Sprite playIcon;
+
+        [SWGroup("결과")]
+        [SerializeField] private Sprite resultVictorySprite;
+        [SerializeField] private Sprite resultLoseSprite;
+
+        [SWGroup("아이콘")]
+        [SerializeField] private Sprite swordsIcon;
+        [SerializeField] private Sprite swordsBrokenIcon;
         #endregion // 필드
 
         #region 조회
@@ -41,6 +52,30 @@ namespace ProjectT.Data
         }
 
         /// <summary>
+        /// 정지 상태에 맞는 조작 아이콘을 반환합니다. 미설정이면 null입니다.
+        /// </summary>
+        public Sprite GetPauseAndPlayIcon(bool pause)
+        {
+            return pause ? pauseIcon : playIcon;
+        }
+
+        /// <summary>
+        /// 승패에 맞는 결과 배경을 반환합니다. 미설정이면 null입니다.
+        /// </summary>
+        public Sprite GetResultSprite(bool isWin)
+        {
+            return isWin ? resultVictorySprite : resultLoseSprite;
+        }
+        
+        /// <summary>
+        /// 승패에 맞는 검 장식을 반환합니다. 미설정이면 null입니다.
+        /// </summary>
+        public Sprite GetSwordsIcon(bool isWin)
+        {
+            return isWin ? swordsIcon : swordsBrokenIcon;
+        }
+
+        /// <summary>
         /// 지원하는 세 배속의 아이콘이 모두 연결되었는지 검사합니다.
         /// </summary>
         public override bool Validate(List<DataIssue> issues)
@@ -50,7 +85,6 @@ namespace ProjectT.Data
             valid &= CheckRequired(speedIcon3, nameof(speedIcon3), issues);
             return valid;
         }
-
         #endregion // 조회
     }
 }

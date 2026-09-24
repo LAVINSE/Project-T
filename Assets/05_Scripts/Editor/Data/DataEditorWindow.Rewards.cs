@@ -37,6 +37,13 @@ namespace ProjectT.Editor.Data
                 entry.FindPropertyRelative("acquisitionProbability"),
                 "획득 확률 (%)",
                 "다른 항목과 독립적으로 판정합니다. 100은 항상 지급하고 0은 지급하지 않습니다."));
+            if (entry.FindPropertyRelative("definition").objectReferenceValue is ItemData item && item.Equipment != null)
+            {
+                container.Add(BuildField(entry.FindPropertyRelative("randomizeEquipmentGrade"), "성능 등급 추첨",
+                    "켜면 장비 한 개마다 가중치로 등급을 선택합니다. 끄면 연결한 아이템의 등급을 그대로 지급합니다."));
+                container.Add(Text("추첨 가중치가 있는 모든 등급의 아이템을 아이템 탭에 등록하세요.", "project-data-description"));
+                container.Add(Text("개별 추첨의 처리 한도는 한 보상 요청당 " + ProjectDefine.Inventory.MaximumEquipmentRollCount + "개입니다.", "project-data-description"));
+            }
             var summary = Text(string.Empty, "project-data-description");
             container.Add(summary);
             container.schedule.Execute(() => RefreshRewardSummary(path, summary)).Every(300);

@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 using SW.EditorTools;
+using SW.Base;
+using SW.Stat;
 
 using ProjectT.Data;
 
@@ -19,57 +21,38 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 현재 데이터에 맞는 미리보기를 만듭니다. 참조가 없으면 안내만 표시합니다.
         /// </summary>
-        public static VisualElement Create(ProjectData asset)
+        public static VisualElement Create(ScriptableObject asset)
         {
             var root = new VisualElement();
-            root.Add(Description("편집 중인 값의 미리보기입니다. 실제 반영은 적용·저장 후 사용하는 스테이지에서 확인하세요."));
+            root.Add(Description("편집 중인 값의 미리보기입니다. 실제 반영은 저장 후 사용하는 스테이지에서 확인하세요."));
             UnitData appearance = asset as UnitData;
-            if (asset is UnitClassData ally)
+            switch (asset)
             {
-                appearance = ally;
-                root.Add(Description("배치 비용 " + ally.DeploymentCost + " · 체력 " + ally.MaximumHealth + " · 이동속도 " + ally.MoveSpeed + " · 피해 " + ally.AttackDamage + " · 공격 간격 " + ally.AttackInterval + "초"));
-            }
-            else if (asset is UnitEnemyData enemy)
-            {
-                appearance = enemy;
-                foreach (var reward in enemy.Rewards)
-                {
-                    if (reward != null)
-                    {
-                        root.Add(Description((reward.Definition == null ? "보상 미연결" : reward.Definition.DisplayName) + " · 수량 " + reward.Amount + " · 독립 확률 " + reward.AcquisitionProbability + "%"));
-                    }
-                }
-
-                root.Add(Description("체력 " + enemy.MaximumHealth + " · 공방 피해 " + enemy.WorkshopAttackDamage + " · 공방 공격 간격 " + enemy.WorkshopAttackInterval + "초"));
-            }
-            else if (asset is StageData stage)
-            {
-                root.Add(Description("시작 재화 " + stage.StartingCurrency + " · 공방 체력 " + stage.WorkshopMaximumHealth + " · 라운드 " + stage.RoundCount + "개 · 생성 간격 " + stage.SpawnInterval + "초"));
-                for (int index = 0; index < stage.RoundCount; index++)
-                {
-                    root.Add(Description((index + 1) + "라운드: 적 " + stage.GetEnemyCount(index) + "명"));
-                }
-
-                AddRoute(root, stage.EnemyRoute);
-            }
-            else if (asset is RewardData reward)
-            {
-                root.Add(Description(reward.DisplayName + " · 기본 수량 " + reward.DefaultAmount));
-                root.Add(Description("적별 보상에서 수량을 덮어쓸 수 있습니다. 현재 배치 재화만 지급되며 다른 재화·아이템의 보관은 후속 기능입니다."));
-                if (reward.Icon != null)
-                {
-                    var icon = new Image
-                    {
-                        sprite = reward.Icon,
-                        scaleMode = ScaleMode.ScaleToFit
-                    };
-                    icon.AddToClassList("project-data-preview-image");
-                    root.Add(icon);
-                }
-            }
-            else if (asset is EnemyRouteData route)
-            {
-                AddRoute(root, route);
+                case UnitClassData ally:
+                    AddClass(root, ally);
+                    break;
+                case UnitEnemyData enemy:
+                    AddEnemy(root, enemy);
+                    break;
+                case StageData stage:
+                    AddStage(root, stage);
+                    break;
+                case EquipmentData equipment:
+                    AddEquipment(root, equipment);
+                    break;
+                case EquipmentEffectData effect:
+                    root.Add(Description(effect.EffectDescription));
+                    root.Add(Description("고정 증가량 설정입니다. 실제 장착·전투 반영은 후속 기능입니다."));
+                    break;
+                case RewardData reward:
+                    AddReward(root, reward);
+                    break;
+                case EnemyRouteData route:
+                    AddRoute(root, route);
+                    break;
+                case SWIdentifiedObject identified:
+                    AddIdentified(root, identified);
+                    break;
             }
 
             if (appearance != null)
@@ -78,6 +61,132 @@ namespace ProjectT.Editor.Data
             }
 
             return root;
+        }
+
+        /// <summary>
+        /// 캐릭터의 배치 비용과 주요 전투 수치를 표시합니다.
+        /// </summary>
+        private static void AddClass(VisualElement root, UnitClassData ally)
+        {
+            root.Add(Description("배치 비용 " + ally.DeploymentCost + " · 체력 " + ally.MaximumHealth
+                + " · 이동속도 " + ally.MoveSpeed + " · 공격력 " + ally.AttackDamage
+                + " · 공격 속도 " + ally.AttackSpeed.ToString("0.###") + "회/초"));
+        }
+
+        /// <summary>
+        /// 적의 처치 보상 목록과 공방 공격 수치를 표시합니다.
+        /// </summary>
+        private static void AddEnemy(VisualElement root, UnitEnemyData enemy)
+        {
+            foreach (RewardEntry reward in enemy.Rewards)
+            {
+                if (reward != null)
+                {
+                    root.Add(Description((reward.Definition == null ? "보상 미연결" : reward.Definition.DisplayName)
+                        + " · 수량 " + reward.Amount + " · 독립 확률 " + reward.AcquisitionProbability + "%"));
+                }
+            }
+
+            root.Add(Description("체력 " + enemy.MaximumHealth + " · 공방 피해 " + enemy.WorkshopAttackDamage
+                + " · 공방 공격 간격 " + enemy.WorkshopAttackInterval + "초"));
+        }
+
+        /// <summary>
+        /// 스테이지의 시작 설정과 라운드별 적 수, 이동 경로를 표시합니다.
+        /// </summary>
+        private static void AddStage(VisualElement root, StageData stage)
+        {
+            root.Add(Description("시작 재화 " + stage.StartingCurrency + " · 공방 체력 " + stage.WorkshopMaximumHealth
+                + " · 라운드 " + stage.RoundCount + "개 · 생성 간격 " + stage.SpawnInterval + "초"));
+            for (int index = 0; index < stage.RoundCount; index++)
+            {
+                root.Add(Description((index + 1) + "라운드: 적 " + stage.GetEnemyCount(index) + "명"));
+            }
+
+            AddRoute(root, stage.EnemyRoute);
+        }
+
+        /// <summary>
+        /// 보상의 기본 수량과 장비 연결, 아이콘을 표시합니다.
+        /// </summary>
+        private static void AddReward(VisualElement root, RewardData reward)
+        {
+            root.Add(Description(reward.DisplayName + " · 기본 수량 " + reward.DefaultAmount));
+            root.Add(Description("적별 보상에서 수량을 덮어쓸 수 있습니다. 소울·아이템은 기존 자동 지급과 영구 저장을 사용합니다."));
+            if (reward is ItemData item && item.Equipment != null)
+            {
+                root.Add(Description("장비: " + item.Equipment.DisplayName + " · 성능 등급: "
+                    + (item.PerformanceGrade != null ? item.PerformanceGrade.DisplayName : "미연결")));
+                if (item.Equipment.TryGetPerformanceGrade(item.PerformanceGrade, out EquipmentPerformanceGrade grade)
+                    && grade.Effect != null)
+                {
+                    root.Add(Description(grade.EffectDescription));
+                }
+
+                root.Add(Description("이 아이템의 수량을 합산 보관합니다. 장착과 전투 효과 적용은 아직 연결하지 않았습니다."));
+            }
+
+            if (reward.Icon != null)
+            {
+                var icon = new Image
+                {
+                    sprite = reward.Icon,
+                    scaleMode = ScaleMode.ScaleToFit
+                };
+                icon.AddToClassList("project-data-preview-image");
+                root.Add(icon);
+            }
+        }
+
+        /// <summary>
+        /// 분류·스탯 자산의 이름과 값 범위를 표시합니다.
+        /// </summary>
+        private static void AddIdentified(VisualElement root, SWIdentifiedObject identified)
+        {
+            root.Add(Description(identified.DisplayName + " · 코드명: " + identified.CodeName));
+            if (identified is SWStat stat)
+            {
+                root.Add(Description("기본값 " + stat.DefaultValue + " · 범위 " + stat.MinValue + " ~ " + stat.MaxValue));
+                root.Add(Description(stat.IsPercentType ? "백분율 표시 스탯입니다. 1은 100%입니다." : "일반 수치 스탯입니다."));
+            }
+        }
+
+        /// <summary>
+        /// 사용자 지정 순서대로 성능 등급과 고정 효과를 표시합니다. 없는 참조는 안내로 대신합니다.
+        /// </summary>
+        private static void AddEquipment(VisualElement root, EquipmentData equipment)
+        {
+            if (equipment.Icon != null)
+            {
+                var icon = new Image { sprite = equipment.Icon, scaleMode = ScaleMode.ScaleToFit };
+                icon.AddToClassList("project-data-preview-image");
+                root.Add(icon);
+            }
+            else
+            {
+                root.Add(Description("장비 아이콘 미등록 · 인벤토리에 빈 아이콘으로 표시합니다."));
+            }
+            root.Add(Description(equipment.DisplayName + " · 희귀도: "
+                + (equipment.Rarity != null ? equipment.Rarity.DisplayName : "미연결")));
+            if (equipment.PerformanceGrades == null || equipment.PerformanceGrades.Count == 0)
+            {
+                root.Add(Description("성능 등급을 추가하고 등급별 효과를 연결하세요."));
+                return;
+            }
+
+            for (int index = 0; index < equipment.PerformanceGrades.Count; index++)
+            {
+                EquipmentPerformanceGrade grade = equipment.PerformanceGrades[index];
+                string gradeName = grade != null && grade.PerformanceGrade != null
+                    ? grade.PerformanceGrade.DisplayName : "등급 미연결";
+                string effectDescription = grade != null && grade.Effect != null
+                    ? grade.EffectDescription : "효과 미연결";
+                double total = equipment.GetTotalSelectionWeight();
+                double probability = total > 0d && grade != null ? grade.SelectionWeight / total * 100d : 0d;
+                root.Add(Description((index + 1) + ". " + gradeName + " · " + probability.ToString("0.###") + "% · " + effectDescription));
+            }
+
+            root.Add(Description("추첨 대상 등급마다 아이템을 연결하면 적 보상에서 등급을 추첨해 자동 보관합니다. 장착 기능은 별도입니다."));
         }
 
         /// <summary>
@@ -188,7 +297,7 @@ namespace ProjectT.Editor.Data
     public sealed class RoutePreview : VisualElement
     {
         #region 필드
-        private readonly Vector2[] points;
+        private Vector2[] points;
 
         #endregion // 필드
 
@@ -201,6 +310,15 @@ namespace ProjectT.Editor.Data
             points = source == null ? Array.Empty<Vector2>() : (Vector2[])source.Clone();
             AddToClassList("project-data-route");
             generateVisualContent += DrawRoute;
+        }
+
+        /// <summary>
+        /// 표시할 좌표를 바꾸고 그림을 다시 그립니다.
+        /// </summary>
+        public void Present(Vector2[] source)
+        {
+            points = source == null ? Array.Empty<Vector2>() : (Vector2[])source.Clone();
+            MarkDirtyRepaint();
         }
 
         #endregion // 초기화

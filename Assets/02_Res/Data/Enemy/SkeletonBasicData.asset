@@ -14,11 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Units.EnemyDefinition
   displayName: SkeletonBasic
   prefab: {fileID: 3408628263095562975, guid: 3c0f1d47f170ba8488bd550fec16c8c8, type: 3}
-  maximumHealth: 72
-  moveSpeed: 3
-  attackDamage: 10
-  attackRange: 1.05
-  attackInterval: 1.4
+  maximumHealth:
+    stat: {fileID: 11400000, guid: 7d3c7e6d7a96a364d98236f0c8a11f87, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 72
+  moveSpeed:
+    stat: {fileID: 11400000, guid: 798a4b49db0c8144d9ebee034b4f8da4, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 3
+  attackDamage:
+    stat: {fileID: 11400000, guid: 91f32c4be0ff72d47a999c6b73e2b1cd, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 10
+  attackRange:
+    stat: {fileID: 11400000, guid: 3c45740b4b0173d4a921e814c4dc5e3b, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 1.05
+  attackSpeed:
+    stat: {fileID: 11400000, guid: 9f822f381939e8d418c1fe91738def0d, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0.71428573
   attackAction: {fileID: 11400000, guid: 794012e5968d461489917cf65306f676, type: 2}
   portrait: {fileID: -8648193864716803534, guid: 3094a255f2eb43a4a898b15a548163c6, type: 3}
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -26,8 +41,14 @@ MonoBehaviour:
   healthBarHeight: 1.45
   spritesFaceRight: 1
   attackOriginOffset: {x: 0.5, y: 0.8}
-  workshopAttackDamage: 10
-  workshopAttackInterval: 1.4
+  workshopAttackDamage:
+    stat: {fileID: 11400000, guid: 9573b1a2b37b51a4a88eb40e14f04b6c, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 10
+  workshopAttackInterval:
+    stat: {fileID: 11400000, guid: 0dc3e6e0ba561b3419bb45f26ca73932, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 1.4
   rewards:
   - definition: {fileID: 11400000, guid: 9bbc013fbfb43094495c5b13adbbfb53, type: 2}
     useAmountOverride: 1

@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6045c5555bff0c549a18f070a167ee35, type: 3}
   m_Name: SpriteData
   m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.SpriteData
-  speedIcon1: {fileID: 4361022871735152462, guid: 7936b7523bdac8340a7d0076f27a5d06, type: 3}
-  speedIcon2: {fileID: 1406945339828753239, guid: 87f950698337d02449efae6cdc3ac3aa, type: 3}
-  speedIcon3: {fileID: 3678864367100343301, guid: 36023ed39117e6c4ca73d3c6f9b0e3a0, type: 3}
+  speedIcon1: {fileID: 21300000, guid: 7936b7523bdac8340a7d0076f27a5d06, type: 3}
+  speedIcon2: {fileID: 21300000, guid: 87f950698337d02449efae6cdc3ac3aa, type: 3}
+  speedIcon3: {fileID: 21300000, guid: 36023ed39117e6c4ca73d3c6f9b0e3a0, type: 3}
+  pauseIcon: {fileID: 21300000, guid: 39dd457c7d13b02428a8e35e077d4e1c, type: 3}
+  playIcon: {fileID: 21300000, guid: 0c77cc13bbdd90d4aab05833bbeb9feb, type: 3}
+  resultVictorySprite: {fileID: 21300000, guid: 5f4a91e08bc6f094d90f94aff729914b, type: 3}
+  resultLoseSprite: {fileID: 21300000, guid: 796d726d27270d544918059ed842bb94, type: 3}
+  swordsIcon: {fileID: 21300000, guid: 6ce24703ffa878244a6a25dd8e590eeb, type: 3}
+  swordsBrokenIcon: {fileID: 21300000, guid: a79c9da5ff934a04a9765cf8a2d5044a, type: 3}

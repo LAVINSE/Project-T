@@ -33,6 +33,31 @@ namespace ProjectT
         Stage,
         Route,
         Currency,
-        Item
+        Item,
+        Equipment,
+        EquipmentStatEffect,
+        EquipmentCategory,
+        Stat
+    }
+
+    /// <summary>
+    /// 데이터 편집기 목록에 어떤 이름을 표시할지 고르는 기준입니다.
+    /// </summary>
+    public enum DataLabelMode
+    {
+        FileName,
+        DisplayName,
+        CodeName
+    }
+
+    /// <summary>
+    /// 데이터 편집기 목록을 어떤 기준으로 정렬할지 고르는 기준입니다.
+    /// </summary>
+    public enum DataSortMode
+    {
+        FileName,
+        DisplayName,
+        CodeName,
+        Identifier
     }
 }

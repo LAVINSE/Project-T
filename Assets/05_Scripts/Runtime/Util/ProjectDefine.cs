@@ -7,6 +7,20 @@ namespace ProjectT
     /// </summary>
     public static class ProjectDefine
     {
+        #region 자산 경로
+        /// <summary>
+        /// 프로젝트 데이터 자산이 모여 있는 폴더입니다. 하위 폴더 경로는 여기에 이어 붙입니다.
+        /// </summary>
+        public static class Data
+        {
+            /// <summary>
+            /// 모든 프로젝트 데이터 자산의 최상위 폴더입니다.
+            /// </summary>
+            public const string Root = "Assets/02_Res/Data";
+        }
+
+        #endregion // 자산 경로
+
         #region 애니메이터 파라미터
         /// <summary>
         /// 애니메이터 파라미터 해시입니다. 문자열 변환을 한 번만 수행합니다.
@@ -45,7 +59,7 @@ namespace ProjectT
             /// <summary>
             /// 동작 SWCategory 자산 폴더입니다.
             /// </summary>
-            public const string Folder = "Assets/02_Res/Data/UnitAction";
+            public const string Folder = Data.Root + "/UnitAction";
 
             /// <summary>
             /// 대기 동작입니다.
@@ -93,6 +107,79 @@ namespace ProjectT
         }
 
         #endregion // 장면
+
+        #region 영구 저장
+        /// <summary>
+        /// 자산 이름·경로와 독립적인 영구 저장 슬롯과 형식 버전입니다.
+        /// </summary>
+        public static class Save
+        {
+            /// <summary>
+            /// 영구 아이템 수량과 지급 기록을 저장하는 로컬 슬롯입니다.
+            /// </summary>
+            public const string InventorySlot = "ProjectT_Inventory";
+
+            /// <summary>
+            /// 현재 지원하는 영구 인벤토리 저장 형식입니다.
+            /// </summary>
+            public const int InventoryVersion = 1;
+
+            /// <summary>
+            /// 소울 잔액과 지급 기록을 함께 저장하는 로컬 슬롯입니다.
+            /// </summary>
+            public const string SoulSlot = "ProjectT_Soul";
+
+            /// <summary>
+            /// 현재 지원하는 소울 저장 형식입니다.
+            /// </summary>
+            public const int SoulVersion = 1;
+        }
+
+        #endregion // 영구 저장
+
+        #region 인벤토리
+        /// <summary>
+        /// 인벤토리 목록과 정확한 정수 수량 처리에 사용하는 공통 설정입니다.
+        /// </summary>
+        public static class Inventory
+        {
+            /// <summary>
+            /// 특별 전리품 획득 시 아이콘의 확대·복귀를 합친 실제 시간입니다.
+            /// </summary>
+            public const float AcquisitionEffectDuration = 0.5f;
+
+            /// <summary>
+            /// 특별 전리품 획득 시 원래 아이콘 크기에 곱하는 최대 확대 배율입니다.
+            /// </summary>
+            public const float AcquisitionEffectScale = 1.2f;
+
+            /// <summary>
+            /// 아이템 보유 여부와 관계없이 표시하는 기본 슬롯 수입니다. 보관 한도가 아닙니다.
+            /// </summary>
+            public const int MinimumVisibleSlots = 36;
+
+            /// <summary>
+            /// 분류 없는 아이템을 표시하는 기타 분류 코드입니다.
+            /// </summary>
+            public const string OtherCategory = "ItemOther";
+
+            /// <summary>
+            /// 편집기가 아이템 자산을 연결하는 실행용 목록 경로입니다.
+            /// </summary>
+            public const string CatalogPath = Data.Root + "/Common/ItemCatalogData.asset";
+
+            /// <summary>
+            /// double 보상 수량에서 정수 정밀도를 보장하는 최대값입니다.
+            /// </summary>
+            public const double MaximumRewardCount = 9007199254740991d;
+
+            /// <summary>
+            /// 메인 스레드에서 한 보상 요청으로 수행할 개별 장비 추첨의 안전 한도입니다. 보유 수량 한도가 아닙니다.
+            /// </summary>
+            public const int MaximumEquipmentRollCount = 10000;
+        }
+
+        #endregion // 인벤토리
 
         #region 전투
         /// <summary>

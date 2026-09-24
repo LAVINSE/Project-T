@@ -24,7 +24,7 @@ namespace ProjectT.Data
         /// <summary>
         /// 선택적으로 표시할 보상 그림입니다. 없으면 기본 자산 아이콘을 사용합니다.
         /// </summary>
-        public Sprite Icon => icon;
+        public virtual Sprite Icon => icon;
 
         /// <summary>
         /// 보상 항목에서 수량을 덮어쓰지 않을 때 사용하는 기본 수량입니다.

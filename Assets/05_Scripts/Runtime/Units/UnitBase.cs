@@ -14,6 +14,36 @@ namespace ProjectT.Units
     {
         #region 프로퍼티
         /// <summary>
+        /// 개체별 능력치 복제본입니다. 초기화 전에는 null입니다.
+        /// </summary>
+        public RuntimeStatCollection Stats { get; private set; }
+
+        /// <summary>
+        /// 현재 공격력입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float AttackDamage => Stats?.GetValue(Data.AttackDamageStat) ?? 0f;
+
+        /// <summary>
+        /// 현재 초당 공격 횟수입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float AttackSpeed => Stats?.GetValue(Data.AttackSpeedStat) ?? 0f;
+
+        /// <summary>
+        /// 현재 공격 간격입니다. 공격 불가 수치이면 0입니다.
+        /// </summary>
+        public float AttackInterval => AttackSpeed.ExIsPositive() ? 1f / AttackSpeed : 0f;
+
+        /// <summary>
+        /// 현재 사거리입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float AttackRange => Stats?.GetValue(Data.AttackRangeStat) ?? 0f;
+
+        /// <summary>
+        /// 현재 이동속도입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float MoveSpeed => Stats?.GetValue(Data.MoveSpeedStat) ?? 0f;
+
+        /// <summary>
         /// 이 개체의 공통 능력치와 표시 정보입니다. 초기화 전에는 null입니다.
         /// </summary>
         public abstract UnitData Data { get; }
@@ -44,6 +74,11 @@ namespace ProjectT.Units
         public event Action HealthChanged;
 
         /// <summary>
+        /// 런타임 능력치가 변경되었을 때 화면과 외부 모듈에 알립니다.
+        /// </summary>
+        public event Action StatsChanged;
+
+        /// <summary>
         /// 이동으로 위치가 바뀌었을 때 발생합니다.
         /// </summary>
         public event Action Moved;
@@ -56,6 +91,30 @@ namespace ProjectT.Units
         #endregion // 프로퍼티
 
         #region 함수
+        /// <summary>
+        /// 검증이 끝난 복제본으로 교체하고 이전 복제본을 해제합니다.
+        /// </summary>
+        protected void SetStats(RuntimeStatCollection nextStats)
+        {
+            Stats?.Dispose();
+            Stats = nextStats;
+            Stats.Changed += OnStatsChanged;
+        }
+
+        /// <summary>
+        /// 런타임 최대 체력과 이동속도 변경을 반영합니다.
+        /// </summary>
+        protected virtual void OnStatsChanged()
+        {
+            float maximum = Stats.GetValue(Data.MaximumHealthStat);
+            if (maximum.ExIsPositive())
+            {
+                Health?.SetMaximum(maximum);
+            }
+
+            StatsChanged?.Invoke();
+        }
+
         /// <summary>
         /// 전투 관리자가 매 프레임 전달하는 게임 시간만큼 이동과 부활을 진행합니다.
         /// </summary>
@@ -120,6 +179,7 @@ namespace ProjectT.Units
         /// </summary>
         protected virtual void OnDestroy()
         {
+            Stats?.Dispose();
             if (Health != null)
             {
                 Health.Changed -= OnHealthChanged;

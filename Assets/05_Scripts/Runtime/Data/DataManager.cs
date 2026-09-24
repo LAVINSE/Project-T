@@ -14,6 +14,7 @@ namespace ProjectT.Data
         [SWGroup("공통 설정")]
         [SerializeField] private ColorData colorData;
         [SerializeField] private SpriteData spriteData;
+        [SerializeField] private CurrencyData soulCurrency;
 
         #endregion // 필드
 
@@ -27,6 +28,11 @@ namespace ProjectT.Data
         /// 모든 장면에서 공유하는 원본 아이콘 데이터입니다. 실행 중 원본 참조를 변경하지 않습니다.
         /// </summary>
         public SpriteData SpriteData => spriteData;
+
+        /// <summary>
+        /// 소울의 표시 이름과 아이콘 정의입니다. 잔액과 획득 규칙은 보관하지 않습니다.
+        /// </summary>
+        public CurrencyData SoulCurrency => soulCurrency;
 
         #endregion // 프로퍼티
 

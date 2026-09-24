@@ -15,10 +15,16 @@ namespace ProjectT.Data
         [SerializeField] private bool useAmountOverride;
         [SerializeField, Min(0)] private double overrideAmount = 1d;
         [SerializeField, Range(0, 100)] private float acquisitionProbability = 100f;
+        [SerializeField] private bool randomizeEquipmentGrade = true;
 
         #endregion // 필드
 
         #region 프로퍼티
+        /// <summary>
+        /// 장비 보상은 개별 수량마다 등급을 추첨할지 반환합니다. 일반 아이템·재화에는 적용하지 않습니다.
+        /// </summary>
+        public bool RandomizeEquipmentGrade => randomizeEquipmentGrade && definition is ItemData item && item.Equipment != null;
+
         /// <summary>
         /// 지급 대상 재화 또는 아이템의 원본 자산입니다.
         /// </summary>
@@ -70,9 +76,22 @@ namespace ProjectT.Data
                 valid = false;
             }
 
+            if (definition is ItemData && (!Amount.ExIsItemCount() || !definition.IsValid))
+            {
+                issues?.Add(new DataIssue(owner, propertyPath, "아이템 보상은 유효한 정의와 0 이상의 정수 수량이어야 합니다."));
+                valid = false;
+            }
+
             if (!acquisitionProbability.ExIsFinite() || acquisitionProbability < 0f || acquisitionProbability > 100f)
             {
                 issues?.Add(new DataIssue(owner, propertyPath + "." + nameof(acquisitionProbability), "획득 확률을 0부터 100 사이로 입력하세요."));
+                valid = false;
+            }
+
+            if (RandomizeEquipmentGrade && acquisitionProbability > 0f && Amount > ProjectDefine.Inventory.MaximumEquipmentRollCount)
+            {
+                issues?.Add(new DataIssue(owner, propertyPath + "." + nameof(overrideAmount),
+                    "장비 개별 추첨은 한 요청당 " + ProjectDefine.Inventory.MaximumEquipmentRollCount + "개까지 처리합니다. 지급을 나누어 요청하세요."));
                 valid = false;
             }
 

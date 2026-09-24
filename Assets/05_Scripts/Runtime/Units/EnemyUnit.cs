@@ -19,6 +19,21 @@ namespace ProjectT.Units
 
         #region 프로퍼티
         /// <summary>
+        /// 런타임 공방 공격 피해입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float WorkshopAttackDamage => Stats?.GetValue(Definition.WorkshopAttackDamageStat) ?? 0f;
+
+        /// <summary>
+        /// 런타임 공방 공격 간격입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float WorkshopAttackInterval => Stats?.GetValue(Definition.WorkshopAttackIntervalStat) ?? 0f;
+
+        /// <summary>
+        /// 이번 생성의 보상 식별자입니다. 풀에서 다시 대여할 때 새 값으로 바뀌어 이전 생명과 구분됩니다.
+        /// </summary>
+        public string RewardIdentifier { get; private set; }
+
+        /// <summary>
         /// 적의 수치 정의입니다.
         /// </summary>
         public UnitEnemyData Definition { get; private set; }
@@ -73,10 +88,17 @@ namespace ProjectT.Units
                 return false;
             }
 
-            Health nextHealth = Health.Create(definition.MaximumHealth);
+            RuntimeStatCollection nextStats = RuntimeStatCollection.Create(definition.GetStatSettings());
+            if (nextStats == null)
+            {
+                return false;
+            }
+
+            Health nextHealth = Health.Create(nextStats.GetValue(definition.MaximumHealthStat));
             EnemyMovement nextMovement = EnemyMovement.Create(transform, route, definition.MoveSpeed);
             if (nextHealth == null || nextMovement == null)
             {
+                nextStats.Dispose();
                 return false;
             }
 
@@ -86,12 +108,14 @@ namespace ProjectT.Units
             }
 
             Definition = definition;
+            RewardIdentifier = Guid.NewGuid().ToString("N");
             Blocker = null;
             AttackTarget = null;
             resolved = false;
             Movement = nextMovement;
             Movement.Arrived += OnArrived;
             SetHealth(nextHealth);
+            SetStats(nextStats);
             NotifyInitialized();
             NotifyMovingChanged();
             return true;
@@ -100,6 +124,13 @@ namespace ProjectT.Units
         #endregion // 초기화
 
         #region 함수
+        /// <inheritdoc/>
+        protected override void OnStatsChanged()
+        {
+            base.OnStatsChanged();
+            Movement?.SetMoveSpeed(MoveSpeed);
+        }
+
         /// <inheritdoc/>
         public override void Tick(float deltaTime)
         {

@@ -14,11 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Units.AllyClassDefinition
   displayName: OrcWarriorRed
   prefab: {fileID: 6658144341450193196, guid: 0bd86188a806be44a890e6ed593132f1, type: 3}
-  maximumHealth: 150
-  moveSpeed: 2.8
-  attackDamage: 18
-  attackRange: 1.05
-  attackInterval: 0.8
+  maximumHealth:
+    stat: {fileID: 11400000, guid: 7d3c7e6d7a96a364d98236f0c8a11f87, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 150
+  moveSpeed:
+    stat: {fileID: 11400000, guid: 798a4b49db0c8144d9ebee034b4f8da4, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 2.8
+  attackDamage:
+    stat: {fileID: 11400000, guid: 91f32c4be0ff72d47a999c6b73e2b1cd, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 18
+  attackRange:
+    stat: {fileID: 11400000, guid: 3c45740b4b0173d4a921e814c4dc5e3b, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 1.05
+  attackSpeed:
+    stat: {fileID: 11400000, guid: 9f822f381939e8d418c1fe91738def0d, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 1.25
   attackAction: {fileID: 11400000, guid: 794012e5968d461489917cf65306f676, type: 2}
   portrait: {fileID: -6617506407744133513, guid: 40b987dd171b1d54f9ed9eae381227a8, type: 3}
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -26,6 +41,40 @@ MonoBehaviour:
   healthBarHeight: 2.4499998
   spritesFaceRight: 1
   attackOriginOffset: {x: 0.5, y: 0.8}
-  deploymentCost: 30
-  blockCapacity: 2
-  revivalSeconds: 12
+  deploymentCost:
+    stat: {fileID: 11400000, guid: 503dc2226eead004797a075da7218b84, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 30
+  blockCapacity:
+    stat: {fileID: 11400000, guid: 6d063f77bb182e34b94db9aa4c7114a7, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 2
+  revivalSeconds:
+    stat: {fileID: 11400000, guid: 19661491c404b3e4d97f034c7b08a62a, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 12
+  level: 1
+  experience: 0
+  requiredExperience: 0
+  additionalStats:
+  - stat: {fileID: 11400000, guid: 4bc84478e98b5ad47b365e9a2f7d18e1, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0
+  - stat: {fileID: 11400000, guid: d9ada188d3aa3d14cb9c811de404e63e, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0
+  - stat: {fileID: 11400000, guid: c595080d19ea643448e0db326343734b, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0
+  - stat: {fileID: 11400000, guid: 99f92d40448a4bc4d84b74c0afcbc716, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0
+  - stat: {fileID: 11400000, guid: 435f5345fa5f2a047b46ee3d45da9441, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0
+  - stat: {fileID: 11400000, guid: 900d160bcf45c14428521d8ae8f8363c, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0
+  - stat: {fileID: 11400000, guid: 65558f3c6562299499d745dc18253e1f, type: 2}
+    isUseOverride: 1
+    overrideDefaultValue: 0

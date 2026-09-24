@@ -1,22 +1,19 @@
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 using SW.Util;
 
-using ProjectT.Data;
-
 namespace ProjectT.Editor.Data
 {
     /// <summary>
-    /// 편집 중 값을 원본과 분리하고 검사에 통과한 변경만 적용합니다. 생성 실패는 null, 적용 실패는 false입니다.
+    /// 편집 중 값을 원본과 분리하고 데이터 유효성 검사 없이 저장합니다. 생성 실패는 null, 저장 실패는 false입니다.
     /// </summary>
     public sealed class DataEditSession : IDisposable
     {
         #region 필드
-        private readonly ProjectData source;
-        private ProjectData draft;
+        private readonly ScriptableObject source;
+        private ScriptableObject draft;
         private SerializedObject serialized;
         private string baseline;
         private string sourceSnapshot;
@@ -27,12 +24,12 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 저장된 원본 데이터입니다.
         /// </summary>
-        public ProjectData Source => source;
+        public ScriptableObject Source => source;
 
         /// <summary>
         /// 수정 중인 메모리 복사본입니다. 원본 참조는 적용 전까지 바뀌지 않습니다.
         /// </summary>
-        public ProjectData Draft => draft;
+        public ScriptableObject Draft => draft;
 
         /// <summary>
         /// 입력 필드를 연결할 복사본의 직렬화 객체입니다.
@@ -60,7 +57,7 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 검증된 원본으로 편집 복사본을 준비합니다.
         /// </summary>
-        private DataEditSession(ProjectData asset)
+        private DataEditSession(ScriptableObject asset)
         {
             source = asset;
             Reload();
@@ -69,7 +66,7 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 편집 가능한 독립 데이터에만 세션을 만듭니다. 잘못된 대상이면 경고 후 null입니다.
         /// </summary>
-        public static DataEditSession Create(ProjectData asset)
+        public static DataEditSession Create(ScriptableObject asset)
         {
             string path = AssetDatabase.GetAssetPath(asset);
             if (!DataCatalog.IsSupported(asset)
@@ -127,11 +124,10 @@ namespace ProjectT.Editor.Data
 
         #region 적용
         /// <summary>
-        /// 검사·편집 가능 여부·외부 변경을 모두 확인한 뒤 한 번에 적용하고 저장합니다.
+        /// 편집 가능 여부와 외부 변경을 확인한 뒤 저장합니다. 빈 값과 미완성 데이터도 허용하며 저장 불가 시 false입니다.
         /// </summary>
-        public bool TryApply(out List<DataIssue> issues, out string reason)
+        public bool TrySave(out string reason)
         {
-            issues = DataCatalog.CollectIssues(draft);
             reason = string.Empty;
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -148,12 +144,6 @@ namespace ProjectT.Editor.Data
             if (!AssetDatabase.IsOpenForEdit(source))
             {
                 reason = "원본 파일을 수정할 수 없습니다. 파일의 읽기 전용 또는 잠금 상태를 확인하세요.";
-                return false;
-            }
-
-            if (issues.Count > 0)
-            {
-                reason = "검사 오류를 수정한 뒤 다시 적용하세요. 원본은 유지되었습니다.";
                 return false;
             }
 
@@ -175,7 +165,7 @@ namespace ProjectT.Editor.Data
                 Undo.FlushUndoRecordObjects();
                 baseline = EditorJsonUtility.ToJson(draft);
                 sourceSnapshot = EditorJsonUtility.ToJson(source);
-                reason = "검사 통과 · 원본에 적용하고 저장했습니다.";
+                reason = "저장했습니다.";
                 return true;
             }
             catch (Exception exception)

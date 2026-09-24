@@ -26,6 +26,11 @@ namespace ProjectT.Battle
         /// </summary>
         public event Action<Vector2, Vector2, bool> Attacked;
 
+        /// <summary>
+        /// 아군 기본 공격의 실제 체력 감소량과 마지막 타격 처치 여부를 전달합니다.
+        /// </summary>
+        public event Action<CharacterUnit, float, bool> AllyHitResolved;
+
         #endregion // 프로퍼티
 
         #region 초기화
@@ -86,7 +91,7 @@ namespace ProjectT.Battle
         }
 
         /// <summary>
-        /// 현재 게임 시각을 기준으로 저지와 공격을 진행합니다.
+        /// 현재 게임 시각을 기준으로 저지와 공격을 순서대로 진행합니다.
         /// </summary>
         public void Tick(float time)
         {
@@ -95,6 +100,17 @@ namespace ProjectT.Battle
                 return;
             }
 
+            ReleaseInvalidBlockers();
+            AssignBlockers();
+            TickAllyAttacks(time);
+            TickEnemyAttacks(time);
+        }
+
+        /// <summary>
+        /// 저지 수를 다시 세고 사거리를 벗어나거나 싸울 수 없게 된 저지를 해제합니다.
+        /// </summary>
+        private void ReleaseInvalidBlockers()
+        {
             blockedCounts.Clear();
             foreach (CharacterUnit ally in allies)
             {
@@ -111,8 +127,8 @@ namespace ProjectT.Battle
 
                 if (!enemy.IsActive
                     || !blocker.CanFight
-                    || Distance(blocker, enemy) > blocker.Definition.AttackRange
-                    || blockedCounts[blocker] >= blocker.Definition.BlockCapacity)
+                    || Distance(blocker, enemy) > blocker.AttackRange
+                    || blockedCounts[blocker] >= blocker.BlockCapacity)
                 {
                     enemy.SetBlocker(null);
                 }
@@ -121,45 +137,61 @@ namespace ProjectT.Battle
                     blockedCounts[blocker]++;
                 }
             }
+        }
 
+        /// <summary>
+        /// 저지가 없는 적마다 사거리 안에서 가장 가까운 여유 있는 아군을 배정합니다.
+        /// </summary>
+        private void AssignBlockers()
+        {
             foreach (EnemyUnit enemy in enemies)
             {
-                if (!enemy.IsActive)
+                if (!enemy.IsActive || enemy.Blocker != null)
                 {
                     continue;
                 }
 
-                if (enemy.Blocker != null)
-                {
-                    continue;
-                }
-
-                CharacterUnit blocker = null;
-                float closest = float.PositiveInfinity;
-                foreach (CharacterUnit ally in allies)
-                {
-                    if (!ally.CanFight || ally.Definition.BlockCapacity <= blockedCounts[ally])
-                    {
-                        continue;
-                    }
-
-                    float distance = Distance(ally, enemy);
-                    if (distance > ally.Definition.AttackRange || distance >= closest)
-                    {
-                        continue;
-                    }
-
-                    blocker = ally;
-                    closest = distance;
-                }
-
+                CharacterUnit blocker = FindBlocker(enemy);
                 enemy.SetBlocker(blocker);
                 if (blocker != null)
                 {
                     blockedCounts[blocker]++;
                 }
             }
+        }
 
+        /// <summary>
+        /// 적을 저지할 수 있는 가장 가까운 아군을 찾습니다. 없으면 null입니다.
+        /// </summary>
+        private CharacterUnit FindBlocker(EnemyUnit enemy)
+        {
+            CharacterUnit blocker = null;
+            float closest = float.PositiveInfinity;
+            foreach (CharacterUnit ally in allies)
+            {
+                if (!ally.CanFight || ally.BlockCapacity <= blockedCounts[ally])
+                {
+                    continue;
+                }
+
+                float distance = Distance(ally, enemy);
+                if (distance > ally.AttackRange || distance >= closest)
+                {
+                    continue;
+                }
+
+                blocker = ally;
+                closest = distance;
+            }
+
+            return blocker;
+        }
+
+        /// <summary>
+        /// 싸울 수 있는 아군의 예약된 타격을 적용하고 새 공격을 시작합니다.
+        /// </summary>
+        private void TickAllyAttacks(float time)
+        {
             foreach (CharacterUnit ally in allies)
             {
                 if (!ally.CanFight)
@@ -174,28 +206,7 @@ namespace ProjectT.Battle
                     continue;
                 }
 
-                EnemyUnit target = null;
-                float remaining = float.PositiveInfinity;
-                foreach (EnemyUnit enemy in enemies)
-                {
-                    if (!enemy.IsActive || Distance(ally, enemy) > ally.Definition.AttackRange)
-                    {
-                        continue;
-                    }
-
-                    if (enemy.Blocker == ally)
-                    {
-                        target = enemy;
-                        break;
-                    }
-
-                    if (enemy.Movement.RemainingDistance < remaining)
-                    {
-                        target = enemy;
-                        remaining = enemy.Movement.RemainingDistance;
-                    }
-                }
-
+                EnemyUnit target = FindAllyTarget(ally);
                 if (target == null)
                 {
                     continue;
@@ -205,13 +216,48 @@ namespace ProjectT.Battle
                 Begin(
                     ally.Attack,
                     ally.Definition,
-                    ally.Definition.AttackInterval,
+                    ally.AttackInterval,
                     time,
                     target.transform.position,
                     target.Health);
                 ResolveAllyAttack(ally, time);
             }
+        }
 
+        /// <summary>
+        /// 자기가 저지 중인 적을 우선하고, 없으면 공방에 가장 가까운 적을 고릅니다.
+        /// </summary>
+        private EnemyUnit FindAllyTarget(CharacterUnit ally)
+        {
+            EnemyUnit target = null;
+            float remaining = float.PositiveInfinity;
+            foreach (EnemyUnit enemy in enemies)
+            {
+                if (!enemy.IsActive || Distance(ally, enemy) > ally.AttackRange)
+                {
+                    continue;
+                }
+
+                if (enemy.Blocker == ally)
+                {
+                    return enemy;
+                }
+
+                if (enemy.Movement.RemainingDistance < remaining)
+                {
+                    target = enemy;
+                    remaining = enemy.Movement.RemainingDistance;
+                }
+            }
+
+            return target;
+        }
+
+        /// <summary>
+        /// 살아 있는 적의 예약된 타격을 적용하고 아군 또는 공방 공격을 시작합니다. 공방이 파괴되면 즉시 멈춥니다.
+        /// </summary>
+        private void TickEnemyAttacks(float time)
+        {
             foreach (EnemyUnit enemy in enemies)
             {
                 if (!enemy.IsActive)
@@ -231,28 +277,7 @@ namespace ProjectT.Battle
                     continue;
                 }
 
-                CharacterUnit target = enemy.Blocker;
-                float closest = enemy.Definition.AttackRange;
-                if (target == null && !enemy.HasReachedWorkshop)
-                {
-                    foreach (CharacterUnit ally in allies)
-                    {
-                        if (!ally.Health.IsAlive)
-                        {
-                            continue;
-                        }
-
-                        float distance = Distance(ally, enemy);
-                        if (distance > closest)
-                        {
-                            continue;
-                        }
-
-                        target = ally;
-                        closest = distance;
-                    }
-                }
-
+                CharacterUnit target = FindEnemyTarget(enemy);
                 if (target == null && !enemy.HasReachedWorkshop)
                 {
                     continue;
@@ -264,7 +289,7 @@ namespace ProjectT.Battle
                     Begin(
                         enemy.Attack,
                         enemy.Definition,
-                        enemy.Definition.AttackInterval,
+                        enemy.AttackInterval,
                         time,
                         target.transform.position,
                         target.Health);
@@ -274,7 +299,7 @@ namespace ProjectT.Battle
                     Begin(
                         enemy.Attack,
                         enemy.Definition,
-                        enemy.Definition.WorkshopAttackInterval,
+                        enemy.WorkshopAttackInterval,
                         time,
                         workshop.Position,
                         workshop.Health);
@@ -286,6 +311,39 @@ namespace ProjectT.Battle
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// 저지 중인 아군을 우선하고, 없으면 사거리 안에서 가장 가까운 살아 있는 아군을 고릅니다.
+        /// 공방에 도착한 적은 아군을 새로 찾지 않습니다.
+        /// </summary>
+        private CharacterUnit FindEnemyTarget(EnemyUnit enemy)
+        {
+            CharacterUnit target = enemy.Blocker;
+            if (target != null || enemy.HasReachedWorkshop)
+            {
+                return target;
+            }
+
+            float closest = enemy.AttackRange;
+            foreach (CharacterUnit ally in allies)
+            {
+                if (!ally.Health.IsAlive)
+                {
+                    continue;
+                }
+
+                float distance = Distance(ally, enemy);
+                if (distance > closest)
+                {
+                    continue;
+                }
+
+                target = ally;
+                closest = distance;
+            }
+
+            return target;
         }
 
         /// <summary>
@@ -325,7 +383,7 @@ namespace ProjectT.Battle
             }
 
             attack.AimAt(target.transform.position);
-            if (attack.HasPendingImpact && Distance(ally, target) > ally.Definition.AttackRange)
+            if (attack.HasPendingImpact && Distance(ally, target) > ally.AttackRange)
             {
                 attack.Cancel();
                 return;
@@ -341,8 +399,13 @@ namespace ProjectT.Battle
                 target.transform.position,
                 ally.Definition,
                 target.Definition,
-                ally.Definition.BlockCapacity == 0);
-            target.Health.TakeDamage(ally.Definition.AttackDamage);
+                ally.BlockCapacity == 0);
+            Health targetHealth = target.Health;
+            float previousHealth = targetHealth.Current;
+            if (targetHealth.TakeDamage(ally.AttackDamage))
+            {
+                AllyHitResolved?.Invoke(ally, previousHealth - targetHealth.Current, !targetHealth.IsAlive);
+            }
         }
 
         /// <summary>
@@ -374,7 +437,7 @@ namespace ProjectT.Battle
             }
 
             attack.AimAt(target.transform.position);
-            if (attack.HasPendingImpact && Distance(target, enemy) > enemy.Definition.AttackRange)
+            if (attack.HasPendingImpact && Distance(target, enemy) > enemy.AttackRange)
             {
                 attack.Cancel();
                 return;
@@ -386,7 +449,7 @@ namespace ProjectT.Battle
             }
 
             EmitImpact(enemy.transform.position, target.transform.position, enemy.Definition, target.Definition, false);
-            target.Health.TakeDamage(enemy.Definition.AttackDamage);
+            target.Health.TakeDamage(enemy.AttackDamage);
         }
 
         /// <summary>
@@ -414,7 +477,7 @@ namespace ProjectT.Battle
             Vector2 offset = enemy.Definition.AttackOriginOffset;
             offset.x *= workshop.Position.x < enemy.transform.position.x ? -1f : 1f;
             Attacked?.Invoke((Vector2)enemy.transform.position + offset, workshop.Position, false);
-            workshop.Health.TakeDamage(enemy.Definition.WorkshopAttackDamage);
+            workshop.Health.TakeDamage(enemy.WorkshopAttackDamage);
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace ProjectT.Navigation
         #region 필드
         private readonly Transform target;
         private readonly RouteProgress progress;
-        private readonly float moveSpeed;
+        private float moveSpeed;
 
         #endregion // 필드
 
@@ -70,6 +70,21 @@ namespace ProjectT.Navigation
         #endregion // 초기화
 
         #region 함수
+        /// <summary>
+        /// 런타임 이동속도를 반영합니다. 음수나 유한하지 않은 값은 기존 속도를 유지합니다.
+        /// </summary>
+        public bool SetMoveSpeed(float speed)
+        {
+            if (!speed.ExIsNonNegative())
+            {
+                SWLog.LogWarning("[Movement] 이동속도 변경 실패: 0 이상 유한한 값이 필요합니다.");
+                return false;
+            }
+
+            moveSpeed = speed;
+            return true;
+        }
+
         /// <summary>
         /// 저지나 해제 때 경로와 진행 거리를 유지한 채 이동만 중단하거나 재개합니다.
         /// </summary>

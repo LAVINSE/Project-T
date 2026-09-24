@@ -49,11 +49,19 @@ namespace ProjectT.Battle
 
         #region 함수
         /// <summary>
+        /// 잔액 변경 없이 지급 금액과 계산 범위를 확인합니다.
+        /// </summary>
+        public bool CanCredit(double amount)
+        {
+            return amount.ExIsNonNegative() && (Balance + amount).ExIsFinite();
+        }
+
+        /// <summary>
         /// 처치 보상 등 확정된 재화를 지급합니다. 비정상 금액이나 계산 범위 초과는 잔액을 바꾸지 않습니다.
         /// </summary>
         public bool TryCredit(double amount)
         {
-            if (!amount.ExIsNonNegative() || !(Balance + amount).ExIsFinite())
+            if (!CanCredit(amount))
             {
                 return false;
             }
@@ -85,7 +93,20 @@ namespace ProjectT.Battle
             }
 
             Balance = nextBalance;
-            Changed?.Invoke();
+            if (Changed != null)
+            {
+                foreach (Action subscriber in Changed.GetInvocationList())
+                {
+                    try
+                    {
+                        subscriber();
+                    }
+                    catch (Exception exception)
+                    {
+                        SWLog.LogError("[BattleWallet] 잔액 변경 알림 실패: " + exception);
+                    }
+                }
+            }
             return true;
         }
 

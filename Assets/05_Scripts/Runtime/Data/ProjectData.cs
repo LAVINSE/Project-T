@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using SW.Base;
+using SW.Stat;
 
 namespace ProjectT.Data
 {
@@ -14,7 +15,7 @@ namespace ProjectT.Data
         /// <summary>
         /// 문제가 있는 데이터입니다.
         /// </summary>
-        public ProjectData Asset { get; }
+        public ScriptableObject Asset { get; }
 
         /// <summary>
         /// 문제가 있는 항목의 직렬화 경로입니다.
@@ -32,7 +33,7 @@ namespace ProjectT.Data
         /// <summary>
         /// 검사 결과의 위치와 설명을 보관합니다.
         /// </summary>
-        public DataIssue(ProjectData asset, string propertyPath, string message)
+        public DataIssue(ScriptableObject asset, string propertyPath, string message)
         {
             Asset = asset;
             PropertyPath = propertyPath;
@@ -56,6 +57,22 @@ namespace ProjectT.Data
         #endregion // 프로퍼티
 
         #region 검사
+        /// <summary>
+        /// 스탯 참조와 기본값 범위를 검사합니다. 범위를 벗어난 개별값은 자동 보정하지 않고 실패합니다.
+        /// </summary>
+        protected bool CheckStat(SWStatOverride setting, string path, List<DataIssue> issues)
+        {
+            if (!Check(setting?.Stat != null, path + ".stat", "스탯 정의를 연결하세요.", issues))
+            {
+                return false;
+            }
+
+            SWStat stat = setting.Stat;
+            float value = setting.ExGetConfiguredValue();
+            return Check(value.ExIsFinite() && stat.MinValue.ExIsFinite() && stat.MaxValue.ExIsFinite()
+                && stat.MinValue <= value && value <= stat.MaxValue, path, "개별값과 스탯의 허용 범위를 확인하세요.", issues);
+        }
+
         /// <summary>
         /// 데이터를 검사합니다. 목록이 있으면 발견한 문제를 모두 추가하며 원본 값은 바꾸지 않습니다.
         /// </summary>

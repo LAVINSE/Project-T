@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -5,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 using SW.EditorTools.Util;
+using SW.Stat;
 
 using ProjectT.Data;
 
@@ -27,6 +29,7 @@ namespace ProjectT.Editor.Data
             }
 
             var groups = new Dictionary<string, Foldout>();
+            var statTables = new Dictionary<string, VisualElement>();
             var iterator = session.Serialized.GetIterator();
             bool enter = true;
             while (iterator.NextVisible(enter))
@@ -34,6 +37,11 @@ namespace ProjectT.Editor.Data
                 enter = false;
                 if (iterator.propertyPath == "m_Script")
                 {
+                    continue;
+                }
+                if (session.Draft is ItemData equipmentItem && equipmentItem.Equipment != null && iterator.propertyPath == "icon")
+                {
+                    detail.Add(Text("아이콘은 연결한 장비에서 설정합니다. 미등록이면 빈 아이콘으로 표시됩니다.", "project-data-description"));
                     continue;
                 }
 
@@ -48,18 +56,206 @@ namespace ProjectT.Editor.Data
                     };
                     group.AddToClassList("project-data-section");
                     groups.Add(description.Group, group);
-                    detail.Add(group);
+                    InsertGroupInOrder(group, description.Group, groups);
                 }
 
-                if (iterator.isArray && iterator.propertyType != SerializedPropertyType.String)
+                if (session.Draft is EquipmentData && iterator.propertyPath == "rarity")
+                {
+                    group.Add(BuildEquipmentCategoryField(iterator.Copy(), description.Label, description.Description));
+                }
+                else if (session.Draft is ItemData && iterator.propertyPath == "performanceGrade")
+                {
+                    group.Add(BuildFilteredReference(iterator.Copy(), description.Label, description.Description, FindItemGradeChoices));
+                }
+                else if (iterator.isArray && iterator.propertyType != SerializedPropertyType.String)
                 {
                     group.Add(BuildArray(iterator.Copy(), description.Label, description.Description));
+                }
+                else if (iterator.propertyType == SerializedPropertyType.Generic && iterator.type == nameof(SWStatOverride))
+                {
+                    GetStatTable(group, statTables, description.Group)
+                        .Add(BuildStatSetting(iterator.Copy(), description.Label, description.Description));
                 }
                 else
                 {
                     group.Add(BuildField(iterator.Copy(), description.Label, description.Description));
                 }
             }
+        }
+
+        /// <summary>
+        /// 새 그룹을 정해진 표시 순서 자리에 넣습니다. 등록하지 않은 그룹은 뒤에 붙습니다.
+        /// </summary>
+        private void InsertGroupInOrder(Foldout group, string groupName, Dictionary<string, Foldout> groups)
+        {
+            int order = DataCatalog.GetGroupOrder(groupName);
+            int position = detail.childCount;
+            for (int index = 0; index < detail.childCount; index++)
+            {
+                if (detail[index] is Foldout existing
+                    && groups.ContainsKey(existing.text)
+                    && DataCatalog.GetGroupOrder(existing.text) > order)
+                {
+                    position = index;
+                    break;
+                }
+            }
+
+            detail.Insert(position, group);
+        }
+
+        /// <summary>
+        /// 경유점을 경로 그림과 순서 표로 만듭니다. 좌표를 고치면 같은 화면의 그림을 다시 그립니다.
+        /// </summary>
+        private VisualElement BuildRouteArray(SerializedProperty property)
+        {
+            string path = property.propertyPath;
+            var section = Element("project-data-array");
+            fieldElements[path] = section;
+            var preview = new RoutePreview(ReadRoutePoints());
+            section.Add(preview);
+            section.Add(Text("숫자는 이동 순서입니다. 첫 점이 입구, 마지막 점이 공방입니다.", "project-data-description"));
+
+            var table = Element("project-data-stat-table");
+            var header = Element("project-data-stat-row");
+            header.AddToClassList("project-data-stat-header");
+            header.Add(Text("순서", "project-data-route-order"));
+            header.Add(Text("위치", "project-data-route-role"));
+            header.Add(Text("좌표", "project-data-route-point"));
+            header.Add(Text(string.Empty, "project-data-stat-tools"));
+            table.Add(header);
+            int last = property.arraySize - 1;
+            for (int index = 0; index < property.arraySize; index++)
+            {
+                int position = index;
+                var row = Element("project-data-stat-row");
+                row.Add(Text((index + 1).ToString(), "project-data-route-order"));
+                row.Add(Text(index == 0 ? "입구" : index == last ? "공방" : string.Empty, "project-data-route-role"));
+                var point = new Vector2Field { value = property.GetArrayElementAtIndex(index).vector2Value };
+                point.AddToClassList("project-data-route-point");
+                point.RegisterValueChangedCallback(change =>
+                {
+                    ChangeRoutePoint(path, position, change.newValue);
+                    preview.Present(ReadRoutePoints());
+                });
+                row.Add(point);
+                var tools = Element("project-data-stat-tools");
+                Button up = ActionButton("↑", () => ChangeArray(path, position, -1));
+                up.tooltip = "위로 이동";
+                up.SetEnabled(index > 0);
+                tools.Add(up);
+                Button down = ActionButton("↓", () => ChangeArray(path, position, 1));
+                down.tooltip = "아래로 이동";
+                down.SetEnabled(index < last);
+                tools.Add(down);
+                Button remove = ActionButton("−", () => ChangeArray(path, position, 0));
+                remove.tooltip = "경유점 제거";
+                tools.Add(remove);
+                row.Add(tools);
+                table.Add(row);
+            }
+
+            section.Add(table);
+            var footer = Element("project-data-row");
+            footer.Add(ActionButton("+ 경유점 추가", () => ChangeArray(path, -1, 0)));
+            section.Add(footer);
+            return section;
+        }
+
+        /// <summary>
+        /// 편집용 복사본의 현재 경유점을 읽습니다. 경로 데이터가 아니면 빈 배열입니다.
+        /// </summary>
+        private Vector2[] ReadRoutePoints()
+        {
+            SerializedProperty property = session?.Serialized.FindProperty("points");
+            if (property == null)
+            {
+                return Array.Empty<Vector2>();
+            }
+
+            var points = new Vector2[property.arraySize];
+            for (int index = 0; index < points.Length; index++)
+            {
+                points[index] = property.GetArrayElementAtIndex(index).vector2Value;
+            }
+
+            return points;
+        }
+
+        /// <summary>
+        /// 경유점 하나의 좌표를 편집용 복사본에 기록합니다. 항목이 없으면 아무것도 바꾸지 않습니다.
+        /// </summary>
+        private void ChangeRoutePoint(string path, int index, Vector2 value)
+        {
+            if (session == null)
+            {
+                return;
+            }
+
+            session.Serialized.Update();
+            SerializedProperty points = session.Serialized.FindProperty(path);
+            if (points == null || index < 0 || index >= points.arraySize)
+            {
+                return;
+            }
+
+            points.GetArrayElementAtIndex(index).vector2Value = value;
+            session.Serialized.ApplyModifiedProperties();
+            StoreDraft();
+            RefreshStatus();
+        }
+
+        /// <summary>
+        /// 스탯 목록을 머리글이 있는 표 하나로 만듭니다. 각 줄에서 순서 변경과 제거를 함께 제공합니다.
+        /// </summary>
+        private VisualElement BuildStatArray(SerializedProperty property)
+        {
+            string path = property.propertyPath;
+            var section = Element("project-data-array");
+            fieldElements[path] = section;
+            var table = Element("project-data-stat-table");
+            table.Add(BuildStatTableHeader());
+            for (int index = 0; index < property.arraySize; index++)
+            {
+                int position = index;
+                var controls = Element("project-data-array-controls");
+                Button up = ActionButton("↑", () => ChangeArray(path, position, -1));
+                up.tooltip = "위로 이동";
+                up.SetEnabled(index > 0);
+                controls.Add(up);
+                Button down = ActionButton("↓", () => ChangeArray(path, position, 1));
+                down.tooltip = "아래로 이동";
+                down.SetEnabled(index + 1 < property.arraySize);
+                controls.Add(down);
+                Button remove = ActionButton("−", () => ChangeArray(path, position, 0));
+                remove.tooltip = "항목 제거";
+                controls.Add(remove);
+                table.Add(BuildStatSetting(property.GetArrayElementAtIndex(index), string.Empty, string.Empty, controls));
+            }
+
+            section.Add(table);
+            var footer = Element("project-data-row");
+            footer.Add(ActionButton("+ 스탯 추가", () => ChangeArray(path, -1, 0)));
+            section.Add(footer);
+            section.Add(Text("여기에 넣은 스탯은 전투 규칙에 쓰이지 않고 결과 화면에만 표시합니다.", "project-data-description"));
+            return section;
+        }
+
+        /// <summary>
+        /// 그룹의 스탯 표를 가져옵니다. 아직 없으면 머리글과 함께 만들어 그룹에 넣습니다.
+        /// </summary>
+        private VisualElement GetStatTable(VisualElement group, Dictionary<string, VisualElement> tables, string groupName)
+        {
+            if (tables.TryGetValue(groupName, out VisualElement table))
+            {
+                return table;
+            }
+
+            table = Element("project-data-stat-table");
+            table.Add(BuildStatTableHeader());
+            tables.Add(groupName, table);
+            group.Add(table);
+            return table;
         }
 
         /// <summary>
@@ -70,9 +266,23 @@ namespace ProjectT.Editor.Data
             string path = property.propertyPath;
             var container = Element("project-data-field");
             container.name = "field-" + path;
+            UnityEngine.Object previousReference = property.propertyType == SerializedPropertyType.ObjectReference
+                ? property.objectReferenceValue : null;
             var field = new PropertyField(property, title);
             field.BindProperty(property);
-            field.RegisterCallback<SerializedPropertyChangeEvent>(change => RefreshStatus());
+            field.RegisterCallback<SerializedPropertyChangeEvent>(change =>
+            {
+                RefreshStatus();
+                if (path == "equipment" || path.EndsWith(".definition"))
+                {
+                    UnityEngine.Object currentReference = session?.Serialized.FindProperty(path)?.objectReferenceValue;
+                    if (currentReference != previousReference)
+                    {
+                        previousReference = currentReference;
+                        detail.schedule.Execute(RebuildDetail);
+                    }
+                }
+            });
             container.Add(field);
             if (!string.IsNullOrEmpty(description))
             {
@@ -80,37 +290,30 @@ namespace ProjectT.Editor.Data
                 container.tooltip = description;
             }
 
-            if (property.propertyType == SerializedPropertyType.ObjectReference)
-            {
-                container.AddToClassList("project-data-reference-field");
-                var menu = new ToolbarMenu
-                {
-                    text = "⋯",
-                    tooltip = "참조 열기 · 별도 복제"
-                };
-                menu.AddToClassList("project-data-reference-menu");
-                menu.menu.AppendAction(
-                    "참조 열기",
-                    action => OpenReference(path),
-                    action => session?.Serialized.FindProperty(path)?.objectReferenceValue != null
-                    ? DropdownMenuAction.Status.Normal
-                    : DropdownMenuAction.Status.Disabled);
-                menu.menu.AppendAction(
-                    "참조 별도 복제",
-                    action => BeginReferenceCopy(path),
-                    action => !EditorApplication.isPlayingOrWillChangePlaymode
-                    && DataCatalog.IsSupported(session?.Serialized.FindProperty(path)?.objectReferenceValue)
-                    ? DropdownMenuAction.Status.Normal
-                    : DropdownMenuAction.Status.Disabled);
-                container.Add(menu);
-            }
-
             fieldElements[path] = container;
             return container;
         }
 
         /// <summary>
-        /// 목록 추가·제거·순서 변경을 한글 조작으로 제공합니다.
+        /// 항목 형식에 맞는 전용 편집 화면을 만듭니다. 전용 화면이 없는 형식은 null입니다.
+        /// </summary>
+        private VisualElement BuildArrayEntry(SerializedProperty element)
+        {
+            switch (element.type)
+            {
+                case nameof(RewardEntry):
+                    return BuildRewardEntry(element);
+                case nameof(EquipmentStatBonus):
+                    return BuildStatBonusEntry(element);
+                case nameof(EquipmentPerformanceGrade):
+                    return BuildEquipmentGradeEntry(element);
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// 배열 항목을 순서 변경·제거 버튼과 함께 편집용으로 만듭니다.
         /// </summary>
         private VisualElement BuildArray(SerializedProperty property, string label, string description)
         {
@@ -124,6 +327,16 @@ namespace ProjectT.Editor.Data
             section.AddToClassList("project-data-array");
             section.tooltip = description;
             fieldElements[path] = section;
+            if (property.arrayElementType == nameof(SWStatOverride))
+            {
+                return BuildStatArray(property);
+            }
+
+            if (session.Draft is EnemyRouteData && path == "points")
+            {
+                return BuildRouteArray(property);
+            }
+
             for (int index = 0; index < property.arraySize; index++)
             {
                 int position = index;
@@ -142,13 +355,19 @@ namespace ProjectT.Editor.Data
                 var remove = ActionButton("−", () => ChangeArray(path, position, 0));
                 remove.tooltip = "항목 제거";
                 controls.Add(remove);
-                if (path == "rewards")
+                VisualElement entry = BuildArrayEntry(element);
+                if (entry != null)
                 {
                     var header = Element("project-data-array-header");
                     header.Add(Text(title, "project-data-entry-title"));
                     header.Add(controls);
                     row.Add(header);
-                    row.Add(BuildRewardEntry(element));
+                    row.Add(entry);
+                }
+                else if (element.type == nameof(SWStatOverride))
+                {
+                    row.Add(BuildStatSetting(element, title, string.Empty));
+                    row.Add(controls);
                 }
                 else
                 {
@@ -166,7 +385,7 @@ namespace ProjectT.Editor.Data
             if (path == "rewards")
             {
                 section.Add(Text("각 항목은 독립 판정합니다. 100%는 확정 지급입니다.", "project-data-description"));
-                section.Add(Text("현재 배치 재화만 지급되며, 아이템·다른 재화는 계산만 지원합니다.", "project-data-description"));
+                section.Add(Text("배치 재화는 전투 지갑에, 소울·아이템은 영구 보관소에 자동 지급합니다.", "project-data-description"));
             }
 
             return section;
@@ -189,6 +408,26 @@ namespace ProjectT.Editor.Data
                     added.FindPropertyRelative("useAmountOverride").boolValue = false;
                     added.FindPropertyRelative("overrideAmount").doubleValue = 1d;
                     added.FindPropertyRelative("acquisitionProbability").floatValue = 100f;
+                    added.FindPropertyRelative("randomizeEquipmentGrade").boolValue = true;
+                }
+                else if (path == "performanceGrades")
+                {
+                    var added = property.GetArrayElementAtIndex(property.arraySize - 1);
+                    added.FindPropertyRelative("performanceGrade").objectReferenceValue = null;
+                    added.FindPropertyRelative("effect").objectReferenceValue = null;
+                    added.FindPropertyRelative("selectionWeight").floatValue = 1f;
+                    added.FindPropertyRelative("statOverrides").arraySize = 0;
+                    added.FindPropertyRelative("additionalEffects").arraySize = 0;
+                }
+                else if (path == "statBonuses")
+                {
+                    var added = property.GetArrayElementAtIndex(property.arraySize - 1);
+                    added.FindPropertyRelative("stat").objectReferenceValue = null;
+                    added.FindPropertyRelative("amount").floatValue = 0f;
+                }
+                else if (property.GetArrayElementAtIndex(property.arraySize - 1).propertyType == SerializedPropertyType.ObjectReference)
+                {
+                    property.GetArrayElementAtIndex(property.arraySize - 1).objectReferenceValue = null;
                 }
             }
             else if (direction == 0)
@@ -213,7 +452,7 @@ namespace ProjectT.Editor.Data
 
         #region 적용과 검사
         /// <summary>
-        /// 현재 편집 복사본을 검사하고 원본에 적용합니다.
+        /// 현재 편집 복사본을 유효성 검사 없이 저장합니다.
         /// </summary>
         private void ApplyCurrent()
         {
@@ -221,7 +460,7 @@ namespace ProjectT.Editor.Data
         }
 
         /// <summary>
-        /// 적용 결과를 화면에 알립니다. 실패하면 오류 페이지로 이동하고 원본을 유지합니다.
+        /// 저장 결과를 화면에 알립니다. 유효성 검사는 실행하지 않으며 실패 시 현재 편집 화면을 유지합니다.
         /// </summary>
         private bool ApplyCurrentData()
         {
@@ -230,10 +469,10 @@ namespace ProjectT.Editor.Data
                 return false;
             }
 
-            bool success = session.TryApply(out issues, out notice);
-            if (!success && issues.Count > 0)
+            bool success = session.TrySave(out notice);
+            if (success)
             {
-                currentPage = "검사";
+                issues.Clear();
             }
 
             StoreDraft();
@@ -262,19 +501,29 @@ namespace ProjectT.Editor.Data
         }
 
         /// <summary>
-        /// 선택 데이터와 전체 데이터의 검사 결과를 위치 이동 버튼으로 표시합니다.
+        /// 사용자 요청으로 현재 편집값을 검사하고 결과를 표시합니다. 선택이 없거나 생성 중이면 실행하지 않습니다.
+        /// </summary>
+        private void ValidateCurrentData()
+        {
+            if (session?.Draft == null || creatingData)
+            {
+                return;
+            }
+
+            issues = DataCatalog.CollectIssues(session.Draft, session.Source);
+            notice = "현재 편집값 검사: 오류 " + issues.Count + "개. 검사 결과와 관계없이 저장할 수 있습니다.";
+            ShowPage("검사");
+        }
+
+        /// <summary>
+        /// 선택 데이터와 전체 데이터의 검사 결과를 위치 이동 버튼으로 표시합니다. 버튼을 누르기 전에는 검사하지 않습니다.
         /// </summary>
         private void BuildValidation()
         {
             var row = Element("project-data-row");
             row.Add(ActionButton(
                 "현재 편집값 검사",
-                () =>
-            {
-                issues = DataCatalog.CollectIssues(session.Draft);
-                notice = "현재 편집값 검사: 오류 " + issues.Count + "개";
-                RebuildDetail();
-            },
+                ValidateCurrentData,
                 "validateCurrent"));
             row.Add(ActionButton(
                 "전체 저장 데이터 검사",
@@ -298,7 +547,7 @@ namespace ProjectT.Editor.Data
                 RebuildDetail();
             }));
             detail.Add(row);
-            detail.Add(Text("오류 항목을 누르면 해당 데이터와 입력 위치로 이동합니다. 검사는 값을 자동 수정하지 않습니다.", "project-data-description"));
+            detail.Add(Text("검사는 선택 사항이며 저장을 제한하지 않습니다. 오류 항목을 누르면 해당 입력 위치로 이동합니다. 검사로 값을 변경하지 않습니다.", "project-data-description"));
             foreach (var issue in issues)
             {
                 var current = issue;
@@ -368,7 +617,7 @@ namespace ProjectT.Editor.Data
         /// <summary>
         /// 같은 종류는 현재 창에서 열고 다른 종류는 해당 전용 창에서 엽니다. 이동을 취소하면 null을 반환합니다.
         /// </summary>
-        private DataEditorWindow NavigateToAsset(ProjectData asset)
+        private DataEditorWindow NavigateToAsset(ScriptableObject asset)
         {
             if (!DataCatalog.TryGetKind(asset, out DataKind targetKind))
             {
@@ -392,7 +641,7 @@ namespace ProjectT.Editor.Data
                 return;
             }
 
-            if (reference is ProjectData asset && DataCatalog.IsSupported(asset))
+            if (reference is ScriptableObject asset && DataCatalog.IsSupported(asset))
             {
                 NavigateToAsset(asset);
             }
@@ -419,7 +668,7 @@ namespace ProjectT.Editor.Data
                     continue;
                 }
 
-                if (!(iterator.objectReferenceValue is ProjectData reference)
+                if (!(iterator.objectReferenceValue is ScriptableObject reference)
                     || !DataCatalog.IsSupported(reference))
                 {
                     continue;
@@ -445,7 +694,7 @@ namespace ProjectT.Editor.Data
                     path,
                     () =>
                 {
-                    var asset = AssetDatabase.LoadAssetAtPath<ProjectData>(assetPath);
+                    var asset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
                     if (DataCatalog.IsSupported(asset))
                     {
                         NavigateToAsset(asset);
