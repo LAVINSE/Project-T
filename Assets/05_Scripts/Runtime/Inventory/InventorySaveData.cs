@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ProjectT.Inventory
 {
     /// <summary>
-    /// 영구 아이템의 정수 수량과 지급 완료 기록을 함께 저장합니다. 삭제한 아이템의 과거 지급 기록도 유지합니다.
+    /// 영구 아이템의 정수 수량·지급 완료 기록·슬롯 배치·설계도 해금을 함께 저장합니다. 삭제한 아이템의 과거 지급 기록도 유지합니다.
     /// </summary>
     [Serializable]
     public sealed class InventorySaveData : IProjectSaveData
@@ -16,6 +16,7 @@ namespace ProjectT.Inventory
         [SerializeField] private List<string> grantedRewards;
         [SerializeField] private List<string> slotIdentifiers;
         [SerializeField] private bool hasSlotLayout;
+        [SerializeField] private List<string> learnedBlueprints;
 
         #endregion // 필드
 
@@ -30,19 +31,29 @@ namespace ProjectT.Inventory
         /// </summary>
         public IReadOnlyList<string> GrantedRewards => grantedRewards;
 
+        /// <summary>
+        /// 사용해서 해금한 설계도 아이템의 식별자입니다. 이전 형식 저장은 빈 목록입니다.
+        /// </summary>
+        public IReadOnlyList<string> LearnedBlueprints => (IReadOnlyList<string>)learnedBlueprints ?? Array.Empty<string>();
+
         #endregion // 프로퍼티
 
         #region 초기화
         /// <summary>
-        /// 검증된 수량과 지급 기록으로 다음 저장 상태를 구성합니다.
+        /// 검증된 수량·지급 기록·배치·해금 목록으로 다음 저장 상태를 구성합니다.
         /// </summary>
-        private InventorySaveData(List<InventoryQuantity> quantities, List<string> grantedRewards, List<string> slotIdentifiers = null)
+        private InventorySaveData(
+            List<InventoryQuantity> quantities,
+            List<string> grantedRewards,
+            List<string> slotIdentifiers,
+            List<string> learnedBlueprints)
         {
             version = ProjectDefine.Save.InventoryVersion;
             this.quantities = quantities;
             this.grantedRewards = grantedRewards;
             this.slotIdentifiers = slotIdentifiers;
             hasSlotLayout = slotIdentifiers != null;
+            this.learnedBlueprints = learnedBlueprints;
         }
 
         /// <summary>
@@ -50,7 +61,7 @@ namespace ProjectT.Inventory
         /// </summary>
         public static InventorySaveData CreateEmpty()
         {
-            return new InventorySaveData(new List<InventoryQuantity>(), new List<string>());
+            return new InventorySaveData(new List<InventoryQuantity>(), new List<string>(), null, new List<string>());
         }
 
         #endregion // 초기화
@@ -62,7 +73,9 @@ namespace ProjectT.Inventory
         public bool Validate(out string reason)
         {
             reason = "아이템 저장 형식 또는 지급 기록을 읽을 수 없습니다. 기존 파일을 보존합니다.";
-            if (version != ProjectDefine.Save.InventoryVersion || quantities == null || grantedRewards == null)
+            bool current = version == ProjectDefine.Save.InventoryVersion;
+            if ((!current && version != ProjectDefine.Save.PreviousInventoryVersion)
+                || quantities == null || grantedRewards == null || (current && learnedBlueprints == null))
             {
                 return false;
             }
@@ -84,8 +97,22 @@ namespace ProjectT.Inventory
                 return false;
             }
 
-            identifiers.Clear();
-            foreach (string identifier in grantedRewards)
+            if (!ValidateIdentifiers(grantedRewards) || !ValidateIdentifiers(LearnedBlueprints))
+            {
+                return false;
+            }
+
+            reason = string.Empty;
+            return true;
+        }
+
+        /// <summary>
+        /// 식별자 목록이 모두 형식에 맞고 중복이 없는지 확인합니다.
+        /// </summary>
+        private static bool ValidateIdentifiers(IReadOnlyList<string> values)
+        {
+            var identifiers = new HashSet<string>(StringComparer.Ordinal);
+            foreach (string identifier in values)
             {
                 if (!Guid.TryParseExact(identifier, "N", out _) || !identifiers.Add(identifier))
                 {
@@ -93,7 +120,6 @@ namespace ProjectT.Inventory
                 }
             }
 
-            reason = string.Empty;
             return true;
         }
 
@@ -144,9 +170,52 @@ namespace ProjectT.Inventory
         }
 
         /// <summary>
-        /// 같은 종류를 합산한 저장 후보를 만듭니다. 정수 범위를 넘으면 기존 상태를 유지하고 null입니다.
+        /// 같은 종류를 합산하고 지급 식별자를 기록한 저장 후보를 만듭니다. 정수 범위를 넘으면 기존 상태를 유지하고 null입니다.
         /// </summary>
         internal InventorySaveData CreateGrant(string rewardIdentifier, IReadOnlyDictionary<string, long> additions)
+        {
+            return CreateAddition(additions, rewardIdentifier);
+        }
+
+        /// <summary>
+        /// 설계도 1개를 소모하고 해금을 기록한 후보를 만듭니다. 보유하지 않았거나 이미 배운 설계도이면 null입니다.
+        /// </summary>
+        internal InventorySaveData CreateLearn(string identifier)
+        {
+            if (learnedBlueprints != null && learnedBlueprints.Contains(identifier))
+            {
+                return null;
+            }
+
+            InventorySaveData candidate = CreateDiscard(identifier, 1);
+            candidate?.learnedBlueprints.Add(identifier);
+            return candidate;
+        }
+
+        /// <summary>
+        /// 재료를 모두 제거한 뒤 결과를 추가한 한 번의 저장 후보를 만듭니다. 어느 재료든 부족하거나 범위를 넘으면 null입니다.
+        /// </summary>
+        internal InventorySaveData CreateExchange(
+            IReadOnlyDictionary<string, long> removals,
+            IReadOnlyDictionary<string, long> additions)
+        {
+            InventorySaveData candidate = this;
+            foreach (var removal in removals)
+            {
+                candidate = candidate.CreateDiscard(removal.Key, removal.Value);
+                if (candidate == null)
+                {
+                    return null;
+                }
+            }
+
+            return candidate.CreateAddition(additions, null);
+        }
+
+        /// <summary>
+        /// 같은 종류를 합산하고 새 종류는 첫 빈칸에 배치한 후보를 만듭니다. 지급 식별자가 있으면 함께 기록합니다.
+        /// </summary>
+        private InventorySaveData CreateAddition(IReadOnlyDictionary<string, long> additions, string rewardIdentifier)
         {
             var next = new List<InventoryQuantity>(quantities.Count + additions.Count);
             List<string> nextSlots = CopySlots();
@@ -180,8 +249,21 @@ namespace ProjectT.Inventory
                 }
             }
 
-            var nextRewards = new List<string>(grantedRewards) { rewardIdentifier };
-            return new InventorySaveData(next, nextRewards, nextSlots);
+            var nextRewards = new List<string>(grantedRewards);
+            if (rewardIdentifier != null)
+            {
+                nextRewards.Add(rewardIdentifier);
+            }
+
+            return new InventorySaveData(next, nextRewards, nextSlots, CopyLearned());
+        }
+
+        /// <summary>
+        /// 원본을 수정하지 않고 해금 목록을 복사합니다.
+        /// </summary>
+        private List<string> CopyLearned()
+        {
+            return new List<string>(LearnedBlueprints);
         }
 
         /// <summary>
@@ -221,7 +303,7 @@ namespace ProjectT.Inventory
                 }
             }
 
-            return found ? new InventorySaveData(next, new List<string>(grantedRewards), nextSlots) : null;
+            return found ? new InventorySaveData(next, new List<string>(grantedRewards), nextSlots, CopyLearned()) : null;
         }
 
         /// <summary>
@@ -244,7 +326,7 @@ namespace ProjectT.Inventory
             nextSlots[sourceSlot] = nextSlots[targetSlot];
             nextSlots[targetSlot] = identifier;
             return new InventorySaveData(new List<InventoryQuantity>(quantities),
-                new List<string>(grantedRewards), nextSlots);
+                new List<string>(grantedRewards), nextSlots, CopyLearned());
         }
 
         #endregion // 검사와 변경

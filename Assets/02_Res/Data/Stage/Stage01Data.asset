@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Stage01Data
   m_EditorClassIdentifier: ProjectT.Defense.Runtime::ProjectT.Defense.Battle.StageDefinition
   displayName: "\uCD08\uC6D0 \uACBD\uACC4"
+  scenePath: Assets/01_Scenes/Stage01_Grassland.unity
   startingCurrency: 100
   deploymentCurrency: {fileID: 11400000, guid: 9bbc013fbfb43094495c5b13adbbfb53, type: 2}
   workshopMaximumHealth:

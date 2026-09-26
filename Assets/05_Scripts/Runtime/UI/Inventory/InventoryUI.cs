@@ -123,6 +123,7 @@ namespace ProjectT.UI
             slot.Picked += Pick;
             slot.DragStarted += BeginCarry;
             slot.Dropped += Drop;
+            slot.Used += Use;
         }
 
         /// <summary>
@@ -206,6 +207,7 @@ namespace ProjectT.UI
                     slot.Picked -= Pick;
                     slot.DragStarted -= BeginCarry;
                     slot.Dropped -= Drop;
+                    slot.Used -= Use;
                 }
             }
 
@@ -531,6 +533,13 @@ namespace ProjectT.UI
             bool outside = !RectTransformUtility.RectangleContainsScreenPoint(panelRect, eventData.position, eventData.pressEventCamera);
             bool discard = discardSlotRect.gameObject.activeInHierarchy
                 && RectTransformUtility.RectangleContainsScreenPoint(discardSlotRect, eventData.position, eventData.pressEventCamera);
+            if ((outside || discard) && carriedItem.Definition != null && carriedItem.Definition.IsBlueprint)
+            {
+                CancelCarry();
+                ShowNotice("설계도는 버릴 수 없습니다. 오른쪽 클릭으로 사용하세요.");
+                return;
+            }
+
             if (outside || discard)
             {
                 carriedRect.gameObject.SetActive(false);
@@ -546,9 +555,35 @@ namespace ProjectT.UI
             CancelCarry();
             if (targetSlot >= 0 && !inventory.TryMove(identifier, targetSlot, out string reason))
             {
-                emptyText.text = reason;
-                emptyText.gameObject.SetActive(true);
+                ShowNotice(reason);
             }
+        }
+
+        /// <summary>
+        /// 오른쪽 클릭한 설계도를 사용해 제작법을 해금합니다. 성공하면 설계도가 사라지는 것으로 충분하므로 실패 사유만 표시합니다. 설계도가 아닌 아이템은 아직 사용 기능이 없어 무시합니다.
+        /// </summary>
+        private void Use(InventoryItemSlotUI slot)
+        {
+            if (consumedInputFrame == Time.frameCount || carriedSlot != null || discardPopup.IsOpen || !IsVisible
+                || slot.Item?.Definition == null || !slot.Item.Definition.IsBlueprint)
+            {
+                return;
+            }
+
+            consumedInputFrame = Time.frameCount;
+            if (!inventory.TryLearn(slot.Item.Identifier, out string reason))
+            {
+                ShowNotice(reason);
+            }
+        }
+
+        /// <summary>
+        /// 목록 아래 안내 영역에 결과를 표시합니다. 다음 목록 갱신 때 사라집니다.
+        /// </summary>
+        private void ShowNotice(string message)
+        {
+            emptyText.text = message;
+            emptyText.gameObject.SetActive(true);
         }
 
         /// <summary>

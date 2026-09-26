@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d3da75bf45442980a2e60433174e9a, type: 3}
+  m_Name: CommonResearchTreeData
+  m_EditorClassIdentifier: SWUtils.Runtime::SW.SkillTree.SWSkillTreeDefinition
+  identifier: dee08a918cbf4d81b1d18273704cad20
+  nodes:
+  - identifier: fc38310f4de14eec9d2e9c1a0ba256ca
+    skill: {fileID: 11400000, guid: 9c3ceebb8878fa44ea273f93e88d50c7, type: 2}
+    position: {x: 0, y: 0}
+    hasSavedPosition: 1
+    requirementMode: 1
+    requirements: []
+    exclusiveGroup: 
+    retainOnReset: 0
+    revealPolicy: 0
+    concealment: 0
+    visibilityConditions: []
+    purchaseConditions: []
+  - identifier: 9b71c3a5453b41349f2a140df37012b5
+    skill: {fileID: 11400000, guid: 842d141558a2bfd4d81d19eb061d8ee2, type: 2}
+    position: {x: 320, y: -150}
+    hasSavedPosition: 1
+    requirementMode: 1
+    requirements:
+    - nodeIdentifier: fc38310f4de14eec9d2e9c1a0ba256ca
+      requiredLevel: 1
+    exclusiveGroup: 
+    retainOnReset: 0
+    revealPolicy: 0
+    concealment: 0
+    visibilityConditions: []
+    purchaseConditions: []
+  - identifier: fd672d2395084abaa9277b86f1e365da
+    skill: {fileID: 11400000, guid: 82199a08ab1923148af99557edc5c5e7, type: 2}
+    position: {x: 320, y: 150}
+    hasSavedPosition: 1
+    requirementMode: 1
+    requirements:
+    - nodeIdentifier: fc38310f4de14eec9d2e9c1a0ba256ca
+      requiredLevel: 1
+    exclusiveGroup: 
+    retainOnReset: 0
+    revealPolicy: 0
+    concealment: 0
+    visibilityConditions: []
+    purchaseConditions: []
+  - identifier: 70fdfa54e36e4f419e3749a7be6f7ae5
+    skill: {fileID: 11400000, guid: 0e856f2d3778ae44c8f15d335d8913b9, type: 2}
+    position: {x: 640, y: -150}
+    hasSavedPosition: 1
+    requirementMode: 1
+    requirements:
+    - nodeIdentifier: 9b71c3a5453b41349f2a140df37012b5
+      requiredLevel: 1
+    exclusiveGroup: 
+    retainOnReset: 0
+    revealPolicy: 0
+    concealment: 0
+    visibilityConditions: []
+    purchaseConditions: []
+  - identifier: cc8a528666e24586aa07981ad0edba03
+    skill: {fileID: 11400000, guid: 17adca12ea6cc4343917ec6d9d5dfc03, type: 2}
+    position: {x: 640, y: 150}
+    hasSavedPosition: 1
+    requirementMode: 1
+    requirements:
+    - nodeIdentifier: fd672d2395084abaa9277b86f1e365da
+      requiredLevel: 1
+    exclusiveGroup: 
+    retainOnReset: 0
+    revealPolicy: 0
+    concealment: 0
+    visibilityConditions: []
+    purchaseConditions: []
+  - identifier: b5860070f8e3439f95e86e89f0362b6a
+    skill: {fileID: 11400000, guid: 7847155fe73f95742809537aad2518d5, type: 2}
+    position: {x: 960, y: 0}
+    hasSavedPosition: 1
+    requirementMode: 1
+    requirements:
+    - nodeIdentifier: 70fdfa54e36e4f419e3749a7be6f7ae5
+      requiredLevel: 1
+    - nodeIdentifier: cc8a528666e24586aa07981ad0edba03
+      requiredLevel: 1
+    exclusiveGroup: 
+    retainOnReset: 0
+    revealPolicy: 0
+    concealment: 0
+    visibilityConditions: []
+    purchaseConditions: []
+  references:
+    version: 2
+    RefIds: []

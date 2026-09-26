@@ -9,7 +9,7 @@ using ProjectT.Battle;
 namespace ProjectT.Initialization
 {
     /// <summary>
-    /// Main에서 준비되어 장면 전환에도 유지되는 수동 테스트 진입점입니다. 준비된 현재 전투가 없으면 조작하지 않습니다.
+    /// Bootstrap에서 준비되어 장면 전환에도 유지되는 수동 테스트 진입점입니다. 준비된 현재 전투가 없으면 조작하지 않습니다.
     /// </summary>
     public sealed partial class TestManager : SWSingleton<TestManager>
     {
@@ -25,7 +25,7 @@ namespace ProjectT.Initialization
 
         #region 초기화
         /// <summary>
-        /// Main의 관리자 초기화 후 현재 장면을 연결하고 장면 변경을 구독합니다.
+        /// Bootstrap의 관리자 초기화 후 현재 장면을 연결하고 장면 변경을 구독합니다.
         /// </summary>
         private void Start()
         {

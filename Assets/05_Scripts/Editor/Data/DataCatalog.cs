@@ -34,14 +34,16 @@ namespace ProjectT.Editor.Data
             { DataKind.Equipment, (typeof(EquipmentData), "장비", "Equipment") },
             { DataKind.EquipmentStatEffect, (typeof(EquipmentStatEffectData), "장비 효과", "Equipment/Effects") },
             { DataKind.EquipmentCategory, (typeof(SWCategory), "장비 등급", "Equipment/Categories") },
-            { DataKind.Stat, (typeof(SWStat), "스탯", "Stats") }
+            { DataKind.Stat, (typeof(SWStat), "스탯", "Stats") },
+            { DataKind.CraftingRecipe, (typeof(CraftingRecipeData), "제작법", "Crafting/Recipes") },
+            { DataKind.CraftingCost, (typeof(CraftingCostData), "제작 기본 비용", "Crafting") }
         };
 
         private static readonly string[] groupOrder =
         {
             "기본 정보", "전투 능력", "전투 보조 능력치", "공방 공격", "성장 표시", "보상", "보상 기본값",
             "전투 시작", "전투 경제", "라운드", "장비 설정", "장비 연결", "장비 효과", "고정 증가량",
-            "아이템 정보", "스탯 정의", "참조", "경로", "외형", "표시 조정"
+            "아이템 정보", "제작", "비용 덮어쓰기", "스탯 정의", "참조", "경로", "외형", "표시 조정"
         };
 
         private static readonly string[] labelNames = { "파일 이름", "표시 이름", "코드명" };
@@ -67,6 +69,13 @@ namespace ProjectT.Editor.Data
             { "specialLoot", ("특별 전리품", "자동 보관과 저장에 성공하면 인벤토리 아이콘에 획득 연출을 표시합니다. 분류와 무관하게 지정합니다.", "아이템 정보") },
             { "description", ("설명", "아이템에 마우스를 올렸을 때 표시할 설명입니다.", "아이템 정보") },
             { "equipment", ("장비 정의", "장비 아이템이면 종류·희귀도·성능 등급을 정의한 장비 데이터를 연결합니다. 일반 아이템은 비워 둡니다.", "장비 연결") },
+            { "recipe", ("제작법 (설계도)", "연결하면 이 아이템은 설계도가 됩니다. 인벤토리에서 오른쪽 클릭으로 사용해 해금하며, 버릴 수 없고 배웠거나 보유 중이면 다시 드롭되지 않습니다.", "제작") },
+            { "result", ("결과 장비", "제작할 장비입니다. 성능 등급은 장비의 등급 가중치로 추첨합니다.", "제작") },
+            { "overrideSoulCost", ("소울 비용 덮어쓰기", "끄면 결과 장비 희귀도의 기본 소울 비용을 사용합니다.", "비용 덮어쓰기") },
+            { "soulCost", ("소울 비용", "제작 1회에 사용할 소울입니다. 0이면 필요 없습니다.", "비용 덮어쓰기") },
+            { "overrideMaterials", ("재료 덮어쓰기", "끄면 결과 장비 희귀도의 기본 재료를 사용합니다.", "비용 덮어쓰기") },
+            { "materials", ("재료", "제작 1회에 소비할 아이템과 수량입니다. 수량 0은 필요 없습니다. 설계도·장비는 재료로 쓸 수 없습니다.", "비용 덮어쓰기") },
+            { "rarityCosts", ("희귀도별 기본 비용", "결과 장비 희귀도마다 기본 소울·재료를 설정합니다. 등록하지 않은 희귀도는 기본 비용이 없습니다.", "제작") },
             { "performanceGrade", ("성능 등급", "장비 정의의 등급 목록에 등록된 분류를 연결합니다. 같은 장비·등급은 하나의 아이템으로 보관합니다.", "장비 연결") },
             { "rarity", ("희귀도", "일반·희귀 등 원하는 분류 자산을 연결합니다. 성능 등급과 별개이며 자동 수치 배율은 없습니다.", "장비 설정") },
             { "performanceGrades", ("성능 등급 목록", "원하는 등급을 추가하고 화살표로 표시 순서를 바꿉니다. 공유 효과·스탯 포함 여부·수치와 추첨 가중치를 등급별로 설정합니다.", "장비 설정") },
@@ -97,6 +106,7 @@ namespace ProjectT.Editor.Data
             { "workshopAttackDamage", ("공방 공격 피해", "공방에 한 번 타격할 때 주는 피해입니다. 아군 대상 피해와 별개입니다.", "공방 공격") },
             { "workshopAttackInterval", ("공방 공격 간격 (초)", "공방 공격 시작 사이의 게임 시간입니다.", "공방 공격") },
             { "rewards", ("처치 보상", "각 항목의 획득 확률을 독립 판정합니다. 100%는 항상, 0%는 지급하지 않습니다.", "보상") },
+            { "scenePath", ("전투 장면 경로", "거점에서 출전할 때 불러올 장면입니다. 빌드 설정에 등록한 경로를 입력하세요.", "기본 정보") },
             { "startingCurrency", ("시작 재화", "새 전투에 지급하는 배치 재화입니다. 0 이상이어야 합니다.", "전투 시작") },
             { "workshopMaximumHealth", ("공방 최대 체력", "새 전투에서 공방에 부여하는 체력입니다.", "전투 시작") },
             { "deploymentCurrency", ("배치 재화", "이 자산에 해당하는 보상만 현재 전투 지갑에 지급합니다. 시작 금액과 배치 비용도 이 재화를 사용합니다.", "전투 경제") },

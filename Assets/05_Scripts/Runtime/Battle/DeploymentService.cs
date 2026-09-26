@@ -4,6 +4,7 @@ using SW.Pooling;
 
 using ProjectT.Data;
 using ProjectT.Navigation;
+using ProjectT.Research;
 using ProjectT.Units;
 using ProjectT.View;
 
@@ -20,25 +21,28 @@ namespace ProjectT.Battle
         private readonly WalkableBattlefield battlefield;
         private readonly Transform unitParent;
         private readonly ColorData colors;
+        private readonly ResearchBonuses research;
 
         #endregion // 필드
 
         #region 초기화
         /// <summary>
-        /// 한 전투의 스테이지·지갑·전장·배치 부모·표시 색상을 연결합니다.
+        /// 한 전투의 스테이지·지갑·전장·배치 부모·표시 색상과 공통 연구 증가량을 연결합니다. 연구가 없으면 null입니다.
         /// </summary>
         public DeploymentService(
             StageData stage,
             BattleWallet wallet,
             WalkableBattlefield battlefield,
             Transform unitParent,
-            ColorData colors)
+            ColorData colors,
+            ResearchBonuses research)
         {
             this.stage = stage;
             this.wallet = wallet;
             this.battlefield = battlefield;
             this.unitParent = unitParent;
             this.colors = colors;
+            this.research = research;
         }
 
         #endregion // 초기화
@@ -78,7 +82,7 @@ namespace ProjectT.Battle
 
             SWPool pool = SWPool.Instance;
             CharacterUnit unit = pool.Spawn<CharacterUnit>(unitClass.Prefab, position, Quaternion.identity, unitParent);
-            if (unit == null || !unit.Initialize(unitClass, battlefield, position) || !wallet.TrySpend(unitClass.DeploymentCost))
+            if (unit == null || !unit.Initialize(unitClass, battlefield, position, research) || !wallet.TrySpend(unitClass.DeploymentCost))
             {
                 if (unit != null)
                 {

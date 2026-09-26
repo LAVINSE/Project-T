@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using SW.Stat;
 
@@ -14,6 +15,7 @@ namespace ProjectT.Data
     {
         #region 필드
         [SerializeField] private string displayName;
+        [SerializeField] private string scenePath;
         [SerializeField] private double startingCurrency;
         [SerializeField] private CurrencyData deploymentCurrency;
 
@@ -36,6 +38,11 @@ namespace ProjectT.Data
         /// 스테이지 이름입니다.
         /// </summary>
         public string DisplayName => displayName;
+
+        /// <summary>
+        /// 거점에서 출전할 때 불러올 전투 장면 경로입니다. 빌드 설정에 등록되어 있어야 합니다.
+        /// </summary>
+        public string ScenePath => scenePath;
 
         /// <summary>
         /// 새 전투마다 지급하는 배치 재화입니다.
@@ -119,6 +126,8 @@ namespace ProjectT.Data
         public override bool Validate(List<DataIssue> issues)
         {
             bool valid = CheckName(displayName, nameof(displayName), issues);
+            valid &= Check(!string.IsNullOrEmpty(scenePath) && SceneUtility.GetBuildIndexByScenePath(scenePath) >= 0,
+                nameof(scenePath), "빌드 설정에 등록된 전투 장면 경로를 입력하세요. 예: Assets/01_Scenes/Stage01_Grassland.unity", issues);
             valid &= CheckNonNegative(startingCurrency, nameof(startingCurrency), issues);
             valid &= CheckRequired(deploymentCurrency, nameof(deploymentCurrency), issues);
             valid &= CheckPositive(WorkshopMaximumHealth, nameof(workshopMaximumHealth), issues);

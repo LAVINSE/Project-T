@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40e20c51b4cb96a4096ecb4645edb468, type: 3}
+  m_Name: CraftingCostData
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.CraftingCostData
+  rarityCosts:
+  - rarity: {fileID: 11400000, guid: 2d5b37a195c44e147bdf8bc81fe2006c, type: 2}
+    soulCost: 20
+    materials:
+    - item: {fileID: 11400000, guid: 654057ee38ce9564a959873ea1bc3980, type: 2}
+      count: 3
+    - item: {fileID: 11400000, guid: 30d589fe84c8e544fbfb29f8413f3995, type: 2}
+      count: 2
+  - rarity: {fileID: 11400000, guid: 288faca4bb4a5384d9a2ec7167d8aae1, type: 2}
+    soulCost: 5
+    materials:
+    - item: {fileID: 11400000, guid: 1e7d1e1e99c4ba6428c5b9a0ee4b4c86, type: 2}
+      count: 2

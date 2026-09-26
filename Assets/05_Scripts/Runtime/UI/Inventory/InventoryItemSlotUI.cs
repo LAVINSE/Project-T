@@ -10,7 +10,7 @@ using ProjectT.Inventory;
 namespace ProjectT.UI
 {
     /// <summary>
-    /// 한 종류의 보유 아이템과 수량을 표시하고 마우스 올림·집기·끌기 입력을 전달합니다.
+    /// 한 종류의 보유 아이템과 수량을 표시하고 마우스 올림·집기·끌기·사용 입력을 전달합니다.
     /// </summary>
     public sealed class InventoryItemSlotUI : MonoBehaviour,
         IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -53,6 +53,11 @@ namespace ProjectT.UI
         /// 끌기를 끝낸 화면 위치를 전달합니다.
         /// </summary>
         public event Action<PointerEventData> Dropped;
+
+        /// <summary>
+        /// 보유 아이템을 오른쪽 클릭한 사용 요청입니다.
+        /// </summary>
+        public event Action<InventoryItemSlotUI> Used;
 
         #endregion // 프로퍼티
 
@@ -112,13 +117,22 @@ namespace ProjectT.UI
         }
 
         /// <summary>
-        /// 왼쪽 클릭으로 아이템을 집습니다. 빈 슬롯을 누르면 기존에 집은 아이템을 인벤토리 안에 놓도록 전달합니다.
+        /// 왼쪽 클릭으로 아이템을 집고 오른쪽 클릭으로 사용을 요청합니다. 빈 슬롯을 누르면 기존에 집은 아이템을 인벤토리 안에 놓도록 전달합니다.
         /// </summary>
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (!eventData.dragging && eventData.button == PointerEventData.InputButton.Left)
+            if (eventData.dragging)
+            {
+                return;
+            }
+
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
                 Picked?.Invoke(this, eventData);
+            }
+            else if (eventData.button == PointerEventData.InputButton.Right && Item != null)
+            {
+                Used?.Invoke(this);
             }
         }
 

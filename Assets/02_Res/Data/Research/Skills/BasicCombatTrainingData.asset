@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 585b0162231d49ec8e911870333f1fe1, type: 3}
+  m_Name: BasicCombatTrainingData
+  m_EditorClassIdentifier: SWUtils.Runtime::SW.SkillTree.SWSkillDefinition
+  categories: []
+  id: 0
+  codeName: ResearchBasicCombat
+  displayName: "\uAE30\uCD08 \uC804\uD22C \uD6C8\uB828"
+  description: "\uBAA8\uB4E0 \uC544\uAD70\uC758 \uACF5\uACA9\uB825\uC744 \uC62C\uB9BD\uB2C8\uB2E4."
+  spriteIcon: {fileID: 0}
+  icon: {fileID: 0}
+  maximumLevel: 1
+  costs:
+  - rid: 5248827210292003694
+  effects:
+  - {fileID: 11400000, guid: 7289af7f88b937d479d9a7586bdf2e44, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 5248827210292003694
+      type: {class: SWSkillTreeFormulaCost, ns: SW.SkillTree, asm: SWUtils.Runtime}
+      data:
+        currency: Soul
+        growth: 0
+        initialCost: 10
+        growthValue: 1.15
+        levelCosts: []

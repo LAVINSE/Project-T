@@ -3,7 +3,7 @@ using SW.Util;
 namespace ProjectT.Progression
 {
     /// <summary>
-    /// Main에서 소울 저장을 불러오고 장면 전환에도 같은 지갑을 제공합니다. 규칙과 파일 처리는 지갑·저장소에 위임합니다.
+    /// Bootstrap에서 소울 저장을 불러오고 장면 전환에도 같은 지갑을 제공합니다. 규칙과 파일 처리는 지갑·저장소에 위임합니다.
     /// </summary>
     public sealed class SoulManager : SWSingleton<SoulManager>
     {

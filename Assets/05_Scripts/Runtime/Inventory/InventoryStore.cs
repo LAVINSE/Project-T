@@ -18,6 +18,7 @@ namespace ProjectT.Inventory
         private readonly Dictionary<string, ItemData> definitions = new Dictionary<string, ItemData>(StringComparer.Ordinal);
         private readonly Dictionary<ItemData, string> identifiers = new Dictionary<ItemData, string>();
         private readonly HashSet<string> grantedRewards;
+        private readonly HashSet<string> learnedBlueprints;
         private readonly Dictionary<object, string> reservations = new Dictionary<object, string>();
         private InventorySaveData data;
         private bool changing;
@@ -67,6 +68,7 @@ namespace ProjectT.Inventory
             }
 
             grantedRewards = new HashSet<string>(data.GrantedRewards, StringComparer.Ordinal);
+            learnedBlueprints = new HashSet<string>(data.LearnedBlueprints, StringComparer.Ordinal);
             RebuildItems();
         }
 
@@ -163,6 +165,11 @@ namespace ProjectT.Inventory
                 }
 
                 long amount = (long)reward.Amount;
+                if (item.IsBlueprint)
+                {
+                    amount = IsLearned(item) || HasStored(identifier) || additions.ContainsKey(identifier) ? 0 : Math.Min(amount, 1);
+                }
+
                 if (amount == 0)
                 {
                     continue;
@@ -280,6 +287,12 @@ namespace ProjectT.Inventory
             }
 
             InventoryStack available = Find(identifier);
+            if (available?.Definition != null && available.Definition.IsBlueprint)
+            {
+                reason = "설계도는 버릴 수 없습니다. 오른쪽 클릭으로 사용하세요.";
+                return false;
+            }
+
             if (available == null || count <= 0 || count > available.Count)
             {
                 reason = "장착 중인 수량을 제외한 보유량만 버릴 수 있습니다.";
@@ -330,6 +343,30 @@ namespace ProjectT.Inventory
         }
 
         /// <summary>
+        /// 장착 점유를 제외한 사용 가능 수량입니다. 목록에 없거나 보유하지 않은 아이템은 0입니다.
+        /// </summary>
+        public long CountAvailable(ItemData item)
+        {
+            return item != null && identifiers.TryGetValue(item, out string identifier) ? Find(identifier)?.Count ?? 0 : 0;
+        }
+
+        /// <summary>
+        /// 저장 파일에 한 개 이상 보관 중인지 확인합니다. 장착 점유와 무관한 전체 보유 기준입니다.
+        /// </summary>
+        private bool HasStored(string identifier)
+        {
+            foreach (InventoryQuantity quantity in data.Quantities)
+            {
+                if (quantity.Identifier == identifier)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// 현재 보유 중인 종류를 반환합니다. 전부 파괴했거나 없는 종류이면 null입니다.
         /// </summary>
         public InventoryStack Find(string identifier)
@@ -346,6 +383,110 @@ namespace ProjectT.Inventory
         }
 
         #endregion // 파괴와 조회
+
+        #region 설계도와 제작
+        /// <summary>
+        /// 설계도를 사용해 해금했는지 반환합니다. 설계도가 아니거나 목록에 없는 아이템이면 false입니다.
+        /// </summary>
+        public bool IsLearned(ItemData blueprint)
+        {
+            return blueprint != null && identifiers.TryGetValue(blueprint, out string identifier)
+                && learnedBlueprints.Contains(identifier);
+        }
+
+        /// <summary>
+        /// 보유한 설계도 1개를 소모해 제작법을 해금합니다. 배운 설계도는 다시 획득하지 않으므로 별도 안내 없이 저장 후보 단계에서 거절합니다.
+        /// 설계도가 아니거나 저장에 실패하면 변경하지 않습니다.
+        /// </summary>
+        public bool TryLearn(string identifier, out string reason)
+        {
+            reason = string.Empty;
+            InventoryStack item = Find(identifier);
+            if (changing || item?.Definition == null || !item.Definition.IsBlueprint)
+            {
+                reason = "사용할 수 있는 설계도가 아닙니다.";
+                return false;
+            }
+
+            InventorySaveData candidate = data.CreateLearn(identifier);
+            if (candidate == null)
+            {
+                reason = "설계도를 사용할 수 없습니다. 보유 수량을 확인하세요.";
+                return false;
+            }
+
+            return TryCommit(candidate, out reason);
+        }
+
+        /// <summary>
+        /// 재료를 소비하고 결과 아이템을 추가할 수 있는지 저장 없이 확인합니다. 수량 부족·잘못된 정의이면 false와 사유입니다.
+        /// </summary>
+        internal bool CanExchange(IReadOnlyDictionary<ItemData, long> costs, ItemData result, out string reason)
+        {
+            return TryPrepareExchange(costs, result, out _, out reason);
+        }
+
+        /// <summary>
+        /// 재료 소비와 결과 추가를 한 번의 저장으로 처리합니다. 실패하면 수량과 배치를 바꾸지 않습니다.
+        /// </summary>
+        internal bool TryExchange(IReadOnlyDictionary<ItemData, long> costs, ItemData result, out string reason)
+        {
+            return TryPrepareExchange(costs, result, out InventorySaveData candidate, out reason)
+                && TryCommit(candidate, out reason);
+        }
+
+        /// <summary>
+        /// 장착 점유를 제외한 사용 가능 수량으로 재료를 검사하고 저장 후보를 만듭니다.
+        /// </summary>
+        private bool TryPrepareExchange(
+            IReadOnlyDictionary<ItemData, long> costs,
+            ItemData result,
+            out InventorySaveData candidate,
+            out string reason)
+        {
+            candidate = null;
+            reason = string.Empty;
+            if (changing || costs == null || result == null || !identifiers.TryGetValue(result, out string resultIdentifier))
+            {
+                reason = "제작 결과가 아이템 목록에 없거나 저장 중입니다.";
+                return false;
+            }
+
+            var removals = new Dictionary<string, long>(StringComparer.Ordinal);
+            foreach (var cost in costs)
+            {
+                if (cost.Value == 0)
+                {
+                    continue;
+                }
+
+                if (cost.Key == null || cost.Value < 0 || !identifiers.TryGetValue(cost.Key, out string identifier))
+                {
+                    reason = "재료 아이템과 수량을 확인하세요.";
+                    return false;
+                }
+
+                long available = CountAvailable(cost.Key);
+                if (available < cost.Value)
+                {
+                    reason = "재료가 부족합니다: " + cost.Key.DisplayName + " " + available.ToString("N0") + " / " + cost.Value.ToString("N0");
+                    return false;
+                }
+
+                removals.Add(identifier, cost.Value);
+            }
+
+            candidate = data.CreateExchange(removals, new Dictionary<string, long>(StringComparer.Ordinal) { { resultIdentifier, 1 } });
+            if (candidate == null)
+            {
+                reason = "제작 후 아이템 수량이 계산 가능한 범위를 벗어났습니다.";
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion // 설계도와 제작
 
         #region 상태 반영
         /// <summary>
@@ -399,6 +540,8 @@ namespace ProjectT.Inventory
                 data = candidate;
                 grantedRewards.Clear();
                 grantedRewards.UnionWith(data.GrantedRewards);
+                learnedBlueprints.Clear();
+                learnedBlueprints.UnionWith(data.LearnedBlueprints);
                 RebuildItems();
                 NotifyChanged();
                 return true;

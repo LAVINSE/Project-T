@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 namespace ProjectT.Editor
 {
     /// <summary>
-    /// 편집기 Play를 항상 Main 장면에서 시작하게 합니다. Play 직전에 열려 있던 장면을 기록해 MainSceneEntry가 그 장면으로 이동합니다.
-    /// 빌드와 같은 초기화 순서를 보장하므로 관리자를 Resources나 실행 순서 지정 없이 Main에 배치할 수 있습니다.
+    /// 편집기 Play를 항상 Bootstrap 장면에서 시작하게 합니다. Play 직전에 열려 있던 장면을 기록해 BootstrapEntry가 그 장면으로 이동합니다.
+    /// 빌드와 같은 초기화 순서를 보장하므로 관리자를 Resources나 실행 순서 지정 없이 Bootstrap에 배치할 수 있습니다.
     /// </summary>
     [InitializeOnLoad]
     public static class PlayModeStartScene
@@ -17,7 +17,7 @@ namespace ProjectT.Editor
         /// </summary>
         static PlayModeStartScene()
         {
-            EditorSceneManager.playModeStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(ProjectDefine.Scene.MainPath);
+            EditorSceneManager.playModeStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(ProjectDefine.Scene.BootstrapPath);
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }

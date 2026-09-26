@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045d0a4f245b76b49b0e6fa29f2e8a6d, type: 3}
+  m_Name: CommonPracticeSwordRecipeData
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.CraftingRecipeData
+  result: {fileID: 11400000, guid: 8e873cc81439bee4d83619dd21b1d006, type: 2}
+  overrideSoulCost: 1
+  soulCost: 0
+  overrideMaterials: 1
+  materials:
+  - item: {fileID: 11400000, guid: 30d589fe84c8e544fbfb29f8413f3995, type: 2}
+    count: 1

@@ -97,6 +97,20 @@ namespace ProjectT.Progression
             return new SoulSaveData(balance + amount, nextRewards);
         }
 
+        /// <summary>
+        /// 지급 기록 없이 잔액만 바꾼 후보를 만듭니다. 결과가 0 미만이거나 계산할 수 없으면 null입니다.
+        /// </summary>
+        internal SoulSaveData CreateAdjustment(double delta)
+        {
+            double next = balance + delta;
+            if (!delta.ExIsFinite() || !next.ExIsNonNegative())
+            {
+                return null;
+            }
+
+            return new SoulSaveData(next, new List<string>(grantedRewards));
+        }
+
         #endregion // 검사와 변경
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,15 +46,16 @@ namespace ProjectT.UI
         private SpriteData spriteData;
         private BattleStatistics displayedResult;
         private float listPosition = 1f;
+        private Action returnToHub;
         private bool subscribed;
 
         #endregion // 필드
 
         #region 초기화
         /// <summary>
-        /// 버튼 알림을 연결하고 제작된 행을 목록에 등록합니다. 이미 연결했으면 다시 구독하지 않습니다.
+        /// 버튼 알림을 연결하고 제작된 행을 목록에 등록합니다. 거점 이동은 조립 지점이 처리합니다. 이미 연결했으면 다시 구독하지 않습니다.
         /// </summary>
-        public void Initialize(SpriteData sprites)
+        public void Initialize(SpriteData sprites, Action hubRequested)
         {
             spriteData = sprites;
             if (subscribed)
@@ -61,6 +63,8 @@ namespace ProjectT.UI
                 return;
             }
 
+            returnToHub = hubRequested;
+            hubButton.onClick.AddListener(RequestHub);
             backButton.onClick.AddListener(ShowSummary);
             damageSortButton.onClick.AddListener(SortByDamage);
             killsSortButton.onClick.AddListener(SortByKills);
@@ -72,10 +76,18 @@ namespace ProjectT.UI
                 }
             }
 
-            hubButton.interactable = false;
-            hubText.text = "거점으로 이동 · 연결 대기";
+            hubText.text = "거점으로 돌아가기";
             subscribed = true;
             Hide();
+        }
+
+        /// <summary>
+        /// 거점 이동을 한 번만 요청합니다. 장면 전환 중 반복 클릭은 무시합니다.
+        /// </summary>
+        private void RequestHub()
+        {
+            hubButton.interactable = false;
+            returnToHub?.Invoke();
         }
 
         #endregion // 초기화
@@ -255,6 +267,7 @@ namespace ProjectT.UI
         {
             if (subscribed)
             {
+                hubButton.onClick.RemoveListener(RequestHub);
                 backButton.onClick.RemoveListener(ShowSummary);
                 damageSortButton.onClick.RemoveListener(SortByDamage);
                 killsSortButton.onClick.RemoveListener(SortByKills);

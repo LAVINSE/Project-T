@@ -21,6 +21,15 @@ namespace ProjectT.Editor.Data
         [SerializeField] private DataLabelMode listLabel = DataLabelMode.FileName;
         [SerializeField] private DataSortMode listSort = DataSortMode.FileName;
 
+        /// <summary>
+        /// 아이템·장비 창의 탭 순서입니다.
+        /// </summary>
+        private static readonly DataKind[] WorkspaceKinds =
+        {
+            DataKind.Item, DataKind.Equipment, DataKind.EquipmentStatEffect, DataKind.EquipmentCategory, DataKind.Stat,
+            DataKind.CraftingRecipe, DataKind.CraftingCost
+        };
+
         #endregion // 필드
 
         #region 작업 공간
@@ -29,8 +38,7 @@ namespace ProjectT.Editor.Data
         /// </summary>
         private static bool IsEquipmentWorkspace(DataKind value)
         {
-            return value == DataKind.Item || value == DataKind.Equipment
-                || value == DataKind.EquipmentStatEffect || value == DataKind.EquipmentCategory || value == DataKind.Stat;
+            return Array.IndexOf(WorkspaceKinds, value) >= 0;
         }
 
         /// <summary>
@@ -39,7 +47,7 @@ namespace ProjectT.Editor.Data
         private VisualElement BuildWorkspaceTabs()
         {
             var tabs = Element("project-data-toolbar");
-            foreach (DataKind tabKind in new[] { DataKind.Item, DataKind.Equipment, DataKind.EquipmentStatEffect, DataKind.EquipmentCategory, DataKind.Stat })
+            foreach (DataKind tabKind in WorkspaceKinds)
             {
                 DataKind targetKind = tabKind;
                 var button = ActionButton(DataCatalog.GetName(tabKind), () => SwitchKind(targetKind));

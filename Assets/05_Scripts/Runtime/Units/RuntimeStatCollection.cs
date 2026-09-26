@@ -100,6 +100,22 @@ namespace ProjectT.Units
         }
 
         /// <summary>
+        /// 증가량을 제외한 이 소유자의 기본값입니다. 연결되지 않은 스탯은 0입니다.
+        /// </summary>
+        public float GetDefaultValue(SWStat definition)
+        {
+            return definition != null && stats.TryGetValue(definition, out SWStat runtime) ? runtime.DefaultValue : 0f;
+        }
+
+        /// <summary>
+        /// 이 소유자에게 연결된 스탯인지 반환합니다.
+        /// </summary>
+        public bool Contains(SWStat definition)
+        {
+            return definition != null && stats.ContainsKey(definition);
+        }
+
+        /// <summary>
         /// 출처별 증가량을 교체합니다. 없는 스탯·출처·유한하지 않은 값은 적용하지 않고 false입니다.
         /// </summary>
         public bool TrySetBonus(SWStat definition, object source, object effect, float amount)

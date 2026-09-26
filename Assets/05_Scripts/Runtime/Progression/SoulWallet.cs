@@ -102,6 +102,71 @@ namespace ProjectT.Progression
         }
 
         /// <summary>
+        /// 잔액이 충분하면 차감을 저장한 뒤 반영합니다. 0은 저장 없이 성공이며 부족·저장 실패 시 잔액을 유지합니다.
+        /// </summary>
+        public bool TrySpend(double amount, out string reason)
+        {
+            reason = string.Empty;
+            if (!amount.ExIsNonNegative())
+            {
+                reason = "소울 사용 수량이 잘못되었습니다.";
+                return false;
+            }
+
+            if (amount == 0d)
+            {
+                return true;
+            }
+
+            if (Balance < amount)
+            {
+                reason = "소울이 부족합니다: " + Balance.ToString("N0") + " / " + amount.ToString("N0");
+                return false;
+            }
+
+            return TryAdjust(-amount, out reason);
+        }
+
+        /// <summary>
+        /// 다른 저장이 실패해 되돌릴 때 사용한 소울을 돌려줍니다. 저장 실패 시 false이며 잔액을 유지합니다.
+        /// </summary>
+        public bool TryRefund(double amount, out string reason)
+        {
+            reason = string.Empty;
+            if (!amount.ExIsNonNegative())
+            {
+                reason = "소울 반환 수량이 잘못되었습니다.";
+                return false;
+            }
+
+            return amount == 0d || TryAdjust(amount, out reason);
+        }
+
+        /// <summary>
+        /// 잔액 변경을 저장하고 성공하면 반영합니다.
+        /// </summary>
+        private bool TryAdjust(double delta, out string reason)
+        {
+            reason = string.Empty;
+            SoulSaveData candidate = data.CreateAdjustment(delta);
+            if (candidate == null)
+            {
+                reason = "소울 잔액이 계산 가능한 범위를 벗어났습니다.";
+                return false;
+            }
+
+            if (!store.TrySave(candidate))
+            {
+                reason = "소울 저장에 실패했습니다. 잔액은 변경되지 않았습니다.";
+                return false;
+            }
+
+            data = candidate;
+            NotifyChanged();
+            return true;
+        }
+
+        /// <summary>
         /// 화면 구독자의 실패가 저장 완료 결과를 바꾸지 않도록 각 알림을 분리합니다.
         /// </summary>
         private void NotifyChanged()

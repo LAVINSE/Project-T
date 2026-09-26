@@ -15,6 +15,7 @@ namespace ProjectT.Data
         [SerializeField] private ColorData colorData;
         [SerializeField] private SpriteData spriteData;
         [SerializeField] private CurrencyData soulCurrency;
+        [SerializeField] private CraftingCostData craftingCost;
 
         #endregion // 필드
 
@@ -33,6 +34,11 @@ namespace ProjectT.Data
         /// 소울의 표시 이름과 아이콘 정의입니다. 잔액과 획득 규칙은 보관하지 않습니다.
         /// </summary>
         public CurrencyData SoulCurrency => soulCurrency;
+
+        /// <summary>
+        /// 결과 장비 희귀도별 기본 제작 비용입니다. 제작법이 덮어쓰지 않은 비용에 사용합니다.
+        /// </summary>
+        public CraftingCostData CraftingCost => craftingCost;
 
         #endregion // 프로퍼티
 

@@ -11,6 +11,7 @@ using ProjectT.Equipment;
 using ProjectT.Inventory;
 using ProjectT.Navigation;
 using ProjectT.Progression;
+using ProjectT.Research;
 using ProjectT.Rewards;
 using ProjectT.Units;
 using ProjectT.View;
@@ -56,12 +57,12 @@ namespace ProjectT.Battle
         public BattleWallet Wallet { get; private set; }
 
         /// <summary>
-        /// Main에서 불러온 영구 소울 지갑입니다. 이 전투의 승패나 재시작으로 초기화하지 않습니다.
+        /// Bootstrap에서 불러온 영구 소울 지갑입니다. 이 전투의 승패나 재시작으로 초기화하지 않습니다.
         /// </summary>
         public SoulWallet Souls { get; private set; }
 
         /// <summary>
-        /// Main에서 불러온 영구 아이템 보관소입니다. 초기화에 실패하면 null입니다.
+        /// Bootstrap에서 불러온 영구 아이템 보관소입니다. 초기화에 실패하면 null입니다.
         /// </summary>
         public InventoryStore Inventory { get; private set; }
 
@@ -199,8 +200,8 @@ namespace ProjectT.Battle
             if (rewards == null)
             {
                 workshop.Dispose();
-                string soulIssue = SoulManager.HasInstance ? SoulManager.Instance.InitializationError : "Main의 SoulManager가 없습니다.";
-                string inventoryIssue = InventoryManager.HasInstance ? InventoryManager.Instance.InitializationError : "Main의 InventoryManager가 없습니다.";
+                string soulIssue = SoulManager.HasInstance ? SoulManager.Instance.InitializationError : "Bootstrap의 SoulManager가 없습니다.";
+                string inventoryIssue = InventoryManager.HasInstance ? InventoryManager.Instance.InitializationError : "Bootstrap의 InventoryManager가 없습니다.";
                 StopInitialization("보상 정의와 영구 저장을 확인하세요. " + soulIssue + " " + inventoryIssue);
                 return;
             }
@@ -208,7 +209,8 @@ namespace ProjectT.Battle
             Wallet = wallet;
             Equipment = new BattleEquipment(Inventory);
             Workshop = workshop;
-            deployment = new DeploymentService(stage, Wallet, battlefield, unitParent, colors);
+            ResearchBonuses research = ResearchManager.HasInstance ? ResearchManager.Instance.Bonuses : null;
+            deployment = new DeploymentService(stage, Wallet, battlefield, unitParent, colors, research);
             spawner = new EnemySpawner(stage.Enemy, route, unitParent, colors, stage.SpawnInterval);
             combat = new CombatSystem(allies, spawner.Enemies, Workshop, new DamageCalculator(() => UnityEngine.Random.value));
             workshopView.Initialize(Workshop, colors);

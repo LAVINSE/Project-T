@@ -19,6 +19,7 @@ namespace ProjectT.Data
         [SerializeField] private CurrencyData sellCurrency;
         [SerializeField] private EquipmentData equipment;
         [SerializeField] private SWCategory performanceGrade;
+        [SerializeField] private CraftingRecipeData recipe;
 
         #endregion // 필드
 
@@ -63,6 +64,16 @@ namespace ProjectT.Data
         /// </summary>
         public SWCategory PerformanceGrade => performanceGrade;
 
+        /// <summary>
+        /// 이 설계도를 사용하면 해금되는 제작법입니다. 일반 아이템은 null입니다.
+        /// </summary>
+        public CraftingRecipeData Recipe => recipe;
+
+        /// <summary>
+        /// 제작법을 연결한 설계도인지 반환합니다. 설계도는 버릴 수 없고 배웠거나 보유 중이면 다시 지급하지 않습니다.
+        /// </summary>
+        public bool IsBlueprint => recipe != null;
+
         #endregion // 프로퍼티
 
         #region 검사
@@ -82,6 +93,12 @@ namespace ProjectT.Data
             {
                 valid &= Check(equipment.IsValid, nameof(equipment), "장비 정의의 검사 오류를 먼저 수정하세요.", issues);
                 valid &= Check(equipment.TryGetPerformanceGrade(performanceGrade, out _), nameof(performanceGrade), "장비에 등록된 성능 등급을 연결하세요.", issues);
+            }
+
+            if (recipe != null)
+            {
+                valid &= Check(equipment == null, nameof(recipe), "설계도에는 장비 정의를 연결하지 않습니다.", issues);
+                valid &= Check(recipe.IsValid, nameof(recipe), "제작법의 검사 오류를 먼저 수정하세요.", issues);
             }
 
             return valid;

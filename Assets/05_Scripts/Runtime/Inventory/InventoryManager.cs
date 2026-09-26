@@ -7,7 +7,7 @@ using ProjectT.Data;
 namespace ProjectT.Inventory
 {
     /// <summary>
-    /// Main에서 영구 인벤토리를 준비하고 장면 전환에도 유지합니다. 보유 수량 규칙과 파일 처리는 별도 모듈에 위임합니다.
+    /// Bootstrap에서 영구 인벤토리를 준비하고 장면 전환에도 유지합니다. 보유 수량 규칙과 파일 처리는 별도 모듈에 위임합니다.
     /// </summary>
     public sealed class InventoryManager : SWSingleton<InventoryManager>
     {

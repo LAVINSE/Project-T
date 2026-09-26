@@ -5,6 +5,7 @@ using SW.Util;
 
 using ProjectT.Data;
 using ProjectT.Navigation;
+using ProjectT.Research;
 
 namespace ProjectT.Units
 {
@@ -107,9 +108,9 @@ namespace ProjectT.Units
 
         #region 초기화
         /// <summary>
-        /// 생성 위치에서 독립된 체력과 클래스별 부활 상태로 초기화합니다.
+        /// 생성 위치에서 독립된 체력과 클래스별 부활 상태로 초기화합니다. 연구 증가량은 체력 생성 전에 적용해 최대 체력으로 시작합니다.
         /// </summary>
-        public bool Initialize(UnitClassData definition, WalkableBattlefield terrain, Vector2 spawn)
+        public bool Initialize(UnitClassData definition, WalkableBattlefield terrain, Vector2 spawn, ResearchBonuses research)
         {
             if (definition == null || !definition.IsValid)
             {
@@ -121,6 +122,11 @@ namespace ProjectT.Units
             if (nextStats == null)
             {
                 return false;
+            }
+
+            if (research != null && !research.TryApply(nextStats))
+            {
+                SWLog.LogWarning("[CharacterUnit] 연구 효과 적용 실패: 연구 없이 배치합니다.");
             }
 
             Health nextHealth = Health.Create(nextStats.GetValue(definition.MaximumHealthStat));

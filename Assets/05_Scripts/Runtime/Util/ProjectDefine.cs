@@ -96,9 +96,19 @@ namespace ProjectT
         public static class Scene
         {
             /// <summary>
-            /// 공통 관리자를 준비하는 시작 장면입니다.
+            /// 화면 없이 공통 관리자를 준비하는 시작 장면입니다.
             /// </summary>
-            public const string MainPath = "Assets/01_Scenes/Main.unity";
+            public const string BootstrapPath = "Assets/01_Scenes/Bootstrap.unity";
+
+            /// <summary>
+            /// 게임 시작·종료를 고르는 타이틀 장면입니다. Bootstrap 다음에 불러옵니다.
+            /// </summary>
+            public const string TitlePath = "Assets/01_Scenes/Title.unity";
+
+            /// <summary>
+            /// 출전 준비·제작·인벤토리 정리를 하는 거점 장면입니다. 타이틀의 게임 시작과 전투 결과 후에 불러옵니다.
+            /// </summary>
+            public const string HubPath = "Assets/01_Scenes/Hub.unity";
 
             /// <summary>
             /// 편집기에서 Play 직전에 열려 있던 장면 경로를 보관하는 SessionState 키입니다.
@@ -120,9 +130,14 @@ namespace ProjectT
             public const string InventorySlot = "ProjectT_Inventory";
 
             /// <summary>
-            /// 현재 지원하는 영구 인벤토리 저장 형식입니다.
+            /// 현재 저장하는 영구 인벤토리 형식입니다. 설계도 해금 목록을 포함합니다.
             /// </summary>
-            public const int InventoryVersion = 1;
+            public const int InventoryVersion = 2;
+
+            /// <summary>
+            /// 설계도 해금 목록이 없던 이전 인벤토리 형식입니다. 읽을 수 있으며 다음 저장에서 현재 형식으로 바뀝니다.
+            /// </summary>
+            public const int PreviousInventoryVersion = 1;
 
             /// <summary>
             /// 소울 잔액과 지급 기록을 함께 저장하는 로컬 슬롯입니다.
@@ -133,9 +148,33 @@ namespace ProjectT
             /// 현재 지원하는 소울 저장 형식입니다.
             /// </summary>
             public const int SoulVersion = 1;
+
+            /// <summary>
+            /// 공통 연구 진행과 지불 기록을 저장하는 로컬 슬롯입니다.
+            /// </summary>
+            public const string ResearchSlot = "ProjectT_Research";
+
+            /// <summary>
+            /// 현재 지원하는 연구 저장 형식입니다.
+            /// </summary>
+            public const int ResearchVersion = 1;
         }
 
         #endregion // 영구 저장
+
+        #region 연구
+        /// <summary>
+        /// 공통 연구 트리 설정입니다.
+        /// </summary>
+        public static class Research
+        {
+            /// <summary>
+            /// 연구 비용에 사용하는 SWSkillTree 재화 이름입니다. 트리 편집기의 비용 재화에 같은 이름을 입력합니다.
+            /// </summary>
+            public const string SoulCurrency = "Soul";
+        }
+
+        #endregion // 연구
 
         #region 인벤토리
         /// <summary>

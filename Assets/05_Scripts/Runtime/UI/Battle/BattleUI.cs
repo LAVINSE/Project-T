@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using SW.Attributes;
 using SW.Base;
@@ -62,7 +63,7 @@ namespace ProjectT.UI
             characterHUD.Initialize(battle.Equipment, DataManager.Instance.SpriteData, EquipSelected);
             battle.Equipment.Changed += RefreshCharacter;
             progress.Initialize();
-            statisticsPopup.Initialize(DataManager.Instance.SpriteData);
+            statisticsPopup.Initialize(DataManager.Instance.SpriteData, ReturnToHub);
             progress.AdvanceRequested += AdvanceBattle;
             input.MessageChanged += RefreshInputMessage;
             battle.StateChanged += Refresh;
@@ -237,6 +238,17 @@ namespace ProjectT.UI
             }
             input.ShowMessage(identifier == null ? "장비를 해제했습니다." : "장비를 장착했습니다.");
             return true;
+        }
+
+        /// <summary>
+        /// 결과가 확정된 전투에서만 거점 장면으로 이동합니다. 장비 점유와 정지는 전투 종료 처리에서 이미 해제되었습니다.
+        /// </summary>
+        private void ReturnToHub()
+        {
+            if (battle.IsFinished)
+            {
+                SceneManager.LoadSceneAsync(ProjectDefine.Scene.HubPath);
+            }
         }
 
         /// <summary>
