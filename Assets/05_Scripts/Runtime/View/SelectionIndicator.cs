@@ -86,7 +86,7 @@ namespace ProjectT.View
             bool visible = target != null;
             Vector2 position = visible ? (Vector2)target.transform.position : Vector2.zero;
             bool hasDestination = visible
-                && (target.Movement.IsMoving
+                && (target.HasQueuedMove || target.Movement.IsMoving
                 || (!target.Health.IsAlive && Vector2.Distance(position, target.RequestedDestination) > 0.05f));
             attackRange.enabled = visible;
             destinationRing.enabled = hasDestination;

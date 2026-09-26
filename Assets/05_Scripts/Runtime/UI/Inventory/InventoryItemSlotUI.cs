@@ -19,7 +19,7 @@ namespace ProjectT.UI
         [SerializeField] private Image iconImage;
         [SerializeField] private TMP_Text countText;
         [SerializeField] private TMP_Text fallbackText;
-        [SerializeField] private GameObject selectionObject;
+        [SerializeField] private Image hoverImage;
 
         #endregion // 필드
 
@@ -45,6 +45,11 @@ namespace ProjectT.UI
         public event Action<InventoryItemSlotUI, PointerEventData> Picked;
 
         /// <summary>
+        /// 끌기 시작의 집기 요청입니다. 클릭으로 이미 집은 상태와 구분합니다.
+        /// </summary>
+        public event Action<InventoryItemSlotUI, PointerEventData> DragStarted;
+
+        /// <summary>
         /// 끌기를 끝낸 화면 위치를 전달합니다.
         /// </summary>
         public event Action<PointerEventData> Dropped;
@@ -63,16 +68,24 @@ namespace ProjectT.UI
             countText.text = item == null ? string.Empty : item.Count.ToString("N0");
             fallbackText.text = item == null || iconImage.enabled || item.Definition?.Equipment != null
                 ? string.Empty : item.DisplayName;
-            Select(false);
+            SetHovered(false);
             gameObject.SetActive(true);
         }
 
         /// <summary>
-        /// 집은 아이템에 선택 표시를 켭니다.
+        /// 보유 아이템이 있는 슬롯의 마우스 강조만 변경합니다.
         /// </summary>
-        public void Select(bool selected)
+        public void SetHovered(bool hovered)
         {
-            selectionObject.SetActive(selected);
+            hoverImage.enabled = hovered && Item != null;
+        }
+
+        /// <summary>
+        /// 창 닫기·필터 변경 후 이전 강조가 남지 않게 합니다.
+        /// </summary>
+        private void OnDisable()
+        {
+            SetHovered(false);
         }
 
         #endregion // 표시
@@ -94,6 +107,7 @@ namespace ProjectT.UI
         /// </summary>
         public void OnPointerExit(PointerEventData eventData)
         {
+            SetHovered(false);
             Exited?.Invoke();
         }
 
@@ -104,14 +118,7 @@ namespace ProjectT.UI
         {
             if (!eventData.dragging && eventData.button == PointerEventData.InputButton.Left)
             {
-                if (Item != null)
-                {
-                    Picked?.Invoke(this, eventData);
-                }
-                else
-                {
-                    Dropped?.Invoke(eventData);
-                }
+                Picked?.Invoke(this, eventData);
             }
         }
 
@@ -122,7 +129,8 @@ namespace ProjectT.UI
         {
             if (eventData.button == PointerEventData.InputButton.Left && Item != null)
             {
-                Picked?.Invoke(this, eventData);
+                eventData.eligibleForClick = false;
+                DragStarted?.Invoke(this, eventData);
             }
         }
 
@@ -138,7 +146,7 @@ namespace ProjectT.UI
         /// </summary>
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left && Item != null)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
                 Dropped?.Invoke(eventData);
             }

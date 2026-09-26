@@ -23,6 +23,8 @@ namespace ProjectT.Data
         [SerializeField] private SWStatOverride attackDamage;
         [SerializeField] private SWStatOverride attackRange;
         [SerializeField] private SWStatOverride attackSpeed;
+        [SerializeField] private SWStatOverride defense;
+        [SerializeField] private SWStatOverride evasion;
         [SerializeField] private SWCategory attackAction;
         [SerializeField] private Sprite portrait;
         [SerializeField] private Color tint = Color.white;
@@ -60,6 +62,16 @@ namespace ProjectT.Data
         /// 사거리 원본 스탯입니다. 미연결이면 null입니다.
         /// </summary>
         public SWStat AttackRangeStat => attackRange?.Stat;
+
+        /// <summary>
+        /// 방어력 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat DefenseStat => defense?.Stat;
+
+        /// <summary>
+        /// 회피 확률 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat EvasionStat => evasion?.Stat;
 
         /// <summary>
         /// 게임 화면에 표시할 이름입니다.
@@ -227,6 +239,8 @@ namespace ProjectT.Data
             valid &= CheckStat(attackSpeed, nameof(attackSpeed), issues);
             valid &= CheckStat(moveSpeed, nameof(moveSpeed), issues);
             valid &= CheckStat(attackRange, nameof(attackRange), issues);
+            valid &= CheckStat(defense, nameof(defense), issues);
+            valid &= CheckStat(evasion, nameof(evasion), issues);
             return valid;
         }
 
@@ -248,6 +262,8 @@ namespace ProjectT.Data
             yield return attackSpeed;
             yield return moveSpeed;
             yield return attackRange;
+            yield return defense;
+            yield return evasion;
         }
 
         #endregion // 스탯 정의

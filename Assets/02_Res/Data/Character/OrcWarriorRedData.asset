@@ -34,6 +34,14 @@ MonoBehaviour:
     stat: {fileID: 11400000, guid: 9f822f381939e8d418c1fe91738def0d, type: 2}
     isUseOverride: 1
     overrideDefaultValue: 1.25
+  defense:
+    stat: {fileID: 11400000, guid: 4bc84478e98b5ad47b365e9a2f7d18e1, type: 2}
+    isUseOverride: 0
+    overrideDefaultValue: 0
+  evasion:
+    stat: {fileID: 11400000, guid: 99f92d40448a4bc4d84b74c0afcbc716, type: 2}
+    isUseOverride: 0
+    overrideDefaultValue: 0
   attackAction: {fileID: 11400000, guid: 794012e5968d461489917cf65306f676, type: 2}
   portrait: {fileID: -6617506407744133513, guid: 40b987dd171b1d54f9ed9eae381227a8, type: 3}
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -56,25 +64,23 @@ MonoBehaviour:
   level: 1
   experience: 0
   requiredExperience: 0
-  additionalStats:
-  - stat: {fileID: 11400000, guid: 4bc84478e98b5ad47b365e9a2f7d18e1, type: 2}
-    isUseOverride: 1
+  criticalChance:
+    stat: {fileID: 11400000, guid: d9ada188d3aa3d14cb9c811de404e63e, type: 2}
+    isUseOverride: 0
     overrideDefaultValue: 0
-  - stat: {fileID: 11400000, guid: d9ada188d3aa3d14cb9c811de404e63e, type: 2}
-    isUseOverride: 1
+  criticalDamage:
+    stat: {fileID: 11400000, guid: c595080d19ea643448e0db326343734b, type: 2}
+    isUseOverride: 0
     overrideDefaultValue: 0
-  - stat: {fileID: 11400000, guid: c595080d19ea643448e0db326343734b, type: 2}
-    isUseOverride: 1
+  lifeSteal:
+    stat: {fileID: 11400000, guid: 435f5345fa5f2a047b46ee3d45da9441, type: 2}
+    isUseOverride: 0
     overrideDefaultValue: 0
-  - stat: {fileID: 11400000, guid: 99f92d40448a4bc4d84b74c0afcbc716, type: 2}
-    isUseOverride: 1
+  armorPenetration:
+    stat: {fileID: 11400000, guid: 65558f3c6562299499d745dc18253e1f, type: 2}
+    isUseOverride: 0
     overrideDefaultValue: 0
-  - stat: {fileID: 11400000, guid: 435f5345fa5f2a047b46ee3d45da9441, type: 2}
-    isUseOverride: 1
-    overrideDefaultValue: 0
-  - stat: {fileID: 11400000, guid: 900d160bcf45c14428521d8ae8f8363c, type: 2}
-    isUseOverride: 1
-    overrideDefaultValue: 0
-  - stat: {fileID: 11400000, guid: 65558f3c6562299499d745dc18253e1f, type: 2}
-    isUseOverride: 1
+  skillHaste:
+    stat: {fileID: 11400000, guid: 900d160bcf45c14428521d8ae8f8363c, type: 2}
+    isUseOverride: 0
     overrideDefaultValue: 0

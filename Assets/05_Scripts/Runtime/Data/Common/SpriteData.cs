@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 using SW.Attributes;
+using SW.Base;
 using SW.Util;
 
 namespace ProjectT.Data
@@ -29,9 +31,29 @@ namespace ProjectT.Data
         [SWGroup("아이콘")]
         [SerializeField] private Sprite swordsIcon;
         [SerializeField] private Sprite swordsBrokenIcon;
+
+        [SWGroup("등급 박스")]
+        [SerializeField] private Sprite commonBoxSprite;
+        [SerializeField] private GradeBox[] gradeBoxes = Array.Empty<GradeBox>();
         #endregion // 필드
 
         #region 조회
+        /// <summary>
+        /// 희귀도 분류의 박스를 반환합니다. 미지정·미등록 분류는 일반 박스입니다.
+        /// </summary>
+        public Sprite GetGradeBox(SWCategory category)
+        {
+            foreach (GradeBox entry in gradeBoxes)
+            {
+                if (entry.Category != null && category != null && entry.Category.CodeName == category.CodeName)
+                {
+                    return entry.Sprite;
+                }
+            }
+
+            return commonBoxSprite;
+        }
+
         /// <summary>
         /// 현재 배속의 아이콘을 반환합니다. 미연결 아이콘이나 지원하지 않는 배속은 null입니다.
         /// </summary>
@@ -86,5 +108,23 @@ namespace ProjectT.Data
             return valid;
         }
         #endregion // 조회
+
+        #region 등급 표시
+        /// <summary>
+        /// 사용자 분류와 슬롯 박스 스프라이트를 연결합니다.
+        /// </summary>
+        [Serializable]
+        private sealed class GradeBox
+        {
+            [SerializeField] private SWCategory category;
+            [SerializeField] private Sprite sprite;
+
+            /// <summary>표시 대상 분류입니다.</summary>
+            public SWCategory Category => category;
+            /// <summary>사용자가 지정한 박스 스프라이트입니다.</summary>
+            public Sprite Sprite => sprite;
+        }
+
+        #endregion // 등급 표시
     }
 }

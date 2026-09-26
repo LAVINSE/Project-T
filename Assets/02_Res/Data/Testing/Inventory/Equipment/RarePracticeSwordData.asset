@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a7f3d05714bae48915ba2a3150d95f, type: 3}
+  m_Name: RarePracticeSwordData
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.EquipmentData
+  displayName: "[\uB354\uBBF8] \uD76C\uADC0 \uAC80"
+  icon: {fileID: 21300000, guid: 18e077d1fdcfeaf4bb87703644e0b2ea, type: 3}
+  sellPrice: 120
+  sellCurrency: {fileID: 11400000, guid: 9bbc013fbfb43094495c5b13adbbfb53, type: 2}
+  rarity: {fileID: 11400000, guid: 2d5b37a195c44e147bdf8bc81fe2006c, type: 2}
+  performanceGrades:
+  - performanceGrade: {fileID: 11400000, guid: cd2096278ec469040b2d1e9b1111e9e7, type: 2}
+    effect: {fileID: 11400000, guid: 1135dce29badf8d47ac57c92bd82a784, type: 2}
+    selectionWeight: 3
+    statOverrides:
+    - stat: {fileID: 11400000, guid: 91f32c4be0ff72d47a999c6b73e2b1cd, type: 2}
+      enabled: 1
+      useAmountOverride: 0
+      amount: 12
+    - stat: {fileID: 11400000, guid: 9f822f381939e8d418c1fe91738def0d, type: 2}
+      enabled: 1
+      useAmountOverride: 0
+      amount: 0.2
+    - stat: {fileID: 11400000, guid: 7d3c7e6d7a96a364d98236f0c8a11f87, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 50
+    - stat: {fileID: 11400000, guid: 4bc84478e98b5ad47b365e9a2f7d18e1, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 5
+    - stat: {fileID: 11400000, guid: d9ada188d3aa3d14cb9c811de404e63e, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.05
+    - stat: {fileID: 11400000, guid: c595080d19ea643448e0db326343734b, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.25
+    - stat: {fileID: 11400000, guid: 798a4b49db0c8144d9ebee034b4f8da4, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.15
+    - stat: {fileID: 11400000, guid: 3c45740b4b0173d4a921e814c4dc5e3b, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.5
+    - stat: {fileID: 11400000, guid: 99f92d40448a4bc4d84b74c0afcbc716, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.03
+    - stat: {fileID: 11400000, guid: 435f5345fa5f2a047b46ee3d45da9441, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.03
+    - stat: {fileID: 11400000, guid: 900d160bcf45c14428521d8ae8f8363c, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.1
+    - stat: {fileID: 11400000, guid: 65558f3c6562299499d745dc18253e1f, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 4
+    additionalEffects: []
+  - performanceGrade: {fileID: 11400000, guid: 903684ba731a4c8419c34a903d7026cc, type: 2}
+    effect: {fileID: 11400000, guid: 1135dce29badf8d47ac57c92bd82a784, type: 2}
+    selectionWeight: 1
+    statOverrides:
+    - stat: {fileID: 11400000, guid: 91f32c4be0ff72d47a999c6b73e2b1cd, type: 2}
+      enabled: 1
+      useAmountOverride: 1
+      amount: 20
+    - stat: {fileID: 11400000, guid: 9f822f381939e8d418c1fe91738def0d, type: 2}
+      enabled: 1
+      useAmountOverride: 0
+      amount: 0.2
+    - stat: {fileID: 11400000, guid: 7d3c7e6d7a96a364d98236f0c8a11f87, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 50
+    - stat: {fileID: 11400000, guid: 4bc84478e98b5ad47b365e9a2f7d18e1, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 5
+    - stat: {fileID: 11400000, guid: d9ada188d3aa3d14cb9c811de404e63e, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.05
+    - stat: {fileID: 11400000, guid: c595080d19ea643448e0db326343734b, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.25
+    - stat: {fileID: 11400000, guid: 798a4b49db0c8144d9ebee034b4f8da4, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.15
+    - stat: {fileID: 11400000, guid: 3c45740b4b0173d4a921e814c4dc5e3b, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.5
+    - stat: {fileID: 11400000, guid: 99f92d40448a4bc4d84b74c0afcbc716, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.03
+    - stat: {fileID: 11400000, guid: 435f5345fa5f2a047b46ee3d45da9441, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.03
+    - stat: {fileID: 11400000, guid: 900d160bcf45c14428521d8ae8f8363c, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 0.1
+    - stat: {fileID: 11400000, guid: 65558f3c6562299499d745dc18253e1f, type: 2}
+      enabled: 0
+      useAmountOverride: 0
+      amount: 4
+    additionalEffects: []

@@ -44,6 +44,16 @@ namespace ProjectT.Editor.Data
                     detail.Add(Text("아이콘은 연결한 장비에서 설정합니다. 미등록이면 빈 아이콘으로 표시됩니다.", "project-data-description"));
                     continue;
                 }
+                if (session.Draft is ItemData pricedEquipmentItem && pricedEquipmentItem.Equipment != null
+                    && (iterator.propertyPath == "sellPrice" || iterator.propertyPath == "sellCurrency"))
+                {
+                    if (iterator.propertyPath == "sellPrice")
+                    {
+                        detail.Add(Text("판매 재화와 금액은 연결한 장비에서 설정합니다. 현재 판매가 (1개): "
+                            + ((double?)pricedEquipmentItem.SellPrice).ExToSellPriceText(pricedEquipmentItem.SellCurrency), "project-data-description"));
+                    }
+                    continue;
+                }
 
                 var description = DataCatalog.Describe(iterator.propertyPath);
                 if (!groups.TryGetValue(description.Group, out Foldout group))

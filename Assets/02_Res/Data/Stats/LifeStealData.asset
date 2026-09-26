@@ -18,7 +18,7 @@ MonoBehaviour:
   displayName: "\uC0DD\uBA85\uB825 \uD761\uC218"
   description: 
   spriteIcon: {fileID: 0}
-  isPercentType: 0
+  isPercentType: 1
   maxValue: 3.4028235e+38
   minValue: 0
   defaultValue: 0

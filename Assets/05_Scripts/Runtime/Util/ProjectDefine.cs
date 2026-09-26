@@ -188,6 +188,31 @@ namespace ProjectT
         public static class Battle
         {
             /// <summary>
+            /// 한 캐릭터가 동시에 장착할 수 있는 장비 수입니다.
+            /// </summary>
+            public const int EquipmentSlotCount = 2;
+
+            /// <summary>
+            /// 방어력 비율 감소의 기준값입니다. 유효 방어력이 이 값과 같으면 피해가 절반이 됩니다.
+            /// </summary>
+            public const float DefenseScale = 100f;
+
+            /// <summary>
+            /// 치명타 피해 능력치가 0일 때의 치명타 피해 배율입니다.
+            /// </summary>
+            public const float BaseCriticalMultiplier = 1.5f;
+
+            /// <summary>
+            /// 치명타 확률의 상한입니다. 1은 100%입니다.
+            /// </summary>
+            public const float MaximumCriticalChance = 1f;
+
+            /// <summary>
+            /// 회피 확률의 상한입니다. 1은 100%입니다.
+            /// </summary>
+            public const float MaximumEvasion = 0.75f;
+
+            /// <summary>
             /// 배속 버튼이 순환하는 최대 배속입니다.
             /// </summary>
             public const int MaximumSpeedMultiplier = 3;

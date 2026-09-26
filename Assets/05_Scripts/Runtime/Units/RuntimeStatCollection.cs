@@ -15,6 +15,8 @@ namespace ProjectT.Units
         #region 필드
         private readonly Dictionary<SWStat, SWStat> stats = new Dictionary<SWStat, SWStat>();
         private readonly List<SWStat> order = new List<SWStat>();
+        private bool replacingBonuses;
+        private bool bonusValueChanged;
 
         #endregion // 필드
 
@@ -138,9 +140,77 @@ namespace ProjectT.Units
         }
 
         /// <summary>
+        /// 한 출처의 스탯 묶음을 전체 검사한 뒤 교체합니다. 소유자 알림은 마지막에 한 번 보내 중간 체력 감소를 방지합니다.
+        /// </summary>
+        public bool TryReplaceBonuses(object source, IReadOnlyDictionary<SWStat, float> bonuses)
+        {
+            if (source == null || bonuses == null || replacingBonuses)
+            {
+                return false;
+            }
+
+            foreach (var bonus in bonuses)
+            {
+                if (bonus.Key == null || !bonus.Value.ExIsFinite() || !stats.ContainsKey(bonus.Key))
+                {
+                    return false;
+                }
+            }
+            foreach (var entry in stats)
+            {
+                bonuses.TryGetValue(entry.Key, out float amount);
+                float next = entry.Value.BonusValue - entry.Value.GetBonusValue(source, source) + amount;
+                if (!next.ExIsFinite() || !(entry.Value.DefaultValue + next).ExIsFinite())
+                {
+                    return false;
+                }
+            }
+
+            replacingBonuses = true;
+            bonusValueChanged = false;
+            try
+            {
+                foreach (var entry in stats)
+                {
+                    bonuses.TryGetValue(entry.Key, out float amount);
+                    if (amount == 0f)
+                    {
+                        entry.Value.RemoveBonusValue(source, source);
+                    }
+                    else
+                    {
+                        entry.Value.SetBonusValue(source, source, amount);
+                    }
+                }
+            }
+            finally
+            {
+                replacingBonuses = false;
+            }
+            if (bonusValueChanged)
+            {
+                NotifyChanged();
+            }
+            return true;
+        }
+
+        /// <summary>
         /// 스탯 알림을 소유자에게 전달합니다.
         /// </summary>
         private void OnValueChanged(SWStat stat, float current, float previous)
+        {
+            if (replacingBonuses)
+            {
+                bonusValueChanged = true;
+                return;
+            }
+            NotifyChanged();
+        }
+
+        /// <summary>
+        /// 완성된 능력치 변경을 소유자에게 전달합니다.
+        /// </summary>
+        private void NotifyChanged()
         {
             if (Changed == null)
             {

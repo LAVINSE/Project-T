@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.CurrencyDefinition
   displayName: "\uCF54\uC778"
   icon: {fileID: 0}
-  defaultAmount: 10
+  defaultAmount: 0

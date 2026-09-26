@@ -44,6 +44,16 @@ namespace ProjectT.Units
         public float MoveSpeed => Stats?.GetValue(Data.MoveSpeedStat) ?? 0f;
 
         /// <summary>
+        /// 현재 방어력입니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float Defense => Stats?.GetValue(Data.DefenseStat) ?? 0f;
+
+        /// <summary>
+        /// 현재 회피 확률입니다. 1은 100%이며 상한은 전투 계산에서 적용합니다. 초기화 전에는 0입니다.
+        /// </summary>
+        public float Evasion => Stats?.GetValue(Data.EvasionStat) ?? 0f;
+
+        /// <summary>
         /// 이 개체의 공통 능력치와 표시 정보입니다. 초기화 전에는 null입니다.
         /// </summary>
         public abstract UnitData Data { get; }

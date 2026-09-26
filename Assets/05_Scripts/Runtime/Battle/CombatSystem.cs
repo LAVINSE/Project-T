@@ -8,7 +8,7 @@ using ProjectT.Units;
 namespace ProjectT.Battle
 {
     /// <summary>
-    /// 근접 저지와 자동 공격 대상을 결정합니다. 이동 명령과 사망은 저지를 즉시 해제합니다.
+    /// 근접 저지와 자동 공격 대상을 결정하고 유닛 사이 타격에 피해 계산을 적용합니다. 이동 명령과 사망은 저지를 즉시 해제합니다.
     /// </summary>
     public sealed class CombatSystem
     {
@@ -16,6 +16,7 @@ namespace ProjectT.Battle
         private readonly List<CharacterUnit> allies;
         private readonly List<EnemyUnit> enemies;
         private readonly Workshop workshop;
+        private readonly DamageCalculator damage;
         private readonly Dictionary<CharacterUnit, int> blockedCounts = new Dictionary<CharacterUnit, int>();
 
         #endregion // 필드
@@ -31,20 +32,27 @@ namespace ProjectT.Battle
         /// </summary>
         public event Action<CharacterUnit, float, bool> AllyHitResolved;
 
+        /// <summary>
+        /// 유닛 사이 타격의 피해 계산 결과와 생명력 흡수 회복량을 전달합니다. 회피한 타격도 포함합니다.
+        /// </summary>
+        public event Action<UnitBase, UnitBase, DamageResult, float> HitCalculated;
+
         #endregion // 프로퍼티
 
         #region 초기화
         /// <summary>
-        /// 현재 전투의 개체 목록을 연결합니다.
+        /// 현재 전투의 개체 목록과 피해 계산을 연결합니다.
         /// </summary>
         public CombatSystem(
             List<CharacterUnit> allyUnits,
             List<EnemyUnit> enemyUnits,
-            Workshop objective)
+            Workshop objective,
+            DamageCalculator damageCalculator)
         {
             allies = allyUnits;
             enemies = enemyUnits;
             workshop = objective;
+            damage = damageCalculator;
         }
 
         #endregion // 초기화
@@ -400,12 +408,20 @@ namespace ProjectT.Battle
                 ally.Definition,
                 target.Definition,
                 ally.BlockCapacity == 0);
+            DamageResult result = damage.Calculate(ally.AttackProfile, target.Defense, target.Evasion);
             Health targetHealth = target.Health;
             float previousHealth = targetHealth.Current;
-            if (targetHealth.TakeDamage(ally.AttackDamage))
+            if (!targetHealth.TakeDamage(result.Amount))
             {
-                AllyHitResolved?.Invoke(ally, previousHealth - targetHealth.Current, !targetHealth.IsAlive);
+                HitCalculated?.Invoke(ally, target, result, 0f);
+                return;
             }
+
+            float dealt = previousHealth - targetHealth.Current;
+            float healthBeforeHeal = ally.Health.Current;
+            ally.Health.Heal(dealt * ally.LifeSteal);
+            HitCalculated?.Invoke(ally, target, result, ally.Health.Current - healthBeforeHeal);
+            AllyHitResolved?.Invoke(ally, dealt, !targetHealth.IsAlive);
         }
 
         /// <summary>
@@ -449,7 +465,9 @@ namespace ProjectT.Battle
             }
 
             EmitImpact(enemy.transform.position, target.transform.position, enemy.Definition, target.Definition, false);
-            target.Health.TakeDamage(enemy.AttackDamage);
+            DamageResult result = damage.Calculate(new AttackProfile(enemy.AttackDamage), target.Defense, target.Evasion);
+            target.Health.TakeDamage(result.Amount);
+            HitCalculated?.Invoke(enemy, target, result, 0f);
         }
 
         /// <summary>

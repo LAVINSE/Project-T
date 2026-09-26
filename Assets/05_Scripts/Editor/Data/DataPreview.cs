@@ -112,6 +112,10 @@ namespace ProjectT.Editor.Data
         private static void AddReward(VisualElement root, RewardData reward)
         {
             root.Add(Description(reward.DisplayName + " · 기본 수량 " + reward.DefaultAmount));
+            if (reward is ItemData pricedItem)
+            {
+                root.Add(Description("판매가 (1개): " + ((double?)pricedItem.SellPrice).ExToSellPriceText(pricedItem.SellCurrency)));
+            }
             root.Add(Description("적별 보상에서 수량을 덮어쓸 수 있습니다. 소울·아이템은 기존 자동 지급과 영구 저장을 사용합니다."));
             if (reward is ItemData item && item.Equipment != null)
             {
@@ -156,6 +160,7 @@ namespace ProjectT.Editor.Data
         /// </summary>
         private static void AddEquipment(VisualElement root, EquipmentData equipment)
         {
+            root.Add(Description("판매가 (1개): " + ((double?)equipment.SellPrice).ExToSellPriceText(equipment.SellCurrency)));
             if (equipment.Icon != null)
             {
                 var icon = new Image { sprite = equipment.Icon, scaleMode = ScaleMode.ScaleToFit };

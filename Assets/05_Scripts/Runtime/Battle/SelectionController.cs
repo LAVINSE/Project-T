@@ -100,6 +100,11 @@ namespace ProjectT.Battle
                 return;
             }
 
+            if (battle.TimeController.IsPaused)
+            {
+                showMessage("이동 목적지를 예약했습니다. 정지를 해제하면 마지막 명령을 실행합니다.");
+                return;
+            }
             showMessage(SelectedUnit.Health.IsAlive
                 ? "목적지로 이동합니다. 이동 중에는 공격과 저지를 멈춥니다."
                 : "부활 후 이동할 목적지를 변경했습니다.");

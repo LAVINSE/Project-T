@@ -15,6 +15,8 @@ namespace ProjectT.Data
         #region 필드
         [SerializeField] private string displayName = "새 장비";
         [SerializeField] private Sprite icon;
+        [SerializeField, Min(0)] private double sellPrice;
+        [SerializeField] private CurrencyData sellCurrency;
         [SerializeField] private SWCategory rarity;
         [SerializeField] private EquipmentPerformanceGrade[] performanceGrades = Array.Empty<EquipmentPerformanceGrade>();
 
@@ -30,6 +32,16 @@ namespace ProjectT.Data
         /// 연결한 장비 아이템이 공통으로 사용하는 그림입니다. 미등록이면 빈 아이콘입니다.
         /// </summary>
         public Sprite Icon => icon;
+
+        /// <summary>
+        /// 이 장비에 연결된 아이템이 사용하는 한 개의 판매가입니다. 기본값은 0입니다.
+        /// </summary>
+        public double SellPrice => sellPrice;
+
+        /// <summary>
+        /// 이 장비의 판매 대금으로 받는 재화입니다. 미지정이면 판매가를 표시하지 않습니다.
+        /// </summary>
+        public CurrencyData SellCurrency => sellCurrency;
 
         /// <summary>
         /// 일반·희귀처럼 사용자가 정의하는 희귀도입니다. 성능 등급이 있는 장비는 반드시 연결합니다.
@@ -133,6 +145,9 @@ namespace ProjectT.Data
         public override bool Validate(List<DataIssue> issues)
         {
             bool valid = CheckName(displayName, nameof(displayName), issues);
+            valid &= CheckNonNegative(sellPrice, nameof(sellPrice), issues);
+            valid &= Check(sellCurrency == null || sellCurrency.IsValid,
+                nameof(sellCurrency), "판매 재화의 검사 오류를 확인하세요.", issues);
             valid &= Check(performanceGrades != null, nameof(performanceGrades), "성능 등급 목록이 없습니다.", issues);
             valid &= Check(rarity == null || !string.IsNullOrWhiteSpace(rarity.CodeName), nameof(rarity), "희귀도 분류에 코드명이 필요합니다.", issues);
             if (performanceGrades == null)

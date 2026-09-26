@@ -7,6 +7,7 @@ using SW.Pooling;
 using SW.Util;
 
 using ProjectT.Data;
+using ProjectT.Equipment;
 using ProjectT.Inventory;
 using ProjectT.Navigation;
 using ProjectT.Progression;
@@ -65,6 +66,11 @@ namespace ProjectT.Battle
         public InventoryStore Inventory { get; private set; }
 
         /// <summary>
+        /// 이 전투 개체들의 장비 점유와 효과입니다.
+        /// </summary>
+        public BattleEquipment Equipment { get; private set; }
+
+        /// <summary>
         /// 보류 중인 보상 지급 안내입니다. 정상 지급 상태에서는 빈 문자열입니다.
         /// </summary>
         public string RewardIssue { get; private set; } = string.Empty;
@@ -105,6 +111,11 @@ namespace ProjectT.Battle
         public IReadOnlyList<CharacterUnit> Allies => allies;
 
         /// <summary>
+        /// 아직 처치되지 않은 전장의 적 목록입니다. 초기화 실패 시 빈 목록입니다.
+        /// </summary>
+        public IReadOnlyList<EnemyUnit> Enemies => spawner != null ? spawner.Enemies : (IReadOnlyList<EnemyUnit>)Array.Empty<EnemyUnit>();
+
+        /// <summary>
         /// 현재 전투의 통계입니다. 승패 확정 후에는 종료 시점의 값으로 유지됩니다.
         /// </summary>
         public BattleStatistics Statistics { get; } = new BattleStatistics();
@@ -115,9 +126,14 @@ namespace ProjectT.Battle
         public bool IsReady => combat != null;
 
         /// <summary>
-        /// 플레이어가 배치와 이동 명령을 내릴 수 있는 상태입니다.
+        /// 플레이어가 구매 배치와 라운드 진행을 요청할 수 있는 상태입니다. 정지 중에는 허용하지 않습니다.
         /// </summary>
         public bool CanCommand => IsReady && enabled && !TimeController.IsPaused && !IsFinished;
+
+        /// <summary>
+        /// 정지 중에도 선택·이동 예약·장비 변경이 가능한 상태입니다. 종료된 전투는 제외합니다.
+        /// </summary>
+        public bool CanInteract => IsReady && enabled && !IsFinished;
 
         /// <summary>
         /// 단계·라운드·처치 수·잔액·정지 상태 중 하나가 바뀌었을 때 발생합니다.
@@ -128,6 +144,16 @@ namespace ProjectT.Battle
         /// 공격 시각 효과 요청을 표시 모듈로 전달합니다.
         /// </summary>
         public event Action<Vector2, Vector2, bool> Attacked;
+
+        /// <summary>
+        /// 새 적을 전장에 생성했을 때 발생합니다.
+        /// </summary>
+        public event Action<EnemyUnit> EnemySpawned;
+
+        /// <summary>
+        /// 유닛 사이 타격의 피해 계산 결과와 생명력 흡수 회복량을 전달합니다.
+        /// </summary>
+        public event Action<UnitBase, UnitBase, DamageResult, float> HitCalculated;
 
         #endregion // 프로퍼티
 
@@ -180,18 +206,21 @@ namespace ProjectT.Battle
             }
 
             Wallet = wallet;
+            Equipment = new BattleEquipment(Inventory);
             Workshop = workshop;
             deployment = new DeploymentService(stage, Wallet, battlefield, unitParent, colors);
             spawner = new EnemySpawner(stage.Enemy, route, unitParent, colors, stage.SpawnInterval);
-            combat = new CombatSystem(allies, spawner.Enemies, Workshop);
+            combat = new CombatSystem(allies, spawner.Enemies, Workshop, new DamageCalculator(() => UnityEngine.Random.value));
             workshopView.Initialize(Workshop, colors);
             Wallet.Changed += NotifyStateChanged;
             Souls.Changed += NotifyStateChanged;
             Workshop.Health.Died += OnWorkshopDestroyed;
-            TimeController.PauseChanged += NotifyStateChanged;
+            TimeController.PauseChanged += OnPauseChanged;
             spawner.EnemyResolved += OnEnemyResolved;
+            spawner.EnemySpawned += OnEnemySpawned;
             combat.Attacked += OnAttacked;
             combat.AllyHitResolved += Statistics.RecordHit;
+            combat.HitCalculated += OnHitCalculated;
             Phase = BattlePhase.Preparation;
         }
 
@@ -249,7 +278,18 @@ namespace ProjectT.Battle
         /// </summary>
         public bool TryMove(CharacterUnit unit, Vector2 destination)
         {
-            return CanCommand && unit != null && allies.Contains(unit) && unit.TryMove(destination);
+            return CanInteract && unit != null && allies.Contains(unit)
+                && (TimeController.IsPaused ? unit.TryQueueMove(destination) : unit.TryMove(destination));
+        }
+
+        /// <summary>
+        /// 선택 가능한 아군의 장비를 변경합니다. 정지는 장착을 막지 않으며 결과 확정 후에는 거절합니다.
+        /// </summary>
+        public bool TryEquip(CharacterUnit unit, int index, string identifier, out string reason)
+        {
+            reason = "지금은 이 캐릭터의 장비를 변경할 수 없습니다.";
+            return CanInteract && unit != null && allies.Contains(unit)
+                && Equipment.TryEquip(unit, index, identifier, out reason);
         }
 
         /// <summary>
@@ -415,6 +455,7 @@ namespace ProjectT.Battle
             combat.CancelAttacks();
             resultPause = TimeController.Pause();
             SetPhase(phase);
+            Equipment.Dispose();
         }
 
         /// <summary>
@@ -434,6 +475,22 @@ namespace ProjectT.Battle
         }
 
         /// <summary>
+        /// 새로 생성한 적을 외부 모듈에 전달합니다.
+        /// </summary>
+        private void OnEnemySpawned(EnemyUnit enemy)
+        {
+            EnemySpawned?.Invoke(enemy);
+        }
+
+        /// <summary>
+        /// 타격 계산 결과를 외부 모듈에 전달합니다.
+        /// </summary>
+        private void OnHitCalculated(UnitBase attacker, UnitBase target, DamageResult result, float healed)
+        {
+            HitCalculated?.Invoke(attacker, target, result, healed);
+        }
+
+        /// <summary>
         /// 상태 변경을 구독자에게 알립니다.
         /// </summary>
         private void NotifyStateChanged()
@@ -442,6 +499,21 @@ namespace ProjectT.Battle
                 Time.realtimeSinceStartupAsDouble,
                 IsReady && enabled && Phase == BattlePhase.Fighting && !TimeController.IsPaused);
             StateChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// 마지막 정지가 풀리면 개체별 마지막 예약 목적지를 적용하고 화면에 알립니다.
+        /// </summary>
+        private void OnPauseChanged()
+        {
+            if (CanInteract && !TimeController.IsPaused)
+            {
+                foreach (CharacterUnit ally in allies)
+                {
+                    ally.ResumeQueuedMove();
+                }
+            }
+            NotifyStateChanged();
         }
 
         #endregion // 진행
@@ -462,10 +534,13 @@ namespace ProjectT.Battle
             Wallet.Changed -= NotifyStateChanged;
             Souls.Changed -= NotifyStateChanged;
             Workshop.Health.Died -= OnWorkshopDestroyed;
-            TimeController.PauseChanged -= NotifyStateChanged;
+            TimeController.PauseChanged -= OnPauseChanged;
+            Equipment.Dispose();
             spawner.EnemyResolved -= OnEnemyResolved;
+            spawner.EnemySpawned -= OnEnemySpawned;
             combat.Attacked -= OnAttacked;
             combat.AllyHitResolved -= Statistics.RecordHit;
+            combat.HitCalculated -= OnHitCalculated;
             SWPool pool = SWPool.HasInstance ? SWPool.Instance : null;
             foreach (CharacterUnit ally in allies)
             {

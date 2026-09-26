@@ -15,6 +15,8 @@ namespace ProjectT.Data
         [SerializeField] private SWCategory category;
         [SerializeField, Tooltip("획득 저장에 성공하면 인벤토리 아이콘 연출을 표시합니다.")] private bool specialLoot;
         [SerializeField, TextArea(3, 8)] private string description;
+        [SerializeField, Min(0)] private double sellPrice;
+        [SerializeField] private CurrencyData sellCurrency;
         [SerializeField] private EquipmentData equipment;
         [SerializeField] private SWCategory performanceGrade;
 
@@ -35,6 +37,16 @@ namespace ProjectT.Data
         /// 마우스를 올렸을 때 표시할 설명입니다. 미작성 시 빈 문자열입니다.
         /// </summary>
         public string Description => description ?? string.Empty;
+
+        /// <summary>
+        /// 한 개의 판매가입니다. 장비 아이템은 연결한 장비의 공통 판매가를 사용합니다.
+        /// </summary>
+        public double SellPrice => equipment != null ? equipment.SellPrice : sellPrice;
+
+        /// <summary>
+        /// 판매 시 받는 재화입니다. 미지정이면 판매가를 표시하지 않으며 장비는 장비 정의를 따릅니다.
+        /// </summary>
+        public CurrencyData SellCurrency => equipment != null ? equipment.SellCurrency : sellCurrency;
 
         /// <summary>
         /// 장비 아이템의 종류·희귀도·등급별 효과 정의입니다. 일반 아이템은 연결하지 않습니다.
@@ -60,6 +72,9 @@ namespace ProjectT.Data
         public override bool Validate(List<DataIssue> issues)
         {
             bool valid = base.Validate(issues);
+            valid &= equipment != null || CheckNonNegative(sellPrice, nameof(sellPrice), issues);
+            valid &= equipment != null || Check(sellCurrency == null || sellCurrency.IsValid,
+                nameof(sellCurrency), "판매 재화의 검사 오류를 확인하세요.", issues);
             valid &= Check(DefaultAmount.ExIsItemCount(), "defaultAmount", "아이템 수량은 계산 가능한 범위의 0 이상 정수여야 합니다.", issues);
             valid &= Check(category == null || !string.IsNullOrWhiteSpace(category.CodeName), nameof(category), "아이템 분류에 코드명이 필요합니다.", issues);
             valid &= Check(equipment != null || performanceGrade == null, nameof(equipment), "성능 등급을 지정한 아이템은 장비 정의를 연결하세요.", issues);

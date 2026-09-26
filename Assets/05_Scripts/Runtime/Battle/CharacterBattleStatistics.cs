@@ -65,7 +65,7 @@ namespace ProjectT.Battle
         public IReadOnlyList<StatDisplay> Stats { get; private set; } = Array.Empty<StatDisplay>();
 
         /// <summary>
-        /// 공격력과 공격 속도로 계산한 기본 공격 DPS입니다. 추가 능력치의 효과는 포함하지 않습니다.
+        /// 공격력과 공격 속도로 계산한 기본 공격 DPS입니다. 치명타·방어 등 전투 보조 능력치는 확률과 대상에 따라 달라지므로 포함하지 않습니다.
         /// </summary>
         public double BasicAttackDamagePerSecond => (double)attackDamage * attackSpeed;
 

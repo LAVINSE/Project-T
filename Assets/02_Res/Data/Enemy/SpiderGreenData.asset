@@ -34,6 +34,14 @@ MonoBehaviour:
     stat: {fileID: 11400000, guid: 9f822f381939e8d418c1fe91738def0d, type: 2}
     isUseOverride: 1
     overrideDefaultValue: 0
+  defense:
+    stat: {fileID: 11400000, guid: 4bc84478e98b5ad47b365e9a2f7d18e1, type: 2}
+    isUseOverride: 0
+    overrideDefaultValue: 0
+  evasion:
+    stat: {fileID: 11400000, guid: 99f92d40448a4bc4d84b74c0afcbc716, type: 2}
+    isUseOverride: 0
+    overrideDefaultValue: 0
   attackAction: {fileID: 11400000, guid: 794012e5968d461489917cf65306f676, type: 2}
   portrait: {fileID: 8500924862469547597, guid: 7be8a4e3ffd8f57499dee56821c7ed65, type: 3}
   tint: {r: 1, g: 1, b: 1, a: 1}

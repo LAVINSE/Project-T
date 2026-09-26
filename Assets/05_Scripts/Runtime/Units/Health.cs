@@ -117,6 +117,21 @@ namespace ProjectT.Units
         }
 
         /// <summary>
+        /// 생존 중에만 최대 체력 이내로 회복합니다. 사망자·가득 찬 체력·잘못된 값이면 변경 없이 false입니다.
+        /// </summary>
+        public bool Heal(float amount)
+        {
+            if (!IsAlive || !amount.ExIsPositive() || Current >= Maximum)
+            {
+                return false;
+            }
+
+            Current = Math.Min(Maximum, Current + amount);
+            Changed?.Invoke();
+            return true;
+        }
+
+        /// <summary>
         /// 같은 개체가 부활할 때 최대 체력으로 회복합니다.
         /// </summary>
         public void Revive()

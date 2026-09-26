@@ -21,3 +21,13 @@ MonoBehaviour:
   resultLoseSprite: {fileID: 21300000, guid: 796d726d27270d544918059ed842bb94, type: 3}
   swordsIcon: {fileID: 21300000, guid: 6ce24703ffa878244a6a25dd8e590eeb, type: 3}
   swordsBrokenIcon: {fileID: 21300000, guid: a79c9da5ff934a04a9765cf8a2d5044a, type: 3}
+  commonBoxSprite: {fileID: 21300000, guid: da302b378243bc142aa37a37b50153c6, type: 3}
+  gradeBoxes:
+  - category: {fileID: 11400000, guid: 2d5b37a195c44e147bdf8bc81fe2006c, type: 2}
+    sprite: {fileID: 21300000, guid: d6cd671e790713d4786813c733c685ff, type: 3}
+  - category: {fileID: 11400000, guid: 0e331c8dad8502745a152787ed30afec, type: 2}
+    sprite: {fileID: 21300000, guid: 4b882070ac3045b45ad4191eb16335fb, type: 3}
+  - category: {fileID: 11400000, guid: 7f08f67d1ce0fa246afb3ce0e305101c, type: 2}
+    sprite: {fileID: 21300000, guid: a627c46584f2ed94db0c2334ac0ad302, type: 3}
+  - category: {fileID: 11400000, guid: 48eb2df1d4fd8d644a02f26aedf77901, type: 2}
+    sprite: {fileID: 21300000, guid: 8ca38e71a668104439457034ee210510, type: 3}

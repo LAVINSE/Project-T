@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,8 @@ using TMPro;
 using SW.Base;
 
 using ProjectT.Units;
+using ProjectT.Data;
+using ProjectT.Equipment;
 
 namespace ProjectT.UI
 {
@@ -22,10 +25,26 @@ namespace ProjectT.UI
         [SerializeField] private Image experienceFillImage;
         [SerializeField] private TMP_Text levelText;
         [SerializeField] private Button[] skillButtons;
+        [SerializeField] private CharacterEquipmentSlotUI[] equipmentSlots;
+        private BattleEquipment equipment;
+        private SpriteData sprites;
 
         #endregion // 필드
 
         #region 초기화
+        /// <summary>
+        /// 장비 표시와 선택 캐릭터의 장착 요청을 전달받습니다.
+        /// </summary>
+        public void Initialize(BattleEquipment battleEquipment, SpriteData spriteData, Func<int, string, bool> equip)
+        {
+            equipment = battleEquipment;
+            sprites = spriteData;
+            for (int index = 0; index < equipmentSlots.Length; index++)
+            {
+                equipmentSlots[index].Initialize(index, equip);
+            }
+        }
+
         /// <summary>
         /// 선택 전의 성장 표시와 미등록 스킬 버튼을 초기화합니다.
         /// </summary>
@@ -57,6 +76,10 @@ namespace ProjectT.UI
             }
 
             Health health = unit.Health;
+            for (int index = 0; index < equipmentSlots.Length; index++)
+            {
+                equipmentSlots[index].Present(equipment.GetItem(unit, index), sprites);
+            }
             portraitImage.sprite = unit.Definition.Portrait;
             portraitImage.enabled = portraitImage.sprite != null;
             levelText.text = unit.Definition.Level.ToString();

@@ -29,6 +29,7 @@ namespace ProjectT.Battle
         private BattleManager battle;
         private PointerEventData pointerData;
         private EventSystem pointerEventSystem;
+        private Func<bool> blocksFieldInput;
 
         #endregion // 필드
 
@@ -120,6 +121,14 @@ namespace ProjectT.Battle
 
         #region 화면 요청
         /// <summary>
+        /// 아이템 집기·버리기 확인처럼 필드가 소비하면 안 되는 입력의 조건을 연결합니다.
+        /// </summary>
+        public void SetFieldInputBlocker(Func<bool> blocker)
+        {
+            blocksFieldInput = blocker;
+        }
+
+        /// <summary>
         /// 구매 버튼의 클릭·드래그로 배치를 시작하고 현재 포인터 위치에 미리보기를 표시합니다.
         /// </summary>
         public void BeginPlacement(UnitClassData unitClass, bool dragging = false)
@@ -158,7 +167,7 @@ namespace ProjectT.Battle
         private void OnSelect(InputAction.CallbackContext context)
         {
             Vector2? position = GetWorldPosition(pointAction.ReadValue<Vector2>());
-            if (!battle.CanCommand || !position.HasValue)
+            if (!battle.CanInteract || !position.HasValue)
             {
                 return;
             }
@@ -181,6 +190,10 @@ namespace ProjectT.Battle
         /// </summary>
         private void OnCommand(InputAction.CallbackContext context)
         {
+            if (blocksFieldInput?.Invoke() == true)
+            {
+                return;
+            }
             if (Placement.IsPlacing)
             {
                 Placement.Cancel();
@@ -188,7 +201,7 @@ namespace ProjectT.Battle
             }
 
             Vector2? position = GetWorldPosition(pointAction.ReadValue<Vector2>());
-            if (battle.CanCommand && position.HasValue)
+            if (battle.CanInteract && position.HasValue)
             {
                 Selection.MoveSelected(position.Value);
             }
@@ -246,7 +259,7 @@ namespace ProjectT.Battle
         /// <summary>
         /// 안내 문구를 바꾸고 화면에 알립니다.
         /// </summary>
-        private void ShowMessage(string message)
+        public void ShowMessage(string message)
         {
             Message = message;
             MessageChanged?.Invoke();
@@ -260,7 +273,7 @@ namespace ProjectT.Battle
         /// </summary>
         private Vector2? GetWorldPosition(Vector2 screenPosition)
         {
-            if (!worldCamera.pixelRect.Contains(screenPosition))
+            if (blocksFieldInput?.Invoke() == true || !worldCamera.pixelRect.Contains(screenPosition))
             {
                 return null;
             }

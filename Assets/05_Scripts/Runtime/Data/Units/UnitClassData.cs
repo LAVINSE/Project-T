@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +9,7 @@ using ProjectT.Units;
 namespace ProjectT.Data
 {
     /// <summary>
-    /// 캐릭터의 전투 설정과 성장 표시 값을 관리합니다.
-    /// 전투 규칙이 직접 읽는 능력치만 이름을 가진 항목으로 두고, 표시만 하는 능력치는 추가 능력치 목록에 넣습니다.
+    /// 캐릭터의 전투 설정과 성장 표시 값을 관리합니다. 전투 규칙이 직접 읽는 능력치는 이름을 가진 항목으로 둡니다.
     /// </summary>
     [CreateAssetMenu(fileName = "UnitClassData", menuName = "Project T/데이터/캐릭터")]
     public sealed class UnitClassData : UnitData
@@ -27,9 +25,12 @@ namespace ProjectT.Data
         [SerializeField, Min(0)] private double experience;
         [SerializeField, Min(0)] private double requiredExperience;
 
-        [SWGroup("추가 능력치 · 전투 계산 미적용")]
-
-        [SerializeField] private SWStatOverride[] additionalStats = Array.Empty<SWStatOverride>();
+        [SWGroup("전투 보조 능력치")]
+        [SerializeField] private SWStatOverride criticalChance;
+        [SerializeField] private SWStatOverride criticalDamage;
+        [SerializeField] private SWStatOverride lifeSteal;
+        [SerializeField] private SWStatOverride armorPenetration;
+        [SerializeField] private SWStatOverride skillHaste;
 
         #endregion // 필드
 
@@ -48,6 +49,26 @@ namespace ProjectT.Data
         /// 배치 비용 원본 스탯입니다. 미연결이면 null입니다.
         /// </summary>
         public SWStat DeploymentCostStat => deploymentCost?.Stat;
+
+        /// <summary>
+        /// 치명타 확률 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat CriticalChanceStat => criticalChance?.Stat;
+
+        /// <summary>
+        /// 기본 치명타 배율에 더하는 치명타 피해 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat CriticalDamageStat => criticalDamage?.Stat;
+
+        /// <summary>
+        /// 실제 피해 중 회복 비율인 생명력 흡수 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat LifeStealStat => lifeSteal?.Stat;
+
+        /// <summary>
+        /// 대상 방어력에서 빼는 방어 관통 원본 스탯입니다. 미연결이면 null입니다.
+        /// </summary>
+        public SWStat ArmorPenetrationStat => armorPenetration?.Stat;
 
         /// <summary>
         /// 캐릭터 한 명을 배치할 때 필요한 비용입니다.
@@ -83,7 +104,7 @@ namespace ProjectT.Data
 
         #region 검사
         /// <summary>
-        /// 공통 전투 설정과 성장·추가 능력치의 입력 범위를 검사합니다.
+        /// 공통 전투 설정과 성장·전투 보조 능력치의 입력 범위를 검사합니다.
         /// </summary>
         public override bool Validate(List<DataIssue> issues)
         {
@@ -102,12 +123,11 @@ namespace ProjectT.Data
             valid &= CheckStat(blockCapacity, nameof(blockCapacity), issues);
             valid &= CheckStat(revivalSeconds, nameof(revivalSeconds), issues);
             valid &= CheckStat(deploymentCost, nameof(deploymentCost), issues);
-            foreach (SWStatOverride setting in additionalStats)
-            {
-                valid &= CheckStat(setting, nameof(additionalStats), issues);
-                valid &= CheckNonNegative(setting.ExGetConfiguredValue(), nameof(additionalStats), issues);
-            }
-
+            valid &= CheckStat(criticalChance, nameof(criticalChance), issues);
+            valid &= CheckStat(criticalDamage, nameof(criticalDamage), issues);
+            valid &= CheckStat(lifeSteal, nameof(lifeSteal), issues);
+            valid &= CheckStat(armorPenetration, nameof(armorPenetration), issues);
+            valid &= CheckStat(skillHaste, nameof(skillHaste), issues);
             return valid;
         }
 
@@ -135,10 +155,11 @@ namespace ProjectT.Data
             yield return blockCapacity;
             yield return revivalSeconds;
             yield return deploymentCost;
-            foreach (SWStatOverride setting in additionalStats)
-            {
-                yield return setting;
-            }
+            yield return criticalChance;
+            yield return criticalDamage;
+            yield return lifeSteal;
+            yield return skillHaste;
+            yield return armorPenetration;
         }
 
         #endregion // 스탯 정의

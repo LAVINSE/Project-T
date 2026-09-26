@@ -105,3 +105,13 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+  commonColor: {r: 0.84705883, g: 0.8235294, b: 0.78431374, a: 1}
+  gradeColors:
+  - category: {fileID: 11400000, guid: 2d5b37a195c44e147bdf8bc81fe2006c, type: 2}
+    color: {r: 0.43529412, g: 0.7176471, b: 1, a: 1}
+  - category: {fileID: 11400000, guid: 0e331c8dad8502745a152787ed30afec, type: 2}
+    color: {r: 0.7254902, g: 0.54901963, b: 1, a: 1}
+  - category: {fileID: 11400000, guid: 7f08f67d1ce0fa246afb3ce0e305101c, type: 2}
+    color: {r: 0.9607843, g: 0.8156863, b: 0.2901961, a: 1}
+  - category: {fileID: 11400000, guid: 48eb2df1d4fd8d644a02f26aedf77901, type: 2}
+    color: {r: 1, g: 0.48235294, b: 0.22745098, a: 1}

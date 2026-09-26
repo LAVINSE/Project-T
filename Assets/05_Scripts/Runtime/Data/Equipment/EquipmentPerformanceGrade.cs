@@ -104,13 +104,13 @@ namespace ProjectT.Data
                 return false;
             }
 
-            if (!(effect is EquipmentStatEffectData template))
+            if (!effect.TryGetStatBonuses(out IReadOnlyList<EquipmentStatBonus> templateBonuses))
             {
-                return true;
+                return false;
             }
 
             var result = new List<EquipmentStatBonus>();
-            foreach (EquipmentStatBonus bonus in template.StatBonuses)
+            foreach (EquipmentStatBonus bonus in templateBonuses)
             {
                 EquipmentGradeStatOverride setting = FindStatOverride(bonus.Stat);
                 if (setting != null && !setting.Enabled)

@@ -30,6 +30,13 @@ namespace ProjectT.Data
         /// </summary>
         public IReadOnlyList<EquipmentStatBonus> StatBonuses => statBonuses;
 
+        /// <inheritdoc/>
+        public override bool TryGetStatBonuses(out IReadOnlyList<EquipmentStatBonus> bonuses)
+        {
+            bonuses = statBonuses;
+            return IsValid;
+        }
+
         /// <summary>
         /// 연결된 스탯과 증가량을 표시합니다. 미완성 항목은 안내로 표시하며 능력치를 적용하지 않습니다.
         /// </summary>

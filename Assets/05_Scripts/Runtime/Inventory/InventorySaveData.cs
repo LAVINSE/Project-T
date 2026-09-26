@@ -14,6 +14,8 @@ namespace ProjectT.Inventory
         [SerializeField] private int version;
         [SerializeField] private List<InventoryQuantity> quantities;
         [SerializeField] private List<string> grantedRewards;
+        [SerializeField] private List<string> slotIdentifiers;
+        [SerializeField] private bool hasSlotLayout;
 
         #endregion // 필드
 
@@ -34,11 +36,13 @@ namespace ProjectT.Inventory
         /// <summary>
         /// 검증된 수량과 지급 기록으로 다음 저장 상태를 구성합니다.
         /// </summary>
-        private InventorySaveData(List<InventoryQuantity> quantities, List<string> grantedRewards)
+        private InventorySaveData(List<InventoryQuantity> quantities, List<string> grantedRewards, List<string> slotIdentifiers = null)
         {
             version = ProjectDefine.Save.InventoryVersion;
             this.quantities = quantities;
             this.grantedRewards = grantedRewards;
+            this.slotIdentifiers = slotIdentifiers;
+            hasSlotLayout = slotIdentifiers != null;
         }
 
         /// <summary>
@@ -74,6 +78,12 @@ namespace ProjectT.Inventory
                 }
             }
 
+            if (!ValidateSlots(identifiers))
+            {
+                reason = "아이템 슬롯 배치에 중복·누락 또는 없는 아이템이 있습니다. 기존 파일을 보존합니다.";
+                return false;
+            }
+
             identifiers.Clear();
             foreach (string identifier in grantedRewards)
             {
@@ -88,11 +98,58 @@ namespace ProjectT.Inventory
         }
 
         /// <summary>
+        /// 위치 정보가 있는 저장에서 모든 보유 종류가 정확히 한 슬롯에 있는지 확인합니다.
+        /// </summary>
+        private bool ValidateSlots(HashSet<string> identifiers)
+        {
+            if (!hasSlotLayout)
+            {
+                return true;
+            }
+
+            if (slotIdentifiers == null)
+            {
+                return false;
+            }
+
+            var placed = new HashSet<string>(StringComparer.Ordinal);
+            foreach (string identifier in slotIdentifiers)
+            {
+                if (!string.IsNullOrEmpty(identifier)
+                    && (!identifiers.Contains(identifier) || !placed.Add(identifier)))
+                {
+                    return false;
+                }
+            }
+
+            return placed.Count == identifiers.Count;
+        }
+
+        /// <summary>
+        /// 원본을 수정하지 않고 슬롯 배치를 복사합니다. 이전 저장은 기존 획득 순서로 읽습니다.
+        /// </summary>
+        internal List<string> CopySlots()
+        {
+            if (hasSlotLayout)
+            {
+                return new List<string>(slotIdentifiers);
+            }
+
+            var result = new List<string>(quantities.Count);
+            foreach (InventoryQuantity quantity in quantities)
+            {
+                result.Add(quantity.Identifier);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 같은 종류를 합산한 저장 후보를 만듭니다. 정수 범위를 넘으면 기존 상태를 유지하고 null입니다.
         /// </summary>
         internal InventorySaveData CreateGrant(string rewardIdentifier, IReadOnlyDictionary<string, long> additions)
         {
             var next = new List<InventoryQuantity>(quantities.Count + additions.Count);
+            List<string> nextSlots = CopySlots();
             var included = new HashSet<string>(StringComparer.Ordinal);
             foreach (InventoryQuantity quantity in quantities)
             {
@@ -111,11 +168,20 @@ namespace ProjectT.Inventory
                 if (!included.Contains(addition.Key))
                 {
                     next.Add(new InventoryQuantity(addition.Key, addition.Value));
+                    int empty = nextSlots.FindIndex(string.IsNullOrEmpty);
+                    if (empty < 0)
+                    {
+                        nextSlots.Add(addition.Key);
+                    }
+                    else
+                    {
+                        nextSlots[empty] = addition.Key;
+                    }
                 }
             }
 
             var nextRewards = new List<string>(grantedRewards) { rewardIdentifier };
-            return new InventorySaveData(next, nextRewards);
+            return new InventorySaveData(next, nextRewards, nextSlots);
         }
 
         /// <summary>
@@ -129,6 +195,7 @@ namespace ProjectT.Inventory
             }
 
             bool found = false;
+            List<string> nextSlots = CopySlots();
             var next = new List<InventoryQuantity>(quantities.Count);
             foreach (InventoryQuantity quantity in quantities)
             {
@@ -148,9 +215,36 @@ namespace ProjectT.Inventory
                 {
                     next.Add(new InventoryQuantity(identifier, quantity.Count - count));
                 }
+                else
+                {
+                    nextSlots[nextSlots.IndexOf(identifier)] = string.Empty;
+                }
             }
 
-            return found ? new InventorySaveData(next, new List<string>(grantedRewards)) : null;
+            return found ? new InventorySaveData(next, new List<string>(grantedRewards), nextSlots) : null;
+        }
+
+        /// <summary>
+        /// 지정한 슬롯으로 이동하거나 두 아이템을 교환한 후보를 만듭니다. 수량과 지급 기록은 보존합니다.
+        /// </summary>
+        internal InventorySaveData CreateMove(string identifier, int targetSlot)
+        {
+            List<string> nextSlots = CopySlots();
+            int sourceSlot = nextSlots.IndexOf(identifier);
+            if (sourceSlot < 0 || targetSlot < 0
+                || targetSlot >= nextSlots.Count + ProjectDefine.Inventory.MinimumVisibleSlots)
+            {
+                return null;
+            }
+
+            while (nextSlots.Count <= targetSlot)
+            {
+                nextSlots.Add(string.Empty);
+            }
+            nextSlots[sourceSlot] = nextSlots[targetSlot];
+            nextSlots[targetSlot] = identifier;
+            return new InventorySaveData(new List<InventoryQuantity>(quantities),
+                new List<string>(grantedRewards), nextSlots);
         }
 
         #endregion // 검사와 변경

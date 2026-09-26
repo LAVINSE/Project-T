@@ -47,6 +47,11 @@ namespace ProjectT.Battle
         /// </summary>
         public event Action<EnemyUnit> EnemyResolved;
 
+        /// <summary>
+        /// 적을 초기화해 전장 목록에 추가한 직후 발생합니다.
+        /// </summary>
+        public event Action<EnemyUnit> EnemySpawned;
+
         #endregion // 프로퍼티
 
         #region 초기화
@@ -104,6 +109,7 @@ namespace ProjectT.Battle
             enemies.Add(enemy);
             spawnedCount++;
             spawnTimer.Start();
+            EnemySpawned?.Invoke(enemy);
             return true;
         }
 

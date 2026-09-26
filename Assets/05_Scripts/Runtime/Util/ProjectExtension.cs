@@ -3,6 +3,8 @@ using UnityEngine;
 using SW.Util;
 using SW.Stat;
 
+using ProjectT.Data;
+
 namespace ProjectT
 {
     /// <summary>
@@ -211,6 +213,20 @@ namespace ProjectT
             }
 
             return SWAmountFormat.Format(balance.Value, null);
+        }
+
+        /// <summary>
+        /// 판매 재화와 0을 포함한 금액을 표시합니다. 재화 미지정·음수·계산 불가능한 값은 대시입니다.
+        /// </summary>
+        public static string ExToSellPriceText(this double? price, CurrencyData currency, bool includeCurrencyName = true)
+        {
+            if (currency == null || !price.HasValue || !price.Value.ExIsNonNegative())
+            {
+                return "-";
+            }
+
+            string amount = SWAmountFormat.Format(price.Value, null);
+            return includeCurrencyName ? amount + " " + currency.DisplayName : amount;
         }
 
         #endregion // 표시

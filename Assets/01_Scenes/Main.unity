@@ -148,6 +148,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5c8167c126c7b844aa538ab949a86fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Initialization.TestManager
+  inventorySampleItems:
+  - {fileID: 11400000, guid: 397e006bcf10e07478b0164f5883125b, type: 2}
+  - {fileID: 11400000, guid: 1e7ee9a90bc6edc4492f57073b14fbf1, type: 2}
+  - {fileID: 11400000, guid: 30d589fe84c8e544fbfb29f8413f3995, type: 2}
+  - {fileID: 11400000, guid: fc28c318d7f045145aa2bc96657fde66, type: 2}
+  - {fileID: 11400000, guid: 10a981544ed9caf4f9e13be603a39da4, type: 2}
+  - {fileID: 11400000, guid: 160487b2c4ba3764aafbf84cc93ac226, type: 2}
+  - {fileID: 11400000, guid: 680bb42b3f060134fa4010c8bb7e4922, type: 2}
+  - {fileID: 11400000, guid: 781c42985d7624646a5c7fedd6d1fbe4, type: 2}
+  - {fileID: 11400000, guid: 9bf9d900a88fa2745802a6dbbcd59c45, type: 2}
+  - {fileID: 11400000, guid: fb01c48daeeba5f43ae284a953e3bbc2, type: 2}
+  - {fileID: 11400000, guid: 384a77363d0ec024f9b9bc12f2a618d9, type: 2}
+  - {fileID: 11400000, guid: 994b79b53191ec84e828cfaebd11d25c, type: 2}
+  - {fileID: 11400000, guid: 1a0d179579fa8ca429a89b6b1f96a224, type: 2}
+  inventoryScrollItems:
+  - {fileID: 11400000, guid: 654057ee38ce9564a959873ea1bc3980, type: 2}
+  - {fileID: 11400000, guid: 1e7d1e1e99c4ba6428c5b9a0ee4b4c86, type: 2}
+  - {fileID: 11400000, guid: f3257aabf1409cd4d8ada9c15a178838, type: 2}
+  - {fileID: 11400000, guid: 418778b554389724b8a0b8df9e2b650e, type: 2}
+  - {fileID: 11400000, guid: 52a2d26cefdc39e4f95026a4604e5b8d, type: 2}
+  - {fileID: 11400000, guid: 65039e7bd36047446bcac305934f78f3, type: 2}
+  - {fileID: 11400000, guid: dfe9fa3426cfc82439240bc832219fa7, type: 2}
+  - {fileID: 11400000, guid: 361399bf20bfeaa4b9bda4b3fe5e11b0, type: 2}
+  - {fileID: 11400000, guid: 48b67dd51e2f1a04a90ee8a7ab39f6c5, type: 2}
+  - {fileID: 11400000, guid: 792bec08f37ed8442abd943098f8ff96, type: 2}
+  - {fileID: 11400000, guid: 5e5672aaebb726747aa179ca8da9ab05, type: 2}
+  - {fileID: 11400000, guid: 49c9a292422a71642a7a9244c464980d, type: 2}
+  - {fileID: 11400000, guid: 7d254e0374adc4c4a97da38f2006b419, type: 2}
+  - {fileID: 11400000, guid: d4a25f5f0f6ac294f950549f2c768613, type: 2}
+  - {fileID: 11400000, guid: 1acb40d784fd010499512493ebb3eb97, type: 2}
+  - {fileID: 11400000, guid: e883f9cef2036d24a8fb7cea9f489df9, type: 2}
+  - {fileID: 11400000, guid: 05008fee8fae8ca45adced95dd3296cc, type: 2}
+  - {fileID: 11400000, guid: 8a93b1f003151b349b6bff9ef9b87942, type: 2}
+  - {fileID: 11400000, guid: 746f38b80dc00b14a894c6ac9c7a385d, type: 2}
+  - {fileID: 11400000, guid: adbfbba15778220458d2e3d751d2fd65, type: 2}
+  - {fileID: 11400000, guid: dc076b07c6015fe42a76f7c2d22117c6, type: 2}
+  - {fileID: 11400000, guid: 77cf1ba4100aa74438dd23da02fb05f9, type: 2}
+  - {fileID: 11400000, guid: 6ed5ef30e8887c143a99766a753c95fb, type: 2}
+  - {fileID: 11400000, guid: c4887a4aed3540e47807e9cb8296573a, type: 2}
+  inventoryTestStatus: "Play \uD6C4 \uBC84\uD2BC\uC73C\uB85C \uC9C0\uAE09\uD569\uB2C8\uB2E4. \uC2E4\uC81C \uC800\uC7A5\uC5D0 \uBC18\uC601\uB418\uBA70 \uD14C\uC2A4\uD2B8 \uBAA9\uB85D \uC544\uC774\uD15C\uB9CC \uC81C\uAC70\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   testStatus: "Play \uD6C4 \uD604\uC7AC \uC804\uD22C\uB97C \uC5F0\uACB0\uD569\uB2C8\uB2E4."
 --- !u!4 &226892504
 Transform:

@@ -11,7 +11,7 @@ namespace ProjectT.Initialization
     /// <summary>
     /// Main에서 준비되어 장면 전환에도 유지되는 수동 테스트 진입점입니다. 준비된 현재 전투가 없으면 조작하지 않습니다.
     /// </summary>
-    public sealed class TestManager : SWSingleton<TestManager>
+    public sealed partial class TestManager : SWSingleton<TestManager>
     {
         #region 필드
         [SWGroup("전투 테스트 상태")]
@@ -110,6 +110,7 @@ namespace ProjectT.Initialization
                 input.MessageChanged += RefreshStatus;
             }
 
+            ConnectCombatTest();
             RefreshStatus();
         }
 
@@ -235,6 +236,7 @@ namespace ProjectT.Initialization
         /// </summary>
         private void DisconnectBattle()
         {
+            DisconnectCombatTest();
             if (battle != null)
             {
                 battle.StateChanged -= RefreshStatus;

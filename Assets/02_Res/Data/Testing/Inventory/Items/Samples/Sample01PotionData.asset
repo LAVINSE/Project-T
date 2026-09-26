@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a1447938d2d0684185e67fe92d45d56, type: 3}
+  m_Name: Sample01PotionData
+  m_EditorClassIdentifier: ProjectT.Runtime::ProjectT.Data.ItemData
+  displayName: "[\uB354\uBBF8] \uD68C\uBCF5 \uBB3C\uC57D"
+  icon: {fileID: 21300000, guid: 33a075ac064380341bbab88a1f256bbe, type: 3}
+  defaultAmount: 12
+  category: {fileID: 11400000, guid: d4c13a2a87feb6648bbe3d8bbd5aad07, type: 2}
+  specialLoot: 0
+  description: "\uC218\uB7C9 \uC785\uB825\xB7\uC99D\uAC10\xB7\uCD5C\uB300 \uC120\uD0DD\xB7\uCDE8\uC18C\xB7\uBC84\uB9AC\uAE30 \uD655\uC778\uC6A9\uC785\uB2C8\uB2E4. \uC18C\uBE44 \uD6A8\uACFC\uB294 \uC5C6\uC2B5\uB2C8\uB2E4."
+  sellPrice: 25
+  sellCurrency: {fileID: 11400000, guid: 9bbc013fbfb43094495c5b13adbbfb53, type: 2}
+  equipment: {fileID: 0}
+  performanceGrade: {fileID: 0}
